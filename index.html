@@ -3554,7 +3554,7 @@ let db = {
 
 // ══════════════════════════════════════════
 // EMPRESA ÚNICA
-// Esta instalação atende uma única empresa (Dana Casa). A estrutura de
+// Esta instalação atende uma única empresa (Guianna). A estrutura de
 // `empresa_id` do sistema original (multi-empresa) foi mantida por baixo dos
 // panos só para não mexer em cada tela/consulta, mas toda a interface de
 // troca/cadastro de empresas foi removida. Na primeira carga, o sistema
@@ -3563,7 +3563,7 @@ let db = {
 // nenhuma tela ou seletor visível ao usuário.
 // ══════════════════════════════════════════
 const EMPRESA_KEY = 'cap_empresa_ativa';
-const EMPRESA_UNICA_NOME = 'Dana Casa';
+const EMPRESA_UNICA_NOME = 'Guianna';
 
 // Tabelas que guardam movimento e, portanto, pertencem a uma empresa.
 // Cadastros (clientes, fornecedores, produtos, bancos, grupos DRE/DFC,
@@ -3596,6 +3596,13 @@ async function garantirEmpresaUnica() {
     emp = { id: uid(), nome: EMPRESA_UNICA_NOME, apelido: EMPRESA_UNICA_NOME, cnpj: '', ativo: true };
     const ok = await sbFetch('empresas', 'POST', emp);
     if (ok) { db.empresas.push(emp); } else { emp = null; }
+  } else if (emp.nome !== EMPRESA_UNICA_NOME || emp.apelido !== EMPRESA_UNICA_NOME) {
+    // Já existe registro (base antiga) com nome/apelido desatualizados —
+    // sincroniza com a constante para refletir mudanças de nome da empresa
+    // em todas as telas sem precisar recriar o registro.
+    emp.nome = EMPRESA_UNICA_NOME;
+    emp.apelido = EMPRESA_UNICA_NOME;
+    await sbFetch('empresas', 'PATCH', { nome: emp.nome, apelido: emp.apelido }, `?id=eq.${emp.id}`);
   }
   if (emp && emp.id) {
     try { localStorage.setItem(EMPRESA_KEY, emp.id); } catch(e) {}
