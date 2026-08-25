@@ -31,6 +31,58 @@
   --radius: 8px;
   --radius2: 12px;
 }
+
+/* ── ATALHOS FLUTUANTES: NOVO LANÇAMENTO (estilo app) ── */
+.fab-lanc {
+  position:fixed; right:22px; bottom:22px; z-index:900;
+  display:flex; flex-direction:column; align-items:flex-end; gap:10px;
+  pointer-events:none;
+}
+.fab-lanc > * { pointer-events:auto; }
+.fab-acoes { display:flex; flex-direction:column; gap:10px; align-items:flex-end; }
+.fab-lanc.oculto .fab-acoes { display:none; }
+.fab-btn {
+  display:flex; align-items:center; gap:9px;
+  border:none; cursor:pointer; color:#fff;
+  font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700;
+  padding:13px 20px; border-radius:999px; white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.20);
+  transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+.fab-btn:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,.26); filter:brightness(1.06); }
+.fab-btn:active { transform:translateY(0); }
+.fab-btn .fab-ico { font-size:17px; line-height:1; font-weight:800; }
+.fab-receber { background:#16a34a; }
+.fab-pagar   { background:#ea580c; }
+.fab-toggle {
+  width:44px; height:44px; border-radius:50%; border:none; cursor:pointer;
+  background:#1f2937; color:#fff; font-size:19px; line-height:1;
+  box-shadow:0 6px 18px rgba(0,0,0,.22);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .12s ease, background .12s ease;
+}
+.fab-toggle:hover { transform:scale(1.06); background:#374151; }
+.fab-lanc.oculto .fab-toggle { background:#ea580c; }
+@media (max-width:640px) {
+  .fab-lanc { right:14px; bottom:14px; }
+  .fab-btn { padding:11px 16px; font-size:13px; }
+}
+@media print { .fab-lanc { display:none !important; } }
+
+/* ── FORMULÁRIO COMPACTO (modal de lançamento) ──
+   Gaps menores e todos os campos num grid único: os campos escondidos
+   pelo bloco OCULTAR somem sem deixar linhas pela metade. */
+.form-compacto { gap:14px 16px; }
+.form-compacto .form-group { margin-bottom:0; }
+.form-compacto input, .form-compacto select, .form-compacto textarea { padding:8px 11px; }
+#modal-novo-lanc .modal { padding:26px 28px; }
+#modal-novo-lanc .modal-footer { margin-top:18px; padding-top:16px; }
+/* Grade de parcelas: rola em vez de esticar o modal quando são muitas. */
+.parcela-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px;
+  max-height:250px; overflow-y:auto; padding-right:4px;
+}
+
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; }
 
@@ -659,6 +711,20 @@ th.ef-th { padding:8px 8px 8px 12px; }
 
 <!-- ═══ APP ═══ -->
 <div id="app">
+
+  <!-- ══ ATALHOS FLUTUANTES DE LANÇAMENTO (estilo app) ══ -->
+  <div class="fab-lanc" id="fab-lanc">
+    <div class="fab-acoes" id="fab-acoes">
+      <button class="fab-btn fab-receber" onclick="abrirModalLancReceber()" title="Novo lançamento de Contas a Receber">
+        <span class="fab-ico">＋</span> Conta a Receber
+      </button>
+      <button class="fab-btn fab-pagar" onclick="abrirModalLanc()" title="Novo lançamento de Contas a Pagar">
+        <span class="fab-ico">＋</span> Conta a Pagar
+      </button>
+    </div>
+    <button class="fab-toggle" id="fab-toggle" onclick="alternarFabLanc()" title="Ocultar atalhos">✕</button>
+  </div>
+
   <!-- SIDEBAR -->
   <div class="menu-hotzone" onmouseenter="document.body.classList.add('menu-espiando')"></div>
   <button class="menu-abrir" onclick="alternarMenu()" title="Mostrar menu">☰</button>
@@ -923,6 +989,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
         <div><div class="page-title">Lançamentos — Contas a Pagar</div><div class="page-sub" style="margin-bottom:0">Registro de compras de produtos</div></div>
         <button class="btn-pdf" onclick="imprimirPagina('lancamentos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> PDF</button>
         <button class="btn btn-secondary" onclick="abrirModalCategoriaMassa('lancamentos')">🏷️ Categoria em Massa</button>
+        <button class="btn btn-secondary" onclick="abrirContasFixas()">🔁 Contas Fixas</button>
         <button class="btn btn-secondary" onclick="abrirModalImport('pagar')">📥 Importar Extrato</button>
         <button class="btn-novo" id="btn-novo-lanc" onclick="abrirModalLanc()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo
@@ -947,10 +1014,13 @@ th.ef-th { padding:8px 8px 8px 12px; }
             <select id="lf-forn" onchange="renderLancamentos()"><option value="">Todos</option></select>
           </div>
           <div class="form-group"><label>Grupo</label>
-            <select id="lf-grupo" onchange="popularSelectCategoriaFiltro('lf-cat','lf-grupo'); renderLancamentos()"><option value="">Todos</option></select>
+            <select id="lf-grupo" onchange="popularSelectCategoriaFiltro('lf-cat','lf-grupo'); popularFiltroSubcatLancamentos(); renderLancamentos()"><option value="">Todos</option></select>
           </div>
           <div class="form-group"><label>Categoria</label>
-            <select id="lf-cat" onchange="renderLancamentos()"><option value="">Todos</option></select>
+            <select id="lf-cat" onchange="popularFiltroSubcatLancamentos(); renderLancamentos()"><option value="">Todos</option></select>
+          </div>
+          <div class="form-group"><label>Subcategoria</label>
+            <select id="lf-subcat" onchange="renderLancamentos()" title="Filtra pela subcategoria escolhida no lançamento"><option value="">Todas</option></select>
           </div>
           <div class="form-group"><label>Produto</label>
             <select id="lf-prod" onchange="renderLancamentos()"><option value="">Todos</option></select>
@@ -1552,6 +1622,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     <div class="page" id="page-dfc-categorias">
       <div class="page-header">
         <div><div class="page-title">Categorias</div><div class="page-sub" style="margin-bottom:0">Gerencie as categorias usadas no Demonstrativo de Fluxo de Caixa (DFC) e na DRE. O Grupo de cada categoria é cadastrado em DRE &rarr; Grupos.</div></div>
+        <button class="btn btn-secondary" onclick="abrirLimparCategoriasDuplicadas()">🧹 Limpar Duplicadas</button>
         <button class="btn-novo" id="btn-novo-dfccat" onclick="toggleFormPanel('form-dfccat',this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo
         </button>
@@ -2350,39 +2421,101 @@ th.ef-th { padding:8px 8px 8px 12px; }
 </div>
 
 <!-- ══ MODAL EDITAR CLIENTE ══ -->
+<!-- ══ MODAL: LIMPAR CATEGORIAS DUPLICADAS ══ -->
+<div class="modal-overlay" id="modal-cat-duplicadas">
+  <div class="modal" style="width:820px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div class="modal-title" style="margin-bottom:0;">🧹 Limpar Categorias Duplicadas</div>
+      <button onclick="closeModal('modal-cat-duplicadas')" style="background:none;border:none;cursor:pointer;color:#a8a29e;font-size:22px;line-height:1;padding:4px;" title="Fechar">✕</button>
+    </div>
+    <div class="page-sub" style="margin-bottom:16px">
+      Categorias com o mesmo nome dentro do mesmo grupo são unificadas: uma é mantida
+      e os lançamentos das outras passam a apontar para ela antes da exclusão.
+      Nenhum lançamento é apagado.
+    </div>
+    <div id="catdup-corpo"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-cat-duplicadas')">Cancelar</button>
+      <button class="btn btn-primary" id="catdup-btn" onclick="executarLimpezaCategorias()">Unificar selecionadas</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: GERENCIAR CONTAS FIXAS ══ -->
+<div class="modal-overlay" id="modal-contas-fixas">
+  <div class="modal" style="width:900px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div class="modal-title" style="margin-bottom:0;">🔁 Contas Fixas (recorrentes)</div>
+      <button onclick="closeModal('modal-contas-fixas')" style="background:none;border:none;cursor:pointer;color:#a8a29e;font-size:22px;line-height:1;padding:4px;" title="Fechar">✕</button>
+    </div>
+    <div class="page-sub" style="margin-bottom:16px">
+      Altere ou exclua de uma vez todos os lançamentos gerados por uma conta fixa —
+      sem precisar mexer mês a mês.
+    </div>
+
+    <!-- Lista de contas fixas -->
+    <div id="cf-lista"></div>
+
+    <!-- Painel de gestão da conta fixa escolhida -->
+    <div id="cf-detalhe" style="display:none;"></div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-contas-fixas')">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ MODAL CRIAR LANÇAMENTO — PAGAMENTO ══ -->
 <div class="modal-overlay" id="modal-novo-lanc">
   <div class="modal" style="width:720px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <div class="modal-title" style="margin-bottom:0;">📦 Novo Lançamento — Pagamento</div>
-      <button onclick="closeModal('modal-novo-lanc')" style="background:none;border:none;cursor:pointer;color:#a8a29e;font-size:22px;line-height:1;padding:4px;" title="Fechar">✕</button>
+      <button onclick="fecharModalLanc()" style="background:none;border:none;cursor:pointer;color:#a8a29e;font-size:22px;line-height:1;padding:4px;" title="Fechar">✕</button>
     </div>
-    <div class="grid3">
+    <!-- Formulário compacto: TODOS os campos num único grid, para que os
+         campos escondidos pelo bloco OCULTAR não deixem linhas pela metade. -->
+    <div class="grid3 form-compacto">
       <div class="form-group" style="display:none"><label>Empresa *</label><select id="l-empresa" class="sel-empresa"><option value="">Selecione...</option></select></div>
-    </div>
-    <div class="grid3">
-      <div class="form-group"><label>Data da Compra *</label><input id="l-dtcompra" type="date" /></div>
-      <div class="form-group"><label>Previsão de Pagamento</label><input id="l-dtprev" type="date" /></div>
+
+      <div class="form-group"><label>Data da Compra *</label><input id="l-dtcompra" type="date" onchange="atualizarParcelasDoForm('l-parcelas','l-parcela-dates')" /></div>
+      <div class="form-group"><label>Previsão de Pagamento</label><input id="l-dtprev" type="date" onchange="atualizarParcelasDoForm('l-parcelas','l-parcela-dates')" /></div>
+      <div class="form-group"><label>Valor Total (R$) *</label><input id="l-valor" type="number" step="0.01" placeholder="0,00" onchange="atualizarParcelasDoForm('l-parcelas','l-parcela-dates')" /></div>
+
       <div class="form-group"><label>Nº da Nota Fiscal</label><input id="l-nf" type="text" placeholder="000000" /></div>
-    </div>
-    <div class="grid3">
       <div class="form-group"><label class="label-add">Fornecedor<button type="button" class="btn-add-inline" title="Cadastrar novo fornecedor" onclick="abrirCadastroRapido('fornecedor','l-forn')">+</button></label><select id="l-forn"><option value="">Selecione...</option></select></div>
       <div class="form-group"><label class="label-add">Produto<button type="button" class="btn-add-inline" title="Cadastrar novo produto" onclick="abrirCadastroRapido('produto','l-prod')">+</button></label><select id="l-prod"><option value="">Nenhum (opcional)</option></select></div>
-      <div class="form-group"><label>Valor Total (R$) *</label><input id="l-valor" type="number" step="0.01" placeholder="0,00" /></div>
-    </div>
-    <div class="grid3">
-      <div class="form-group" style="grid-column:span 2"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','l-catdre')">+</button></label><select id="l-catdre" onchange="onCategoriaChangeUsuario('l-catdre','l-subcat')"><option value="">Nenhuma</option></select></div><div class="form-group" style="grid-column:span 2"><label>Subcategoria <span class="subcat-req" style="color:#dc2626">*</span></label><select id="l-subcat" onchange="onSubcategoriaChange('l-catdre','l-subcat')"><option value="">Nenhuma</option></select></div>
-    </div>
-    <div class="grid3">
-      <div class="form-group">
-        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600">
-          <input type="checkbox" id="l-fixa" onchange="toggleContaFixaVigencia()" style="width:16px;height:16px;cursor:pointer" />
-          Conta Fixa (recorrente mensal)
-        </label>
+
+      <div class="form-group"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','l-catdre')">+</button></label><select id="l-catdre" onchange="onCategoriaChangeUsuario('l-catdre','l-subcat')"><option value="">Nenhuma</option></select></div>
+      <div class="form-group"><label>Subcategoria <span class="subcat-req" style="color:#dc2626">*</span></label><select id="l-subcat" onchange="onSubcategoriaChange('l-catdre','l-subcat')"><option value="">Nenhuma</option></select></div>
+      <div class="form-group"><label>Número de Parcelas</label>
+        <select id="l-parcelas" onchange="toggleParcelaDates('l-parcelas','l-parcela-dates')">
+          <option value="1">1x (À Vista)</option><option value="2">2x</option><option value="3">3x</option><option value="4">4x</option><option value="5">5x</option><option value="6">6x</option><option value="7">7x</option><option value="8">8x</option><option value="9">9x</option><option value="10">10x</option><option value="11">11x</option><option value="12">12x</option><option value="13">13x</option><option value="14">14x</option><option value="15">15x</option><option value="16">16x</option><option value="17">17x</option><option value="18">18x</option><option value="19">19x</option><option value="20">20x</option><option value="21">21x</option><option value="22">22x</option><option value="23">23x</option><option value="24">24x</option><option value="25">25x</option><option value="26">26x</option><option value="27">27x</option><option value="28">28x</option><option value="29">29x</option><option value="30">30x</option><option value="31">31x</option><option value="32">32x</option><option value="33">33x</option><option value="34">34x</option><option value="35">35x</option><option value="36">36x</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label>Tipo de Pagamento</label>
+        <select id="l-tipo-pag" onchange="onTipoPagChange(this)"><option value="">Não informado</option></select>
+      </div>
+      <div class="form-group"><label>Banco / Conta</label>
+        <select id="l-banco"><option value="">Não informado</option></select>
+      </div>
+      <div class="form-group"><label>Incluído no Financeiro?</label>
+        <select id="l-financeiro"><option value="nao">Não</option><option value="sim">Sim</option></select>
+      </div>
+
+      <div class="form-group"><label>Pago?</label>
+        <select id="l-pago"><option value="nao">Não</option><option value="sim">Sim</option></select>
       </div>
     </div>
-    <div id="l-fixa-bloco" style="display:none;margin-bottom:16px">
-      <div class="grid3" style="margin-bottom:10px">
+
+    <div class="form-group" style="margin-bottom:12px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;margin-bottom:0">
+        <input type="checkbox" id="l-fixa" onchange="toggleContaFixaVigencia()" style="width:16px;height:16px;cursor:pointer" />
+        Conta Fixa (recorrente mensal)
+      </label>
+    </div>
+    <div id="l-fixa-bloco" style="display:none;margin-bottom:14px">
+      <div class="grid3 form-compacto" style="margin-bottom:8px">
         <div class="form-group"><label>Vigência — De</label><input id="l-fixa-inicio" type="month" /></div>
         <div class="form-group"><label>Vigência — Até</label><input id="l-fixa-fim" type="month" /></div>
       </div>
@@ -2390,50 +2523,15 @@ th.ef-th { padding:8px 8px 8px 12px; }
         🔁 Será criado 1 lançamento por mês dentro da vigência, repetindo o dia da "Data da Compra" em cada mês (ajustado se o mês não tiver esse dia, ex.: dia 31 em fevereiro).
       </div>
     </div>
-    <div class="grid3">
-      <div class="form-group"><label>Número de Parcelas</label>
-        <select id="l-parcelas" onchange="toggleParcelaDates('l-parcelas','l-parcela-dates')">
-          <option value="1">1x (À Vista)</option>
-          <option value="2">2x</option><option value="3">3x</option><option value="4">4x</option>
-          <option value="5">5x</option><option value="6">6x</option><option value="7">7x</option>
-          <option value="8">8x</option><option value="9">9x</option><option value="10">10x</option>
-          <option value="11">11x</option><option value="12">12x</option><option value="13">13x</option>
-          <option value="14">14x</option><option value="15">15x</option><option value="16">16x</option>
-          <option value="17">17x</option><option value="18">18x</option><option value="19">19x</option>
-          <option value="20">20x</option><option value="21">21x</option><option value="22">22x</option>
-          <option value="23">23x</option><option value="24">24x</option><option value="25">25x</option>
-          <option value="26">26x</option><option value="27">27x</option><option value="28">28x</option>
-          <option value="29">29x</option><option value="30">30x</option><option value="31">31x</option>
-          <option value="32">32x</option><option value="33">33x</option><option value="34">34x</option>
-          <option value="35">35x</option><option value="36">36x</option>
-        </select>
+    <div id="l-parcela-dates" style="display:none;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:600;color:#ea580c;margin-bottom:8px;padding:8px 12px;background:#fff1e6;border-radius:6px;border-left:3px solid #ea580c;">
+        📅 Vencimento e valor de cada parcela — já preenchidos a partir da data configurada. Ajuste o que precisar.
       </div>
-      <div class="form-group"><label>Incluído no Financeiro?</label>
-        <select id="l-financeiro"><option value="nao">Não</option><option value="sim">Sim</option></select>
-      </div>
-      <div class="form-group"><label>Pago?</label>
-        <select id="l-pago"><option value="nao">Não</option><option value="sim">Sim</option></select>
-      </div>
-    </div>
-    <div id="l-parcela-dates" style="display:none;margin-bottom:16px;">
-      <div style="font-size:12px;font-weight:600;color:#ea580c;margin-bottom:10px;padding:8px 12px;background:#fff1e6;border-radius:6px;border-left:3px solid #ea580c;">
-        📅 Datas de vencimento de cada parcela (opcional — substitui a geração automática mensal)
-      </div>
-      <div id="l-parcela-dates-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;"></div>
-    </div>
-    <div class="grid3">
-      <div class="form-group"><label>Tipo de Pagamento</label>
-        <select id="l-tipo-pag" onchange="onTipoPagChange(this)">
-          <option value="">Não informado</option>
-        </select>
-      </div>
-      <div class="form-group"><label>Banco / Conta</label>
-        <select id="l-banco"><option value="">Não informado</option></select>
-      </div>
+      <div id="l-parcela-dates-grid" class="parcela-grid"></div>
     </div>
     <div class="form-group"><label>Observações</label><textarea id="l-obs" rows="2" placeholder="Informações adicionais..."></textarea></div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('modal-novo-lanc')">Cancelar</button>
+      <button class="btn btn-secondary" onclick="fecharModalLanc()">Cancelar</button>
       <button class="btn btn-secondary" onclick="clearLancamento()">Limpar</button>
       <button class="btn btn-primary" onclick="saveLancamento()">Salvar Lançamento</button>
     </div>
@@ -2445,20 +2543,20 @@ th.ef-th { padding:8px 8px 8px 12px; }
   <div class="modal" style="width:720px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
       <div class="modal-title" style="margin-bottom:0;">💰 Novo Lançamento — Recebimento</div>
-      <button onclick="closeModal('modal-novo-lr')" style="background:none;border:none;cursor:pointer;color:#a8a29e;font-size:22px;line-height:1;padding:4px;" title="Fechar">✕</button>
+      <button onclick="fecharModalLancReceber()" style="background:none;border:none;cursor:pointer;color:#a8a29e;font-size:22px;line-height:1;padding:4px;" title="Fechar">✕</button>
     </div>
     <div class="grid3">
       <div class="form-group" style="display:none"><label>Empresa *</label><select id="lr-empresa" class="sel-empresa"><option value="">Selecione...</option></select></div>
     </div>
     <div class="grid3">
-      <div class="form-group"><label>Data da Venda *</label><input id="lr-dtvenda" type="date" /></div>
-      <div class="form-group"><label>Previsão de Recebimento</label><input id="lr-dtprev" type="date" /></div>
+      <div class="form-group"><label>Data da Venda *</label><input id="lr-dtvenda" type="date" onchange="atualizarParcelasDoForm('lr-parcelas','lr-parcela-dates')" /></div>
+      <div class="form-group"><label>Previsão de Recebimento</label><input id="lr-dtprev" type="date" onchange="atualizarParcelasDoForm('lr-parcelas','lr-parcela-dates')" /></div>
       <div class="form-group"><label>Nº da Nota Fiscal</label><input id="lr-nf" type="text" placeholder="000000" /></div>
     </div>
     <div class="grid3">
       <div class="form-group"><label class="label-add">Cliente *<button type="button" class="btn-add-inline" title="Cadastrar novo cliente" onclick="abrirCadastroRapido('cliente','lr-cliente')">+</button></label><select id="lr-cliente"><option value="">Selecione...</option></select></div>
       <div class="form-group"><label class="label-add">Produto de Venda<button type="button" class="btn-add-inline" title="Cadastrar novo produto de venda" onclick="abrirCadastroRapido('prodvenda','lr-prod')">+</button></label><select id="lr-prod"><option value="">Selecione...</option></select></div>
-      <div class="form-group"><label>Valor Total (R$) *</label><input id="lr-valor" type="number" step="0.01" placeholder="0,00" /></div>
+      <div class="form-group"><label>Valor Total (R$) *</label><input id="lr-valor" type="number" step="0.01" placeholder="0,00" onchange="atualizarParcelasDoForm('lr-parcelas','lr-parcela-dates')" /></div>
     </div>
     <div class="grid3">
       <div class="form-group" style="grid-column:span 2"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','lr-catdre')">+</button></label><select id="lr-catdre"><option value="">Nenhuma</option></select></div>
@@ -2511,7 +2609,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
     <div class="form-group"><label>Observações</label><textarea id="lr-obs" rows="2" placeholder="Informações adicionais..."></textarea></div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('modal-novo-lr')">Cancelar</button>
+      <button class="btn btn-secondary" onclick="fecharModalLancReceber()">Cancelar</button>
       <button class="btn btn-secondary" onclick="clearLancReceber()">Limpar</button>
       <button class="btn btn-primary" onclick="saveLancReceber()">Salvar Lançamento</button>
     </div>
@@ -2605,8 +2703,8 @@ th.ef-th { padding:8px 8px 8px 12px; }
       <div class="form-group" style="display:none"><label>Empresa *</label><select id="elr-empresa" class="sel-empresa"><option value="">Selecione...</option></select></div>
     </div>
     <div class="grid3">
-      <div class="form-group"><label>Data da Venda</label><input id="elr-dtvenda" type="date" /></div>
-      <div class="form-group"><label>Prev. Recebimento</label><input id="elr-dtprev" type="date" /></div>
+      <div class="form-group"><label>Data da Venda</label><input id="elr-dtvenda" type="date" onchange="atualizarParcelasDoForm('elr-parcelas','elr-parcela-dates')" /></div>
+      <div class="form-group"><label>Prev. Recebimento</label><input id="elr-dtprev" type="date" onchange="atualizarParcelasDoForm('elr-parcelas','elr-parcela-dates')" /></div>
       <div class="form-group"><label>Nº Nota Fiscal</label><input id="elr-nf" type="text" /></div>
     </div>
     <div class="grid3">
@@ -2936,7 +3034,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
     <div class="grid3">
       <div class="form-group"><label>Data da Compra</label><input id="edit-dtcompra" type="date" /></div>
-      <div class="form-group"><label>Previsão de Pagamento</label><input id="edit-dtprev" type="date" /></div>
+      <div class="form-group"><label>Previsão de Pagamento</label><input id="edit-dtprev" type="date" onchange="atualizarParcelasDoForm('edit-parcelas','edit-parcela-dates')" /></div>
       <div class="form-group"><label>Nº Nota Fiscal</label><input id="edit-nf" type="text" /></div>
     </div>
     <div class="grid3">
@@ -3297,6 +3395,92 @@ const BRAND_LOGO_DATA_URI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAA
 // ══════════════════════════════════════════
 // DATA LAYER
 // ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+// ⚙️ AJUSTES DE VISIBILIDADE (PRODUTO / FORNECEDOR)
+// ------------------------------------------------------------------
+// Liga/desliga em UM lugar só o que some da tela. Nada é apagado do
+// banco: os campos continuam existindo nos registros já salvos, apenas
+// deixam de aparecer. Para voltar a mostrar algo, troque true por false.
+// ══════════════════════════════════════════════════════════════════
+const OCULTAR = {
+  // Itens do menu lateral
+  menuFornecedores:   true,   // "Fornecedores" (Contas a Pagar)
+  menuProdutosCompra: true,   // "Produtos (Compra)"
+  menuProdutosVenda:  false,  // "Produtos de Venda" — continua visível
+  menuSubcategorias:  true,   // "Subcategorias" (DFC)
+  menuAnaliseSubcat:  true,   // "Análise por Subcategoria" (DRE)
+  menuDfcLancamentos: true,   // "DFC — Lançamentos"
+
+  // Filtros das telas
+  filtroFornecedor:   true,   // filtros "Fornecedor" em Lançamentos / A Pagar / Pagas
+  filtroProduto:      true,   // filtros "Produto"    em Lançamentos / A Pagar / Pagas
+
+  // Campos dentro dos modais de lançamento
+  campoFornecedor:    true,   // "Fornecedor" no Novo/Editar Lançamento a Pagar
+  campoProduto:       true,   // "Produto"    no Novo/Editar Lançamento a Pagar
+  campoProdutoVenda:  true,   // "Produto de Venda" no Novo/Editar Lançamento a Receber
+  campoSubcategoria:  true,   // "Subcategoria" no lançamento (campo + filtro)
+                              // Quando true, a subcategoria deixa de ser obrigatória.
+
+  // Colunas das tabelas
+  colunaFornecedor:   true,   // coluna "Fornecedor" em Lançamentos / A Pagar / Pagas
+  colunaProduto:      true,   // coluna "Produto"    em Lançamentos / A Pagar / Pagas
+  colunaProdutoVenda: true    // coluna "Produto" em Lanç. a Receber / A Receber / Recebidas
+};
+
+// Elementos (o id é do <select>/<input>; escondemos o .form-group em volta)
+const CAMPOS_OCULTOS = () => [
+  ...(OCULTAR.filtroFornecedor ? ['lf-forn','af-forn','pgf-forn'] : []),
+  ...(OCULTAR.filtroProduto    ? ['lf-prod','af-prod','pgf-prod','dash-prod'] : []),
+  ...(OCULTAR.campoFornecedor  ? ['l-forn','edit-forn']           : []),
+  ...(OCULTAR.campoProduto     ? ['l-prod','edit-prod']           : []),
+  ...(OCULTAR.campoProdutoVenda? ['lr-prod','elr-prod']           : []),
+  ...(OCULTAR.campoSubcategoria? ['l-subcat','edit-subcat','lf-subcat','dash-subcat'] : [])
+];
+
+const MENUS_OCULTOS = () => [
+  ...(OCULTAR.menuFornecedores   ? ['nav-fornecedores']       : []),
+  ...(OCULTAR.menuProdutosCompra ? ['nav-produtos']           : []),
+  ...(OCULTAR.menuProdutosVenda  ? ['nav-prodvenda']          : []),
+  ...(OCULTAR.menuSubcategorias  ? ['nav-dfc-subcategorias']  : []),
+  ...(OCULTAR.menuAnaliseSubcat  ? ['nav-dre-analise-subcat'] : []),
+  ...(OCULTAR.menuDfcLancamentos ? ['nav-dfc-lancamentos']    : [])
+];
+
+// Colunas que ficam SEMPRE ocultas nas tabelas (não aparecem no seletor
+// "▦ Colunas", para não serem reativadas por engano).
+const EF_COLS_FORCADAS = {
+  lancamentos: [...(OCULTAR.colunaFornecedor?['forn']:[]), ...(OCULTAR.colunaProduto?['prod']:[])],
+  apagar:      [...(OCULTAR.colunaFornecedor?['forn']:[]), ...(OCULTAR.colunaProduto?['prod']:[])],
+  pagas:       [...(OCULTAR.colunaFornecedor?['forn']:[]), ...(OCULTAR.colunaProduto?['prod']:[])],
+  lancreceber: [...(OCULTAR.colunaProdutoVenda?['prod']:[])],
+  areceber:    [...(OCULTAR.colunaProdutoVenda?['prod']:[])],
+  recebido:    [...(OCULTAR.colunaProdutoVenda?['prod']:[])]
+};
+
+// Esconde menus e campos assim que a tela carrega.
+function aplicarOcultacoesMenu() {
+  MENUS_OCULTOS().forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
+function aplicarOcultacoes() {
+  aplicarOcultacoesMenu();
+  CAMPOS_OCULTOS().forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const grupo = el.closest('.form-group') || el.parentElement;
+    if (grupo) grupo.style.display = 'none';
+  });
+}
+
+// Páginas que não devem mais ser acessadas (nem por link direto/atalho).
+function paginaOculta(p) {
+  return MENUS_OCULTOS().includes('nav-' + p);
+}
+
 // ══════════════════════════════════════════
 // SISTEMA DE USUÁRIOS COM PERMISSÕES
 // ══════════════════════════════════════════
@@ -3932,6 +4116,8 @@ function paginaVisivel(p) {
 let _paginaAtual = 'dashboard';
 
 function showPage(p) {
+  // Telas desligadas no bloco OCULTAR não abrem nem por atalho/link direto.
+  if (paginaOculta(p)) { if (p !== 'dashboard') showPage('dashboard'); return; }
   // Verificar permissão (exceto admin e páginas de administração)
   if (p !== 'usuarios' && p !== 'empresas' && currentUser && currentUser.role !== 'admin') {
     const allowed = currentUser.pages || [];
@@ -4051,9 +4237,10 @@ function abrirModalLanc() {
   populateBancoSelects();
   populateFormasPagSelects();
   populateDreCatSelects();
+  clearLancamento();   // abre sempre em branco, nunca com o lançamento anterior
   openModal('modal-novo-lanc');
 }
-function fecharModalLanc() { closeModal('modal-novo-lanc'); }
+function fecharModalLanc() { closeModal('modal-novo-lanc'); clearLancamento(); }
 
 function abrirModalLancReceber() {
   populateClienteSelects();
@@ -4063,7 +4250,38 @@ function abrirModalLancReceber() {
   populateDreCatSelects();
   openModal('modal-novo-lr');
 }
-function fecharModalLancReceber() { closeModal('modal-novo-lr'); }
+function fecharModalLancReceber() { closeModal('modal-novo-lr'); clearLancReceber(); }
+
+// ══════════════════════════════════════════
+// ATALHOS FLUTUANTES DE LANÇAMENTO
+// Dois botões fixos no canto (Conta a Receber / Conta a Pagar) para
+// registrar de qualquer tela, sem precisar navegar até o menu.
+// O botão redondo esconde/mostra os atalhos; a escolha fica salva.
+// ══════════════════════════════════════════
+const FAB_LANC_KEY = '477_fab_lanc_oculto';
+
+function _pintarFabLanc(oculto) {
+  const box = document.getElementById('fab-lanc');
+  const btn = document.getElementById('fab-toggle');
+  if (!box || !btn) return;
+  box.classList.toggle('oculto', oculto);
+  btn.textContent = oculto ? '＋' : '✕';
+  btn.title = oculto ? 'Mostrar atalhos de lançamento' : 'Ocultar atalhos de lançamento';
+}
+
+function alternarFabLanc() {
+  const box = document.getElementById('fab-lanc');
+  if (!box) return;
+  const oculto = !box.classList.contains('oculto');
+  _pintarFabLanc(oculto);
+  try { localStorage.setItem(FAB_LANC_KEY, oculto ? '1' : '0'); } catch(e) {}
+}
+
+function restaurarFabLanc() {
+  let oculto = false;
+  try { oculto = localStorage.getItem(FAB_LANC_KEY) === '1'; } catch(e) {}
+  _pintarFabLanc(oculto);
+}
 
 // ══════════════════════════════════════════
 // HELPERS
@@ -4910,7 +5128,435 @@ function validarBancoObrigatorio(status, banco) {
   return true;
 }
 
-// ── CONTA FIXA (recorrente mensal, com vigência) ──────────────────────
+// ══════════════════════════════════════════════════════════════════
+// LIMPAR CATEGORIAS DUPLICADAS
+// Duas categorias com o MESMO nome (ignorando acentos e maiúsculas) no
+// MESMO grupo são a mesma coisa na prática. Aqui elas são unificadas:
+// tudo que apontava para as repetidas passa a apontar para a mantida,
+// e só então as repetidas são excluídas. Nenhum lançamento é apagado.
+// ══════════════════════════════════════════════════════════════════
+
+// Onde o id de uma categoria aparece no resto do sistema.
+const CAT_REFERENCIAS = [
+  { tabela:'lancamentos',       campo:'cat_dre', lista:'lancamentos' },
+  { tabela:'lancreceber',       campo:'cat_dre', lista:'lancreceber' },
+  { tabela:'dfc_lancamentos',   campo:'cat',     lista:'dfc_lans'    },
+  { tabela:'dfc_subcategorias', campo:'cat',     lista:'dfc_subcats' },
+  { tabela:'produtos',          campo:'cat',     lista:'produtos'    },
+  { tabela:'prodvenda',         campo:'cat',     lista:'prodvenda'   }
+];
+
+// Quantas vezes uma categoria é usada em todo o sistema.
+function _usosDaCategoria(catId) {
+  return CAT_REFERENCIAS.reduce((total, ref) =>
+    total + (db[ref.lista] || []).filter(r => r[ref.campo] === catId).length, 0);
+}
+
+// Grupos de categorias repetidas. Mantém sempre a mais usada (empate:
+// a primeira cadastrada), porque é a que tem menos risco de virar órfã.
+function _categoriasDuplicadas() {
+  const mapa = new Map();
+  (db.dfc_cats || []).forEach(c => {
+    const chave = normText(c.nome) + '||' + (c.grupo || '');
+    if (!mapa.has(chave)) mapa.set(chave, []);
+    mapa.get(chave).push(c);
+  });
+  return [...mapa.values()]
+    .filter(itens => itens.length > 1)
+    .map(itens => {
+      const comUso = itens.map((c, i) => ({ cat:c, usos:_usosDaCategoria(c.id), ordem:i }));
+      comUso.sort((a,b) => b.usos - a.usos || a.ordem - b.ordem);
+      return { manter: comUso[0], remover: comUso.slice(1) };
+    });
+}
+
+function abrirLimparCategoriasDuplicadas() {
+  const dups = _categoriasDuplicadas();
+  const corpo = document.getElementById('catdup-corpo');
+  const btn = document.getElementById('catdup-btn');
+  if (!dups.length) {
+    corpo.innerHTML = '<div class="empty-state" style="padding:28px">✅ Nenhuma categoria duplicada encontrada.</div>';
+    btn.style.display = 'none';
+  } else {
+    btn.style.display = '';
+    corpo.innerHTML = `
+      <div class="table-scroll" style="max-height:340px"><table><thead><tr>
+        <th style="width:38px"></th><th>Categoria</th><th>Grupo</th><th>Será mantida</th><th>Serão unificadas</th>
+      </tr></thead><tbody>${dups.map((d, i) => `
+        <tr>
+          <td><input type="checkbox" class="catdup-chk" value="${i}" checked style="width:auto;margin:0" /></td>
+          <td><b>${d.manter.cat.nome}</b></td>
+          <td><span class="badge badge-blue">${getDfcGrupoLabel(d.manter.cat.grupo)}</span></td>
+          <td style="font-size:12px">a que já tem <b>${d.manter.usos}</b> uso(s)</td>
+          <td style="font-size:12px">${d.remover.length} cópia(s), ${d.remover.reduce((s,r)=>s+r.usos,0)} uso(s) a migrar</td>
+        </tr>`).join('')}</tbody></table></div>
+      <div style="font-size:12px;font-weight:600;color:#ea580c;margin-top:14px;padding:9px 13px;background:#fff1e6;border-radius:6px;border-left:3px solid #ea580c;">
+        ⚠️ Metas cadastradas nas cópias (DRE → Metas por Categoria) não são somadas à mantida — confira depois, se você usa esse recurso.
+      </div>`;
+  }
+  window._catDupCache = dups;
+  openModal('modal-cat-duplicadas');
+}
+
+async function executarLimpezaCategorias() {
+  const dups = window._catDupCache || [];
+  const escolhidos = [...document.querySelectorAll('.catdup-chk:checked')]
+    .map(c => dups[parseInt(c.value,10)]).filter(Boolean);
+  if (!escolhidos.length) { alert('Selecione ao menos uma categoria para unificar.'); return; }
+
+  const totalCopias = escolhidos.reduce((s,d) => s + d.remover.length, 0);
+  const totalUsos   = escolhidos.reduce((s,d) => s + d.remover.reduce((x,r)=>x+r.usos,0), 0);
+  if (!confirm(`Unificar ${escolhidos.length} categoria(s)?\n\n• ${totalCopias} cópia(s) serão excluídas\n• ${totalUsos} registro(s) passarão para a categoria mantida\n\nNenhum lançamento será apagado.`)) return;
+
+  let erros = 0, migrados = 0, apagadas = 0;
+  for (const d of escolhidos) {
+    const manterId = d.manter.cat.id;
+    for (const r of d.remover) {
+      const velhoId = r.cat.id;
+      // 1. Reaponta tudo que usava a cópia para a categoria mantida.
+      let falhouAlgo = false;
+      for (const ref of CAT_REFERENCIAS) {
+        const usados = (db[ref.lista] || []).filter(x => x[ref.campo] === velhoId);
+        if (!usados.length) continue;
+        const ok = await sbFetch(ref.tabela, 'PATCH', { [ref.campo]: manterId }, `?${ref.campo}=eq.${velhoId}`);
+        if (ok) { usados.forEach(x => { x[ref.campo] = manterId; }); migrados += usados.length; }
+        else { falhouAlgo = true; erros++; }
+      }
+      // 2. Só apaga a cópia se TUDO migrou — senão sobrariam registros órfãos.
+      if (falhouAlgo) continue;
+      const del = await sbFetch('dfc_categorias', 'DELETE', null, `?id=eq.${velhoId}`);
+      if (del) { db.dfc_cats = db.dfc_cats.filter(x => x.id !== velhoId); apagadas++; }
+      else erros++;
+    }
+  }
+
+  bumpDbVer();
+  renderDfcCategorias(); populateDfcCatSelects(); popularCategoriasAnalise();
+  popularFiltrosGrupoCategoriaTodos(); populateDreCatSelects();
+  renderLancamentos(); renderApagar(); renderPagas(); renderLancReceber();
+  closeModal('modal-cat-duplicadas');
+  alert(erros
+    ? `⚠️ Concluído com ${erros} erro(s).\n${apagadas} cópia(s) excluída(s), ${migrados} registro(s) migrado(s).\nAs cópias com erro foram mantidas, para não deixar registros órfãos.`
+    : `✅ ${apagadas} cópia(s) excluída(s) e ${migrados} registro(s) migrado(s).`);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// GERENCIAR CONTAS FIXAS (recorrentes mensais)
+// Cada conta fixa gera 1 lançamento por mês da vigência, todos marcados
+// com o mesmo `fixo_grupo`. Aqui o usuário edita ou apaga o conjunto
+// inteiro de uma vez, em vez de abrir mês a mês.
+// ══════════════════════════════════════════════════════════════════
+
+// Agrupa os lançamentos fixos por fixo_grupo.
+function _contasFixasAgrupadas() {
+  const mapa = new Map();
+  db.lancamentos.filter(l => l.fixo).forEach(l => {
+    const chave = l.fixo_grupo || ('avulso:' + l.id);
+    if (!mapa.has(chave)) mapa.set(chave, []);
+    mapa.get(chave).push(l);
+  });
+  const grupos = [...mapa.entries()].map(([chave, itens]) => {
+    itens.sort((a,b) => (a.dtcompra||'').localeCompare(b.dtcompra||''));
+    const primeiro = itens[0];
+    return {
+      chave,
+      itens,
+      catId: primeiro.cat_dre || '',
+      valor: primeiro.valor || 0,
+      inicio: (itens[0].dtcompra || '').slice(0,7),
+      fim:    (itens[itens.length-1].dtcompra || '').slice(0,7),
+      dia:    parseInt((primeiro.dtcompra || '').split('-')[2], 10) || 1,
+      pagos:  itens.filter(l => l.pago === 'sim').length
+    };
+  });
+  grupos.sort((a,b) => (a.inicio||'').localeCompare(b.inicio||''));
+  return grupos;
+}
+
+function _mesLegivel(ym) {
+  if (!ym) return '—';
+  const [a,m] = ym.split('-').map(Number);
+  return (mesesAbr[m] || m) + '/' + a;
+}
+
+function abrirContasFixas() {
+  document.getElementById('cf-detalhe').style.display = 'none';
+  renderContasFixas();
+  openModal('modal-contas-fixas');
+}
+
+function renderContasFixas() {
+  const box = document.getElementById('cf-lista');
+  if (!box) return;
+  const grupos = _contasFixasAgrupadas();
+  if (!grupos.length) {
+    box.innerHTML = '<div class="empty-state" style="padding:28px">Nenhuma conta fixa cadastrada. Crie uma marcando "Conta Fixa (recorrente mensal)" ao lançar uma despesa.</div>';
+    return;
+  }
+  box.innerHTML = `
+    <div class="table-scroll" style="max-height:300px"><table><thead><tr>
+      <th>Categoria</th><th>Valor mensal</th><th>Vigência</th><th>Lançamentos</th><th>Pagos</th><th>Ações</th>
+    </tr></thead><tbody>${grupos.map(g => `
+      <tr>
+        <td>${g.catId ? getDreCatNome(g.catId) : '<span style="color:#d6d3d1">Sem categoria</span>'}</td>
+        <td style="font-family:DM Mono,monospace">${fmtBRL(g.valor)}</td>
+        <td>${_mesLegivel(g.inicio)} → ${_mesLegivel(g.fim)}</td>
+        <td>${g.itens.length}</td>
+        <td>${g.pagos ? `<span class="badge badge-green">${g.pagos}</span>` : '<span style="color:#d6d3d1">0</span>'}</td>
+        <td class="actions">
+          <button class="btn btn-secondary btn-sm" onclick="abrirDetalheContaFixa('${g.chave}')">Gerenciar</button>
+        </td>
+      </tr>`).join('')}</tbody></table></div>`;
+}
+
+let _cfGrupoAtual = null;
+
+function abrirDetalheContaFixa(chave) {
+  const g = _contasFixasAgrupadas().find(x => x.chave === chave);
+  if (!g) return;
+  _cfGrupoAtual = chave;
+  const painel = document.getElementById('cf-detalhe');
+  const cats = [...db.dfc_cats].sort((a,b) => (a.nome||'').localeCompare(b.nome||''));
+
+  painel.style.display = 'block';
+  painel.innerHTML = `
+    <div style="border-top:1px solid #e7e5e4;margin:20px 0 16px"></div>
+    <div class="card-title" style="margin-bottom:4px">
+      Gerenciando: ${g.catId ? getDreCatNome(g.catId) : 'Conta fixa sem categoria'} —
+      ${fmtBRL(g.valor)}/mês
+    </div>
+    <div class="page-sub" style="margin-bottom:16px">
+      ${g.itens.length} lançamento(s), de ${_mesLegivel(g.inicio)} a ${_mesLegivel(g.fim)}.
+      ${g.pagos ? `<b style="color:#16a34a">${g.pagos} já pago(s)</b> — esses ficam protegidos contra exclusão.` : ''}
+    </div>
+
+    <!-- 1. Alterar em massa -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">1 · Alterar todos os meses</div>
+      <div class="page-sub" style="margin-top:-8px;margin-bottom:14px">
+        Deixe em branco / "manter" o que não quiser mudar.
+      </div>
+      <div class="grid3">
+        <div class="form-group"><label>Categoria</label>
+          <select id="cf-nova-cat">
+            <option value="__manter__">— manter atual —</option>
+            <option value="">Nenhuma</option>
+            ${cats.map(c => `<option value="${c.id}">${c.nome}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group"><label>Valor mensal (R$)</label>
+          <input type="number" step="0.01" min="0" id="cf-novo-valor" placeholder="manter (${fmtBRL(g.valor)})" />
+        </div>
+        <div class="form-group"><label>Dia do vencimento</label>
+          <input type="number" min="1" max="31" id="cf-novo-dia" placeholder="manter (dia ${g.dia})" />
+        </div>
+      </div>
+      <div class="grid3">
+        <div class="form-group" style="grid-column:span 2"><label>Aplicar a partir de</label>
+          <select id="cf-aplicar-de">
+            <option value="">Todos os meses da vigência</option>
+            ${g.itens.map(l => `<option value="${l.dtcompra}">${_mesLegivel(l.dtcompra.slice(0,7))} em diante</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="aplicarAlteracaoContaFixa()">Aplicar alterações</button>
+      </div>
+    </div>
+
+    <!-- 2. Ajustar vigência -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">2 · Ajustar o fim da vigência</div>
+      <div class="page-sub" style="margin-top:-8px;margin-bottom:14px">
+        Antecipar apaga os meses seguintes; estender cria os meses que faltam,
+        copiando os dados do último lançamento.
+      </div>
+      <div class="grid3">
+        <div class="form-group"><label>Novo fim da vigência</label>
+          <input type="month" id="cf-novo-fim" value="${g.fim}" />
+        </div>
+        <div style="align-self:end" class="form-group">
+          <button class="btn btn-primary" onclick="ajustarVigenciaContaFixa()">Aplicar nova vigência</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Excluir meses específicos -->
+    <div class="card" style="margin-bottom:8px">
+      <div class="card-title">3 · Excluir meses específicos</div>
+      <div id="cf-meses" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:10px 0 14px;max-height:220px;overflow:auto">
+        ${g.itens.map(l => {
+          const pago = l.pago === 'sim';
+          return `<label style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
+                    background:${pago ? '#f5f4f2' : '#faf9f8'};border:1.5px solid #e7e5e4;border-radius:8px;
+                    padding:8px 10px;cursor:${pago ? 'not-allowed' : 'pointer'};color:${pago ? '#a8a29e' : '#1f2937'}">
+            <input type="checkbox" class="cf-mes-chk" value="${l.id}" ${pago ? 'disabled' : ''} style="width:auto;margin:0" />
+            ${_mesLegivel(l.dtcompra.slice(0,7))}${pago ? ' 🔒' : ''}
+          </label>`;
+        }).join('')}
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="cfMarcarTodosMeses(true)">Marcar todos</button>
+        <button class="btn btn-secondary" onclick="cfMarcarTodosMeses(false)">Desmarcar</button>
+        <button class="btn btn-danger" onclick="excluirMesesContaFixa()">Excluir selecionados</button>
+        <button class="btn btn-danger" onclick="excluirContaFixaInteira()">Excluir a conta fixa inteira</button>
+      </div>
+    </div>`;
+  if (painel.scrollIntoView) painel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function cfMarcarTodosMeses(v) {
+  document.querySelectorAll('.cf-mes-chk:not(:disabled)').forEach(c => { c.checked = v; });
+}
+
+function _cfGrupo() {
+  return _contasFixasAgrupadas().find(x => x.chave === _cfGrupoAtual) || null;
+}
+
+// ── 1. Alteração em massa ──
+async function aplicarAlteracaoContaFixa() {
+  const g = _cfGrupo();
+  if (!g) return;
+  const novaCat  = document.getElementById('cf-nova-cat').value;
+  const novoVal  = document.getElementById('cf-novo-valor').value;
+  const novoDia  = document.getElementById('cf-novo-dia').value;
+  const aPartir  = document.getElementById('cf-aplicar-de').value;
+
+  const mudarCat = novaCat !== '__manter__';
+  const mudarVal = novoVal !== '' && !isNaN(parseFloat(novoVal));
+  const dia      = parseInt(novoDia, 10);
+  const mudarDia = novoDia !== '' && dia >= 1 && dia <= 31;
+  if (!mudarCat && !mudarVal && !mudarDia) { alert('Escolha ao menos uma alteração.'); return; }
+
+  const alvos = g.itens.filter(l => !aPartir || l.dtcompra >= aPartir);
+  if (!alvos.length) { alert('Nenhum lançamento no período escolhido.'); return; }
+
+  const resumo = [
+    mudarCat ? `Categoria → ${novaCat ? getDreCatNome(novaCat) : 'Nenhuma'}` : null,
+    mudarVal ? `Valor → ${fmtBRL(parseFloat(novoVal))}` : null,
+    mudarDia ? `Dia do vencimento → ${dia}` : null
+  ].filter(Boolean).join('\n');
+  if (!confirm(`Alterar ${alvos.length} lançamento(s)?\n\n${resumo}`)) return;
+
+  let erros = 0;
+  for (const l of alvos) {
+    const patch = {};
+    if (mudarCat) { patch.cat_dre = novaCat; patch.subcat = ''; }
+    if (mudarVal) patch.valor = parseFloat(novoVal);
+    if (mudarDia) {
+      const [ano, mes] = l.dtcompra.split('-').map(Number);
+      patch.dtcompra = _dataComDiaFixo(ano, mes, dia);
+    }
+    const ok = await sbFetch('lancamentos', 'PATCH', patch, `?id=eq.${l.id}`);
+    if (ok) Object.assign(l, patch); else erros++;
+  }
+  _cfDepoisDeMexer(erros, `${alvos.length - erros} lançamento(s) alterado(s).`);
+}
+
+// ── 2. Ajustar vigência ──
+async function ajustarVigenciaContaFixa() {
+  const g = _cfGrupo();
+  if (!g) return;
+  const novoFim = document.getElementById('cf-novo-fim').value;
+  if (!novoFim) { alert('Informe o novo fim da vigência.'); return; }
+  if (novoFim < g.inicio) { alert('O fim da vigência não pode ser antes do início (' + _mesLegivel(g.inicio) + ').'); return; }
+  if (novoFim === g.fim) { alert('A vigência já termina em ' + _mesLegivel(novoFim) + '.'); return; }
+
+  // ── Antecipar: apaga os meses depois do novo fim ──
+  if (novoFim < g.fim) {
+    const sobrando = g.itens.filter(l => l.dtcompra.slice(0,7) > novoFim);
+    const pagos = sobrando.filter(l => l.pago === 'sim');
+    const apagar = sobrando.filter(l => l.pago !== 'sim');
+    if (!apagar.length) { alert('Nada a excluir: os meses após ' + _mesLegivel(novoFim) + ' já estão pagos ou não existem.'); return; }
+    const aviso = pagos.length ? `\n\n⚠️ ${pagos.length} mês(es) já pago(s) serão mantidos.` : '';
+    if (!confirm(`Encurtar a vigência até ${_mesLegivel(novoFim)}?\n\nSerão excluídos ${apagar.length} lançamento(s).${aviso}`)) return;
+    let erros = 0;
+    for (const l of apagar) {
+      const ok = await sbFetch('lancamentos', 'DELETE', null, `?id=eq.${l.id}`);
+      if (ok) db.lancamentos = db.lancamentos.filter(x => x.id !== l.id); else erros++;
+    }
+    _cfDepoisDeMexer(erros, `Vigência encurtada até ${_mesLegivel(novoFim)}.`);
+    return;
+  }
+
+  // ── Estender: cria os meses que faltam, copiando o último lançamento ──
+  const modelo = g.itens[g.itens.length - 1];
+  const [ay, am] = g.fim.split('-').map(Number);
+  let ano = ay, mes = am + 1;
+  if (mes > 12) { mes = 1; ano++; }
+  const novos = [];
+  while (`${ano}-${String(mes).padStart(2,'0')}` <= novoFim) {
+    novos.push({ ano, mes });
+    mes++;
+    if (mes > 12) { mes = 1; ano++; }
+  }
+  if (novos.length > 60) { alert('Extensão muito longa (máximo 60 meses de uma vez).'); return; }
+  if (!confirm(`Estender até ${_mesLegivel(novoFim)}?\n\nSerão criados ${novos.length} lançamento(s) iguais ao de ${_mesLegivel(g.fim)}.`)) return;
+
+  let erros = 0;
+  for (const { ano: a, mes: m } of novos) {
+    const novo = {
+      ...modelo,
+      id: uid(),
+      dtcompra: _dataComDiaFixo(a, m, g.dia),
+      dtprev: '',
+      dtpago: '',
+      pago: 'nao',
+      parcela_datas: null,
+      fixo: true,
+      fixo_grupo: g.chave.startsWith('avulso:') ? uid() : g.chave,
+      vigencia_inicio: g.inicio,
+      vigencia_fim: novoFim
+    };
+    const ok = await sbFetch('lancamentos', 'POST', novo);
+    if (ok) db.lancamentos.push(novo); else erros++;
+  }
+  _cfDepoisDeMexer(erros, `${novos.length - erros} lançamento(s) criado(s) até ${_mesLegivel(novoFim)}.`);
+}
+
+// ── 3. Excluir meses selecionados / conta inteira ──
+async function excluirMesesContaFixa() {
+  const g = _cfGrupo();
+  if (!g) return;
+  const ids = [...document.querySelectorAll('.cf-mes-chk:checked')].map(c => c.value);
+  if (!ids.length) { alert('Selecione ao menos um mês.'); return; }
+  if (!confirm(`Excluir ${ids.length} lançamento(s) desta conta fixa?\n\nEssa ação não pode ser desfeita.`)) return;
+  let erros = 0;
+  for (const id of ids) {
+    const ok = await sbFetch('lancamentos', 'DELETE', null, `?id=eq.${id}`);
+    if (ok) db.lancamentos = db.lancamentos.filter(x => x.id !== id); else erros++;
+  }
+  _cfDepoisDeMexer(erros, `${ids.length - erros} lançamento(s) excluído(s).`);
+}
+
+async function excluirContaFixaInteira() {
+  const g = _cfGrupo();
+  if (!g) return;
+  const pagos  = g.itens.filter(l => l.pago === 'sim');
+  const apagar = g.itens.filter(l => l.pago !== 'sim');
+  if (!apagar.length) { alert('Todos os lançamentos desta conta fixa já estão pagos — nada foi excluído.'); return; }
+  const aviso = pagos.length ? `\n\n⚠️ ${pagos.length} lançamento(s) já pago(s) serão mantidos.` : '';
+  if (!confirm(`Excluir a conta fixa inteira (${apagar.length} lançamento(s))?${aviso}\n\nEssa ação não pode ser desfeita.`)) return;
+  let erros = 0;
+  for (const l of apagar) {
+    const ok = await sbFetch('lancamentos', 'DELETE', null, `?id=eq.${l.id}`);
+    if (ok) db.lancamentos = db.lancamentos.filter(x => x.id !== l.id); else erros++;
+  }
+  _cfDepoisDeMexer(erros, `${apagar.length - erros} lançamento(s) excluído(s).`);
+}
+
+// Redesenha tudo que depende dos lançamentos e avisa o resultado.
+function _cfDepoisDeMexer(erros, mensagemOk) {
+  bumpDbVer();
+  renderContasFixas();
+  const aindaExiste = _cfGrupo();
+  if (aindaExiste) abrirDetalheContaFixa(_cfGrupoAtual);
+  else { document.getElementById('cf-detalhe').style.display = 'none'; _cfGrupoAtual = null; }
+  renderLancamentos(); renderApagar(); renderPagas(); populateYearSelects();
+  alert(erros ? `⚠️ Concluído com ${erros} erro(s). ${mensagemOk}` : `✅ ${mensagemOk}`);
+}
+
+// ══════════════════════════════════════════════════════════════════
 // Mostra/esconde os campos de vigência e desativa "Parcelas" quando a
 // conta é marcada como fixa (cada mês vira 1 lançamento avulso — não faz
 // sentido combinar com parcelamento de uma compra única).
@@ -5024,18 +5670,23 @@ async function saveLancamento() {
 }
 
 function clearLancamento() {
-  ['l-dtcompra','l-dtprev','l-nf','l-obs'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('l-forn').value='';
-  document.getElementById('l-prod').value='';
-  document.getElementById('l-valor').value='';
+  // Zera TODOS os campos do formulário. Antes, categoria, subcategoria,
+  // tipo de pagamento e banco ficavam com o valor do lançamento anterior.
+  ['l-dtcompra','l-dtprev','l-nf','l-obs','l-valor',
+   'l-forn','l-prod','l-catdre','l-subcat','l-tipo-pag','l-banco'
+  ].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   document.getElementById('l-parcelas').value='1';
   document.getElementById('l-financeiro').value='nao';
   document.getElementById('l-pago').value='nao';
+  // A lista de subcategorias segue a categoria — sem categoria, fica vazia.
+  if (typeof onCategoriaChange === 'function') onCategoriaChange('l-catdre','l-subcat');
   // Reset parcela dates
   const container = document.getElementById('l-parcela-dates');
   const grid = document.getElementById('l-parcela-dates-grid');
   if(container) container.style.display='none';
   if(grid) grid.innerHTML='';
+  const soma = document.getElementById('l-parcela-dates-sum');
+  if (soma) soma.remove();
   // Reset conta fixa
   const fixaEl = document.getElementById('l-fixa');
   if (fixaEl) fixaEl.checked = false;
@@ -5056,6 +5707,7 @@ function renderLancamentos() {
   const grupo = document.getElementById('lf-grupo') ? document.getElementById('lf-grupo').value : '';
   const cat = document.getElementById('lf-cat') ? document.getElementById('lf-cat').value : '';
   const prod = document.getElementById('lf-prod') ? document.getElementById('lf-prod').value : '';
+  const subcat = document.getElementById('lf-subcat') ? document.getElementById('lf-subcat').value : '';
   const pago = document.getElementById('lf-pago').value;
   const dataEsp = document.getElementById('lf-data').value;
   const dataDe = document.getElementById('lf-data-de') ? document.getElementById('lf-data-de').value : '';
@@ -5081,6 +5733,7 @@ function renderLancamentos() {
       }
       if(grupo && getDfcCatGrupo(catId) !== grupo) return false;
     }
+    if(subcat && l.subcat !== subcat) return false;
     if(pago && l.pago !== pago) return false;
     if(dataEsp && l.dtcompra !== dataEsp) return false;
     if(dataDe && l.dtcompra < dataDe) return false;
@@ -5142,10 +5795,12 @@ function renderLancamentos() {
 }
 
 function clearLancamentoFiltros() {
-  ['lf-mes','lf-ano','lf-forn','lf-grupo','lf-cat','lf-prod','lf-pago','lf-data','lf-data-de','lf-data-ate','lf-valor-min','lf-valor-max','lf-nf'].forEach(id=>{
+  ['lf-mes','lf-ano','lf-forn','lf-grupo','lf-cat','lf-subcat','lf-prod','lf-pago','lf-data','lf-data-de','lf-data-ate','lf-valor-min','lf-valor-max','lf-nf'].forEach(id=>{
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+  popularSelectCategoriaFiltro('lf-cat','lf-grupo');
+  popularFiltroSubcatLancamentos();
   renderLancamentos();
 }
 
@@ -5393,7 +6048,12 @@ function _efSalvarOcultas() {
   const obj = {};
   Object.keys(_ef).forEach(k => {
     const h = _ef[k].hidden;
-    if (h && h.size) obj[k] = [...h];
+    if (!h || !h.size) return;
+    // As colunas do bloco OCULTAR não vão para o localStorage: assim,
+    // se um dia o flag voltar para false, a coluna reaparece sozinha.
+    const forcadas = EF_COLS_FORCADAS[k] || [];
+    const lista = [...h].filter(x => !forcadas.includes(x));
+    if (lista.length) obj[k] = lista;
   });
   try { localStorage.setItem(EF_COLS_KEY, JSON.stringify(obj)); } catch(e) {}
 }
@@ -5403,8 +6063,12 @@ function _efHidden(tableKey) {
     const salvo = _efCarregarOcultas()[tableKey];
     st.hidden = new Set(salvo || []);
   }
+  // Colunas desligadas no bloco OCULTAR: sempre escondidas, independente
+  // do que o usuário tenha marcado antes no seletor de colunas.
+  (EF_COLS_FORCADAS[tableKey] || []).forEach(k => st.hidden.add(k));
   return st.hidden;
 }
+function _efForcadas(tableKey) { return EF_COLS_FORCADAS[tableKey] || []; }
 
 // Reescreve a folha de estilo que esconde as colunas marcadas em todas as tabelas.
 function efAplicarColunasOcultas() {
@@ -5445,7 +6109,8 @@ function efMontarBarraColunas(tableKey, theadId) {
     barra.className = 'ef-colbar';
     scroll.parentElement.insertBefore(barra, scroll);
   }
-  const n = _efHidden(tableKey).size;
+  const forcadas = _efForcadas(tableKey);
+  const n = [..._efHidden(tableKey)].filter(k => !forcadas.includes(k)).length;
   barra.innerHTML = `<button class="ef-colbtn${n ? ' ef-colbtn-on' : ''}" onclick="efAbrirSeletorColunas(event,'${tableKey}')" title="Escolher quais colunas aparecem">
       ▦ Colunas${n ? ` <span class="ef-colbtn-badge">${n} oculta${n > 1 ? 's' : ''}</span>` : ''}
     </button>`;
@@ -5466,11 +6131,14 @@ function efAbrirSeletorColunas(evt, tableKey) {
   const ctx = _efReg[tableKey];
   if (!ctx) return;
   const ocultas = _efHidden(tableKey);
+  const forcadas = _efForcadas(tableKey);
+  const colsEscolhiveis = ctx.cols.filter(c => !forcadas.includes(c.key));
+  const nOcultasUsuario = colsEscolhiveis.filter(c => ocultas.has(c.key)).length;
   const painel = document.createElement('div');
   painel.className = 'ef-dropdown';
   painel.innerHTML = `
-    <div class="ef-dd-actall"><label><input type="checkbox" id="ef-col-all" ${ocultas.size ? '' : 'checked'} onchange="efMarcarTodasColunas(this)" /> Mostrar todas</label></div>
-    <div class="ef-dd-list">${ctx.cols.map(c =>
+    <div class="ef-dd-actall"><label><input type="checkbox" id="ef-col-all" ${nOcultasUsuario ? '' : 'checked'} onchange="efMarcarTodasColunas(this)" /> Mostrar todas</label></div>
+    <div class="ef-dd-list">${colsEscolhiveis.map(c =>
       `<label class="ef-dd-item"><input type="checkbox" value="${c.key}" ${ocultas.has(c.key) ? '' : 'checked'} /> <span>${c.label}</span></label>`
     ).join('')}</div>
     <div class="ef-dd-actions">
@@ -7930,6 +8598,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSavedLogin();
   tentarRestaurarSessao();
   ativarSelectsPesquisaveis();
+  aplicarOcultacoes();
+  restaurarFabLanc();
 
   const ov = document.getElementById('cal-detail-overlay');
   if (ov) ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); });
@@ -7950,6 +8620,24 @@ document.addEventListener('DOMContentLoaded', () => {
 // ══════════════════════════════════════════
 // DATAS MANUAIS DE PARCELAS
 // ══════════════════════════════════════════
+// Descobre a data-base de vencimento de um formulário de parcelas.
+// Usa a "Previsão de Pagamento/Recebimento"; se estiver vazia, cai na
+// data da compra/venda — assim o calendário nunca abre em branco.
+const _BASE_PARCELAS = {
+  'l-parcela-dates':   ['l-dtprev',   'l-dtcompra'],
+  'edit-parcela-dates':['edit-dtprev','edit-dtcompra'],
+  'lr-parcela-dates':  ['lr-dtprev',  'lr-dtvenda'],
+  'elr-parcela-dates': ['elr-dtprev', 'elr-dtvenda']
+};
+function _baseVencimentoParcelas(containerid) {
+  const ids = _BASE_PARCELAS[containerid] || [];
+  for (const id of ids) {
+    const el = document.getElementById(id);
+    if (el && el.value) return el.value;
+  }
+  return '';
+}
+
 function toggleParcelaDates(selectId, containerid) {
   const n = parseInt(document.getElementById(selectId).value) || 1;
   const container = document.getElementById(containerid);
@@ -7958,6 +8646,8 @@ function toggleParcelaDates(selectId, containerid) {
   if (n <= 1) {
     container.style.display = 'none';
     grid.innerHTML = '';
+    const s = document.getElementById(containerid + '-sum');
+    if (s) s.remove();
     return;
   }
   // Try to get total value from sibling valor input
@@ -7969,20 +8659,48 @@ function toggleParcelaDates(selectId, containerid) {
   }
   const valorSugerido = totalValor > 0 ? (totalValor / n).toFixed(2) : '';
 
+  // O que o usuário já digitou é preservado ao redesenhar a grade (ex.:
+  // quando ele muda o valor total ou o número de parcelas depois).
+  const antigos = Array.from({length: 60}, (_, i) => {
+    const d = document.getElementById(`${containerid}-p${i+1}`);
+    const v = document.getElementById(`${containerid}-v${i+1}`);
+    return { data: d ? d.value : '', valor: v ? v.value : '', tocado: d ? d.dataset.tocado === '1' : false };
+  });
+
+  // Datas sugeridas: 1ª parcela na data configurada, as demais de mês em mês.
+  const base = _baseVencimentoParcelas(containerid);
+
   container.style.display = '';
-  // Rebuild grid with date + valor inputs per parcela
-  grid.innerHTML = Array.from({length: n}, (_, i) => `
-    <div style="background:#faf9f8;border:1.5px solid #e7e5e4;border-radius:8px;padding:10px 12px;">
-      <div style="font-size:11px;font-weight:700;color:#ea580c;margin-bottom:8px;">Parcela ${i+1}/${n}</div>
-      <div style="margin-bottom:6px;">
-        <label style="font-size:10px;font-weight:600;color:#57534e;margin-bottom:3px;display:block;">Vencimento</label>
-        <input type="date" id="${containerid}-p${i+1}" style="font-size:12px;padding:6px 9px;width:100%" />
+  grid.innerHTML = Array.from({length: n}, (_, i) => {
+    const ant = antigos[i] || {};
+    const sugerida = base ? parcelaVencimento(base, i + 1, n) : '';
+    // Data digitada à mão vence a sugestão; senão, recalcula pela base.
+    const dataVal = ant.tocado && ant.data ? ant.data : (sugerida || ant.data || '');
+    const valorVal = ant.valor || valorSugerido;
+    return `
+    <div style="background:#faf9f8;border:1.5px solid #e7e5e4;border-radius:8px;padding:8px 10px;">
+      <div style="font-size:11px;font-weight:700;color:#ea580c;margin-bottom:6px;">Parcela ${i+1}/${n}</div>
+      <div style="margin-bottom:5px;">
+        <label style="font-size:10px;font-weight:600;color:#57534e;margin-bottom:2px;display:block;">Vencimento</label>
+        <input type="date" id="${containerid}-p${i+1}" value="${dataVal}" data-tocado="${ant.tocado ? '1' : '0'}"
+               onchange="this.dataset.tocado='1'" style="font-size:12px;padding:5px 8px;width:100%" />
       </div>
       <div>
-        <label style="font-size:10px;font-weight:600;color:#57534e;margin-bottom:3px;display:block;">Valor (R$)</label>
-        <input type="number" step="0.01" min="0" id="${containerid}-v${i+1}" placeholder="0,00" value="${valorSugerido}" style="font-size:12px;padding:6px 9px;width:100%" oninput="syncTotalParcelaValores('${containerid}',${n},'${selectId}')" />
+        <label style="font-size:10px;font-weight:600;color:#57534e;margin-bottom:2px;display:block;">Valor (R$)</label>
+        <input type="number" step="0.01" min="0" id="${containerid}-v${i+1}" placeholder="0,00" value="${valorVal}"
+               style="font-size:12px;padding:5px 8px;width:100%" oninput="syncTotalParcelaValores('${containerid}',${n},'${selectId}')" />
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+  syncTotalParcelaValores(containerid, n, selectId);
+}
+
+// Recalcula as datas sugeridas quando a data-base ou o valor mudam,
+// sem apagar o que o usuário já ajustou à mão.
+function atualizarParcelasDoForm(selectId, containerid) {
+  const el = document.getElementById(selectId);
+  if (!el) return;
+  if ((parseInt(el.value) || 1) > 1) toggleParcelaDates(selectId, containerid);
 }
 
 function syncTotalParcelaValores(containerid, n, selectId) {
@@ -8064,7 +8782,9 @@ function setManualParcelaDates(containerid, raw) {
   setTimeout(() => {
     datas.forEach((d, i) => {
       const el = document.getElementById(`${containerid}-p${i+1}`);
-      if (el && d) el.value = d;
+      // dataset.tocado marca "escolhida à mão": a sugestão automática
+      // não sobrescreve essa data se a grade for redesenhada depois.
+      if (el && d) { el.value = d; el.dataset.tocado = '1'; }
     });
   }, 50);
 }
@@ -8087,7 +8807,9 @@ function restoreParcelaFields(containerid, raw) {
   setTimeout(() => {
     datas.forEach((d, i) => {
       const el = document.getElementById(`${containerid}-p${i+1}`);
-      if (el && d) el.value = d;
+      // dataset.tocado marca "escolhida à mão": a sugestão automática
+      // não sobrescreve essa data se a grade for redesenhada depois.
+      if (el && d) { el.value = d; el.dataset.tocado = '1'; }
     });
     valores.forEach((v, i) => {
       const el = document.getElementById(`${containerid}-v${i+1}`);
@@ -8115,6 +8837,10 @@ function applyNavPermissions() {
     if (isAdmin) { item.style.display = ''; return; }
     item.style.display = allowed.includes(pg) ? '' : 'none';
   });
+  // As permissões acima reescrevem o display de TODOS os itens do menu —
+  // inclusive os que o bloco OCULTAR mandou esconder. Por isso reaplicamos
+  // aqui, antes de decidir quais cabeçalhos de grupo continuam visíveis.
+  aplicarOcultacoesMenu();
   // Ocultar cabeçalho do grupo se todos os itens estiverem ocultos
   ['grp-pagar','grp-receber','grp-dfc','grp-dre'].forEach(grpId => {
     const grp = document.getElementById(grpId);
@@ -9307,6 +10033,34 @@ function subcatsDaCategoria(catId) {
     .sort((a,b) => (a.nome||'').localeCompare(b.nome||''));
 }
 
+// ── Filtro de Subcategoria da tela Lançamentos (Contas a Pagar) ──
+// Se uma Categoria estiver selecionada, lista só as subcategorias dela.
+// Sem categoria escolhida, lista todas no formato "Categoria → Subcategoria",
+// respeitando o Grupo selecionado (se houver).
+function popularFiltroSubcatLancamentos() {
+  const el = document.getElementById('lf-subcat');
+  if (!el) return;
+  const anterior = el.value;
+  const catSel   = (document.getElementById('lf-cat')   || {}).value || '';
+  const grupoSel = (document.getElementById('lf-grupo') || {}).value || '';
+  let lista;
+  if (catSel && catSel !== '__sem_categoria__') {
+    lista = subcatsDaCategoria(catSel);
+    el.innerHTML = '<option value="">Todas</option>' +
+      lista.map(s => `<option value="${s.id}">${s.nome}</option>`).join('');
+  } else {
+    lista = [...db.dfc_subcats]
+      .filter(s => !grupoSel || getDfcCatGrupo(s.cat) === grupoSel)
+      .sort((a,b) => {
+        const ca = getDfcCatNome(a.cat) || '', cb = getDfcCatNome(b.cat) || '';
+        return ca.localeCompare(cb) || (a.nome||'').localeCompare(b.nome||'');
+      });
+    el.innerHTML = '<option value="">Todas</option>' +
+      lista.map(s => `<option value="${s.id}">${getDfcCatNome(s.cat)} → ${s.nome}</option>`).join('');
+  }
+  el.value = (anterior && lista.some(s => s.id === anterior)) ? anterior : '';
+}
+
 // ── SUBCATEGORIA OBRIGATÓRIA ──────────────────────────────────────
 // Regra: se a categoria escolhida TEM subcategorias cadastradas, escolher
 // uma delas passa a ser obrigatório. Categorias sem subcategoria continuam
@@ -9380,6 +10134,9 @@ function onCategoriaChangeUsuario(catSelId, subSelId) {
 
 // Validação chamada antes de salvar. Retorna false e avisa quando faltar.
 function validarSubcategoria(catSelId, subSelId) {
+  // Campo escondido pelo bloco OCULTAR: deixa de ser obrigatório, senão o
+  // usuário travaria num alerta pedindo um campo que ele não consegue ver.
+  if (OCULTAR.campoSubcategoria) return true;
   const catEl = document.getElementById(catSelId);
   const subEl = document.getElementById(subSelId);
   if (!catEl || !subEl) return true;
@@ -10722,6 +11479,7 @@ function popularFiltrosGrupoCategoriaTodos() {
   popularSelectCategoriaFiltro('pgf-categoria', 'pgf-grupo');
   popularSelectGrupoFiltro('lf-grupo');
   popularSelectCategoriaFiltro('lf-cat', 'lf-grupo');
+  popularFiltroSubcatLancamentos();
   // Lado Receber: filtro de Categoria (lista completa + "Sem categoria")
   popularSelectCategoriaFiltro('arf-categoria', null);
   popularSelectCategoriaFiltro('recf-categoria', null);
@@ -12732,7 +13490,18 @@ function imprimirPagina(pagina) {
       if (txt === 'ações' || txt === 'ação') actionCols.push(i);
     });
   }
+  // Colunas escondidas na tela (seletor "▦ Colunas" ou bloco OCULTAR)
+  // também não devem sair no PDF.
+  const headOrig = table.querySelector('thead tr');
+  if (headOrig) {
+    Array.from(headOrig.cells).forEach((th, i) => {
+      if (getComputedStyle(th).display === 'none' && !actionCols.includes(i)) actionCols.push(i);
+    });
+  }
+  actionCols.sort((a, b) => a - b);
   cloneTable.querySelectorAll('tr').forEach(row => {
+    // Linhas de aviso/"nenhum registro" usam colspan e não devem ser mexidas.
+    if (row.cells.length === 1 && row.cells[0].hasAttribute('colspan')) return;
     actionCols.slice().reverse().forEach(i => { if (row.cells[i]) row.deleteCell(i); });
   });
   cloneTable.querySelectorAll('.actions, td button, td .btn').forEach(el => el.remove());
@@ -13548,7 +14317,8 @@ function _pdfDiaColsDef(pagina) {
       { key:'recebido',  label:'Recebido',       get:p=>p.recebido==='sim'?'Recebido':'Pendente' }
     ]
   };
-  return defs[pagina] || [];
+  const forcadas = EF_COLS_FORCADAS[pagina] || [];
+  return (defs[pagina] || []).filter(c => !forcadas.includes(c.key));
 }
 
 // Para a maioria das páginas (Pagar/Pagas/A Receber/Recebidas), o agrupamento
@@ -14250,7 +15020,14 @@ window.APP_BUILD = '2026-08-10 · planeta-flores-empresa-unica';
 
 // Fechar modais clicando fora
 document.querySelectorAll('.modal-overlay').forEach(ov => {
-  ov.addEventListener('click', e => { if(e.target === ov) ov.classList.remove('open'); });
+  ov.addEventListener('click', e => {
+    if (e.target !== ov) return;
+    ov.classList.remove('open');
+    // Os formulários de novo lançamento precisam voltar em branco na
+    // próxima abertura, inclusive quando fechados clicando fora.
+    if (ov.id === 'modal-novo-lanc' && typeof clearLancamento === 'function') clearLancamento();
+    if (ov.id === 'modal-novo-lr'   && typeof clearLancReceber === 'function') clearLancReceber();
+  });
 });
 </script>
 </body>
