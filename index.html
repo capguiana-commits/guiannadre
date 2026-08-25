@@ -780,7 +780,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
         </div>
         <div class="nav-sub-item" onclick="showPage('produtos')" id="nav-produtos">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-          Produtos (Compra)
+          Itens (Compra)
         </div>
         <div class="nav-sub-item" onclick="showPage('lancamentos')" id="nav-lancamentos">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
@@ -940,7 +940,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     <!-- ══ PRODUTOS ══ -->
     <div class="page" id="page-produtos">
       <div class="page-header">
-        <div><div class="page-title">Produtos</div><div class="page-sub" style="margin-bottom:0">Cadastro e gestão de produtos</div></div>
+        <div><div class="page-title">Itens</div><div class="page-sub" style="margin-bottom:0">Cadastro e gestão de itens</div></div>
         <button class="btn-novo" id="btn-novo-prod" onclick="abrirNovoProduto()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo
         </button>
@@ -948,9 +948,9 @@ th.ef-th { padding:8px 8px 8px 12px; }
       <!-- MODAL: Novo Produto -->
       <div class="modal-overlay" id="modal-novo-prod">
         <div class="modal">
-          <div class="modal-title">Novo Produto</div>
+          <div class="modal-title">Novo Item</div>
           <div class="grid3">
-            <div class="form-group"><label>Nome do Produto *</label><input id="p-nome" type="text" placeholder="Descrição do produto" /></div>
+            <div class="form-group"><label>Nome do Item *</label><input id="p-nome" type="text" placeholder="Descrição do item" /></div>
             <div class="form-group"><label>Código / SKU</label><input id="p-sku" type="text" placeholder="SKU-001" /></div>
             <div class="form-group"><label>Unidade de Medida</label>
               <select id="p-unidade">
@@ -968,25 +968,25 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div class="form-group"><label>Descrição / Observações</label><textarea id="p-obs" rows="2" placeholder="Descrição detalhada..."></textarea></div>
           <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal('modal-novo-prod')">Cancelar</button>
-            <button class="btn btn-primary" onclick="saveProduto()">Salvar Produto</button>
+            <button class="btn btn-primary" onclick="saveProduto()">Salvar Item</button>
           </div>
         </div>
       </div><!-- /modal-novo-prod -->
       <div class="card" style="margin-top:16px">
-        <div class="card-title">Produtos Cadastrados</div>
+        <div class="card-title">Itens Cadastrados</div>
         <div class="form-group" style="max-width:340px;margin-bottom:14px">
           <input type="text" id="prod-busca" placeholder="🔍 Buscar por nome ou SKU..." oninput="renderProdutos()" />
         </div>
         <div class="table-scroll"><table><thead><tr id="th-produtos-row">
           <th>Nome</th><th>SKU</th><th>Unidade</th><th>Categoria DFC</th><th>Fornecedor Padrão</th><th>Preço Unit.</th><th>Ações</th>
-        </tr></thead><tbody id="tb-produtos"><tr><td colspan="7" class="empty-state">Nenhum produto cadastrado.</td></tr></tbody></table></div>
+        </tr></thead><tbody id="tb-produtos"><tr><td colspan="7" class="empty-state">Nenhum item cadastrado.</td></tr></tbody></table></div>
       </div>
     </div>
 
     <!-- ══ LANÇAMENTOS ══ -->
     <div class="page" id="page-lancamentos">
       <div class="page-header">
-        <div><div class="page-title">Lançamentos — Contas a Pagar</div><div class="page-sub" style="margin-bottom:0">Registro de compras de produtos</div></div>
+        <div><div class="page-title">Lançamentos — Contas a Pagar</div><div class="page-sub" style="margin-bottom:0">Registro de compras de itens</div></div>
         <button class="btn-pdf" onclick="imprimirPagina('lancamentos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> PDF</button>
         <button class="btn btn-secondary" onclick="abrirModalCategoriaMassa('lancamentos')">🏷️ Categoria em Massa</button>
         <button class="btn btn-secondary" onclick="abrirContasFixas()">🔁 Contas Fixas</button>
@@ -1022,7 +1022,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div class="form-group"><label>Subcategoria</label>
             <select id="lf-subcat" onchange="renderLancamentos()" title="Filtra pela subcategoria escolhida no lançamento"><option value="">Todas</option></select>
           </div>
-          <div class="form-group"><label>Produto</label>
+          <div class="form-group"><label>Item</label>
             <select id="lf-prod" onchange="renderLancamentos()"><option value="">Todos</option></select>
           </div>
           <div class="form-group"><label>Status Pagamento</label>
@@ -1053,7 +1053,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="clearLancamentoFiltros()">Limpar Filtros</button></div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-lancamentos-row">
-          <th>Data Compra</th><th>Fornecedor</th><th>Produto</th><th>Categoria</th><th>Valor</th><th>Parcelas</th>
+          <th>Data Compra</th><th>Fornecedor</th><th>Item</th><th>Categoria</th><th>Valor</th><th>Parcelas</th>
           <th>Prev. Pgto</th><th>Lead Time</th><th>NF</th><th>Financeiro</th><th>Pago</th><th>Ações</th>
         </tr></thead><tbody id="tb-lancamentos"><tr><td colspan="12" class="empty-state">Nenhum lançamento registrado.</td></tr></tbody></table></div>
       </div>
@@ -1081,7 +1081,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div class="form-group"><label>Fornecedor</label>
             <select id="af-forn" onchange="renderApagar()"><option value="">Todos</option></select>
           </div>
-          <div class="form-group"><label>Produto</label>
+          <div class="form-group"><label>Item</label>
             <select id="af-prod" onchange="renderApagar()"><option value="">Todos</option></select>
           </div>
           <div class="form-group"><label>Grupo</label>
@@ -1123,7 +1123,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           </div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-apagar-row">
-          <th>Fornecedor</th><th>Produto</th><th>Categoria</th><th>Parcela</th><th>Valor Parcela</th><th>Dt. Compra</th><th>Vencimento</th><th>Situação</th><th>NF</th><th>Financeiro</th><th>Ações</th>
+          <th>Fornecedor</th><th>Item</th><th>Categoria</th><th>Parcela</th><th>Valor Parcela</th><th>Dt. Compra</th><th>Vencimento</th><th>Situação</th><th>NF</th><th>Financeiro</th><th>Ações</th>
         </tr></thead><tbody id="tb-apagar"><tr><td colspan="11" class="empty-state">Nenhuma parcela em aberto.</td></tr></tbody></table></div>
       </div>
     </div>
@@ -1150,7 +1150,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div class="form-group"><label>Fornecedor</label>
             <select id="pgf-forn" onchange="renderPagas()"><option value="">Todos</option></select>
           </div>
-          <div class="form-group"><label>Produto</label>
+          <div class="form-group"><label>Item</label>
             <select id="pgf-prod" onchange="renderPagas()"><option value="">Todos</option></select>
           </div>
           <div class="form-group"><label>Grupo</label>
@@ -1177,7 +1177,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="clearPagasFiltros()">Limpar</button></div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-pagas-row">
-          <th>Fornecedor</th><th>Produto</th><th>Categoria</th><th>Parcela</th><th>Valor Parcela</th><th>Vencimento</th><th>Data Compra</th><th>Data Pgto</th><th>Forma Pgto</th><th>NF</th><th>Financeiro</th><th>Ações</th>
+          <th>Fornecedor</th><th>Item</th><th>Categoria</th><th>Parcela</th><th>Valor Parcela</th><th>Vencimento</th><th>Data Compra</th><th>Data Pgto</th><th>Forma Pgto</th><th>NF</th><th>Financeiro</th><th>Ações</th>
         </tr></thead><tbody id="tb-pagas"><tr><td colspan="12" class="empty-state">Nenhuma parcela paga.</td></tr></tbody></table></div>
       </div>
     </div>
@@ -2284,7 +2284,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
             </select>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
-            <label style="margin:0;font-size:12px;white-space:nowrap;">Produto (Compras e A Pagar)</label>
+            <label style="margin:0;font-size:12px;white-space:nowrap;">Item (Compras e A Pagar)</label>
             <select id="dash-prod" onchange="renderDashCharts();" style="width:170px;">
               <option value="">Todos</option>
             </select>
@@ -2483,7 +2483,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
 
       <div class="form-group"><label>Nº da Nota Fiscal</label><input id="l-nf" type="text" placeholder="000000" /></div>
       <div class="form-group"><label class="label-add">Fornecedor<button type="button" class="btn-add-inline" title="Cadastrar novo fornecedor" onclick="abrirCadastroRapido('fornecedor','l-forn')">+</button></label><select id="l-forn"><option value="">Selecione...</option></select></div>
-      <div class="form-group"><label class="label-add">Produto<button type="button" class="btn-add-inline" title="Cadastrar novo produto" onclick="abrirCadastroRapido('produto','l-prod')">+</button></label><select id="l-prod"><option value="">Nenhum (opcional)</option></select></div>
+      <div class="form-group"><label class="label-add">Item<button type="button" class="btn-add-inline" title="Cadastrar novo item" onclick="abrirCadastroRapido('produto','l-prod')">+</button></label><select id="l-prod"><option value="">Nenhum (opcional)</option></select></div>
 
       <div class="form-group"><label class="label-add">Categoria<button type="button" class="btn-add-inline" title="Cadastrar nova categoria" onclick="abrirCadastroRapido('categoria','l-catdre')">+</button></label><select id="l-catdre" onchange="onCategoriaChangeUsuario('l-catdre','l-subcat')"><option value="">Nenhuma</option></select></div>
       <div class="form-group"><label>Subcategoria <span class="subcat-req" style="color:#dc2626">*</span></label><select id="l-subcat" onchange="onSubcategoriaChange('l-catdre','l-subcat')"><option value="">Nenhuma</option></select></div>
@@ -3039,7 +3039,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
     <div class="grid3">
       <div class="form-group"><label class="label-add">Fornecedor<button type="button" class="btn-add-inline" title="Cadastrar novo fornecedor" onclick="abrirCadastroRapido('fornecedor','edit-forn')">+</button></label><select id="edit-forn"></select></div>
-      <div class="form-group"><label class="label-add">Produto<button type="button" class="btn-add-inline" title="Cadastrar novo produto" onclick="abrirCadastroRapido('produto','edit-prod')">+</button></label><select id="edit-prod"></select></div>
+      <div class="form-group"><label class="label-add">Item<button type="button" class="btn-add-inline" title="Cadastrar novo item" onclick="abrirCadastroRapido('produto','edit-prod')">+</button></label><select id="edit-prod"></select></div>
       <div class="form-group"><label>Valor Total</label><input id="edit-valor" type="number" step="0.01" /></div>
     </div>
     <div class="grid3">
@@ -3121,10 +3121,10 @@ th.ef-th { padding:8px 8px 8px 12px; }
 <!-- ══ MODAL EDITAR PRODUTO ══ -->
 <div class="modal-overlay" id="modal-prod">
   <div class="modal">
-    <div class="modal-title">Editar Produto</div>
+    <div class="modal-title">Editar Item</div>
     <input type="hidden" id="edit-prod-id" />
     <div class="grid3">
-      <div class="form-group"><label>Nome do Produto</label><input id="ep-nome" type="text" /></div>
+      <div class="form-group"><label>Nome do Item</label><input id="ep-nome" type="text" /></div>
       <div class="form-group"><label>Código / SKU</label><input id="ep-sku" type="text" /></div>
       <div class="form-group"><label>Unidade</label>
         <select id="ep-unidade"><option>UN</option><option>KG</option><option>LT</option><option>MT</option><option>CX</option><option>PC</option></select>
@@ -3322,8 +3322,8 @@ th.ef-th { padding:8px 8px 8px 12px; }
       <select id="catmassa-categoria"><option value="">Selecione...</option></select>
     </div>
     <div class="form-group">
-      <label>Restringir a um Produto (opcional)</label>
-      <select id="catmassa-produto" onchange="atualizarContagemCategoriaMassa()"><option value="">Todos os produtos</option></select>
+      <label>Restringir a um Item (opcional)</label>
+      <select id="catmassa-produto" onchange="atualizarContagemCategoriaMassa()"><option value="">Todos os itens</option></select>
     </div>
     <div class="form-group">
       <label>Trocar apenas quem hoje tem a categoria (opcional)</label>
@@ -3353,7 +3353,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
       <table class="dfc-table" style="width:100%">
         <thead><tr>
           <th style="text-align:left">Data</th><th style="text-align:left">Fornecedor / Cliente</th>
-          <th style="text-align:left">Produto</th><th>Situação</th><th>Valor</th>
+          <th style="text-align:left">Item</th><th>Situação</th><th>Valor</th>
         </tr></thead>
         <tbody id="dre-detalhe-tbody"></tbody>
       </table>
@@ -3405,7 +3405,7 @@ const BRAND_LOGO_DATA_URI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAA
 const OCULTAR = {
   // Itens do menu lateral
   menuFornecedores:   true,   // "Fornecedores" (Contas a Pagar)
-  menuProdutosCompra: true,   // "Produtos (Compra)"
+  menuProdutosCompra: false,  // "Itens (Compra)" — REEXIBIDO
   menuProdutosVenda:  false,  // "Produtos de Venda" — continua visível
   menuSubcategorias:  true,   // "Subcategorias" (DFC)
   menuAnaliseSubcat:  true,   // "Análise por Subcategoria" (DRE)
@@ -3413,18 +3413,18 @@ const OCULTAR = {
 
   // Filtros das telas
   filtroFornecedor:   true,   // filtros "Fornecedor" em Lançamentos / A Pagar / Pagas
-  filtroProduto:      true,   // filtros "Produto"    em Lançamentos / A Pagar / Pagas
+  filtroProduto:      false,  // filtros "Produto"    em Lançamentos / A Pagar / Pagas — REEXIBIDO
 
   // Campos dentro dos modais de lançamento
   campoFornecedor:    true,   // "Fornecedor" no Novo/Editar Lançamento a Pagar
-  campoProduto:       true,   // "Produto"    no Novo/Editar Lançamento a Pagar
+  campoProduto:       false,  // "Produto"    no Novo/Editar Lançamento a Pagar — REEXIBIDO
   campoProdutoVenda:  true,   // "Produto de Venda" no Novo/Editar Lançamento a Receber
   campoSubcategoria:  true,   // "Subcategoria" no lançamento (campo + filtro)
                               // Quando true, a subcategoria deixa de ser obrigatória.
 
   // Colunas das tabelas
   colunaFornecedor:   true,   // coluna "Fornecedor" em Lançamentos / A Pagar / Pagas
-  colunaProduto:      true,   // coluna "Produto"    em Lançamentos / A Pagar / Pagas
+  colunaProduto:      false,  // coluna "Produto"    em Lançamentos / A Pagar / Pagas — REEXIBIDO
   colunaProdutoVenda: true    // coluna "Produto" em Lanç. a Receber / A Receber / Recebidas
 };
 
@@ -3490,7 +3490,7 @@ const PAGES_CONFIG = [
   { id:'transferencias',    label:'Transferência entre Contas', grupo:'pagar' },
   { id:'fluxo-futuro',      label:'Fluxo de Caixa Futuro',grupo:'pagar'  },
   { id:'fornecedores',      label:'Fornecedores',        grupo:'pagar'   },
-  { id:'produtos',          label:'Produtos (Compra)',   grupo:'pagar'   },
+  { id:'produtos',          label:'Itens (Compra)',   grupo:'pagar'   },
   { id:'lancamentos',       label:'Lançamentos (Compra)',grupo:'pagar'   },
   { id:'apagar',            label:'Contas a Pagar',      grupo:'pagar'   },
   { id:'pagas',             label:'Contas Pagas',        grupo:'pagar'   },
@@ -4543,7 +4543,7 @@ function _bloqueiaSeEmUso(rotulo, id, vinculos) {
 async function deleteFornecedor(id) {
   if(_bloqueiaSeEmUso('fornecedor', id, [
     { nome:'Lancamentos (compras)', lista: db.lancamentos, campo:'forn' },
-    { nome:'Produtos',              lista: db.produtos,    campo:'forn' }
+    { nome:'Itens',                 lista: db.produtos,    campo:'forn' }
   ])) return;
   if(!confirm('Excluir este fornecedor?')) return;
   await sbFetch('fornecedores', 'DELETE', null, `?id=eq.${id}`);
@@ -4556,7 +4556,7 @@ async function deleteFornecedor(id) {
 // ══════════════════════════════════════════
 async function saveProduto() {
   const nome = document.getElementById('p-nome').value.trim();
-  if(!nome) { alert('Informe o nome do produto.'); return; }
+  if(!nome) { alert('Informe o nome do item.'); return; }
   const recP = { id: uid(), nome,
     sku: document.getElementById('p-sku').value,
     unidade: document.getElementById('p-unidade').value,
@@ -4565,7 +4565,7 @@ async function saveProduto() {
     preco: parseFloat(document.getElementById('p-preco').value)||0,
     obs: document.getElementById('p-obs').value };
   const rP = await sbFetch('produtos', 'POST', recP);
-  if(!rP) { alert('❌ Erro ao salvar produto.' + sbErroDetalhe()); return; }
+  if(!rP) { alert('❌ Erro ao salvar item.' + sbErroDetalhe()); return; }
   db.produtos.push(recP);
   clearProduto(); renderProdutos(); populateProdSelects();
   closeModal('modal-novo-prod');
@@ -4611,7 +4611,7 @@ function renderProdutos() {
     { key:'acoes', label:'Ações', get:()=>'', noFilter:true }
   ];
   const listProd = efMount('produtos','th-produtos-row',colsProd,baseProd,renderProdutos);
-  if(!listProd.length) { tb.innerHTML='<tr><td colspan="7" class="empty-state">Nenhum produto cadastrado.</td></tr>'; return; }
+  if(!listProd.length) { tb.innerHTML='<tr><td colspan="7" class="empty-state">Nenhum item cadastrado.</td></tr>'; return; }
   tb.innerHTML = listProd.map(p=>`
     <tr>
       <td><b>${p.nome}</b></td>
@@ -4663,7 +4663,7 @@ async function deleteProduto(id) {
   if(_bloqueiaSeEmUso('produto', id, [
     { nome:'Lancamentos (compras)', lista: db.lancamentos, campo:'prod' }
   ])) return;
-  if(!confirm('Excluir este produto?')) return;
+  if(!confirm('Excluir este item?')) return;
   await sbFetch('produtos', 'DELETE', null, `?id=eq.${id}`);
   db.produtos = db.produtos.filter(x=>x.id!==id);
   renderProdutos();
@@ -4813,7 +4813,7 @@ function agendarTrocaFraseDoDia() {
 // ══════════════════════════════════════════
 const CAD_RAPIDO = {
   fornecedor: { titulo:'Novo Fornecedor',        label:'Nome do fornecedor *', tabela:'fornecedores',   lista:'fornecedores' },
-  produto:    { titulo:'Novo Produto (Compra)',  label:'Nome do produto *',    tabela:'produtos',       lista:'produtos' },
+  produto:    { titulo:'Novo Item (Compra)',     label:'Nome do item *',       tabela:'produtos',       lista:'produtos' },
   cliente:    { titulo:'Novo Cliente',           label:'Nome do cliente *',    tabela:'clientes',       lista:'clientes' },
   prodvenda:  { titulo:'Novo Produto de Venda',  label:'Nome do produto *',    tabela:'prodvenda',      lista:'prodvenda' },
   categoria:  { titulo:'Nova Categoria',         label:'Nome da categoria *',  tabela:'dfc_categorias', lista:'dfc_cats' }
@@ -5748,7 +5748,7 @@ function renderLancamentos() {
   const colsLanc = [
     { key:'dtcompra', label:'Data Compra', get:l=>l.dtcompra, display:l=>fmtDate(l.dtcompra) },
     { key:'forn', label:'Fornecedor', get:l=>getFornNome(l.forn) },
-    { key:'prod', label:'Produto', get:l=>l.prod?getProdNome(l.prod):null },
+    { key:'prod', label:'Item', get:l=>l.prod?getProdNome(l.prod):null },
     { key:'cat', label:'Categoria', get:l=>{ const c=_catDeLanc(l); return c?getDreCatNome(c):null; } },
     { key:'valor', label:'Valor', get:l=>l.valor||0, display:l=>fmtBRL(l.valor) },
     { key:'parcelas', label:'Parcelas', get:l=>l.parcelas||1, display:l=>`${l.parcelas}x` },
@@ -6540,7 +6540,7 @@ function renderApagar() {
   // Colunas para o filtro/ordenação estilo Excel no cabeçalho da tabela
   const colsApagar = [
     { key:'forn', label:'Fornecedor', get:p=>getFornNome(p.forn) },
-    { key:'prod', label:'Produto', get:p=>p.prod?getProdNome(p.prod):null },
+    { key:'prod', label:'Item', get:p=>p.prod?getProdNome(p.prod):null },
     { key:'cat', label:'Categoria', get:p=>p.catId?getDreCatNome(p.catId):null },
     { key:'parcela', label:'Parcela', get:p=>p.parcIdx+(p.totalParc/1000), display:p=>`${p.parcIdx}/${p.totalParc}` },
     { key:'valor', label:'Valor Parcela', get:p=>p.valParc, display:p=>fmtBRL(p.valParc) },
@@ -7156,7 +7156,7 @@ function renderPagas() {
   // Colunas para o filtro/ordenação estilo Excel no cabeçalho da tabela
   const colsPagas = [
     { key:'forn', label:'Fornecedor', get:p=>getFornNome(p.forn) },
-    { key:'prod', label:'Produto', get:p=>p.prod?getProdNome(p.prod):null },
+    { key:'prod', label:'Item', get:p=>p.prod?getProdNome(p.prod):null },
     { key:'cat', label:'Categoria', get:p=>p.catId?getDreCatNome(p.catId):null },
     { key:'parcela', label:'Parcela', get:p=>p.parcIdx+(p.totalParc/1000), display:p=>`${p.parcIdx}/${p.totalParc}` },
     { key:'valor', label:'Valor Parcela', get:p=>p.valParc, display:p=>fmtBRL(p.valParc) },
@@ -7490,8 +7490,8 @@ function abrirRelatorioKPI(key) {
   const dtLabel = isPagar ? 'Data Compra' : 'Data Venda';
   const nomeLabel = isPagar ? 'Fornecedor' : 'Cliente';
   const cab = rel.tipo === 'lanc'
-    ? `<th style="text-align:left">${dtLabel}</th><th style="text-align:left">${nomeLabel}</th><th style="text-align:left">Produto</th><th style="text-align:left">NF</th><th style="text-align:center">Parc.</th><th style="text-align:right">Valor</th>`
-    : `<th style="text-align:left">${dtLabel}</th><th style="text-align:left">Vencimento</th><th style="text-align:left">${nomeLabel}</th><th style="text-align:left">Produto</th><th style="text-align:center">Parc.</th><th style="text-align:center">Status</th><th style="text-align:right">Valor</th>`;
+    ? `<th style="text-align:left">${dtLabel}</th><th style="text-align:left">${nomeLabel}</th><th style="text-align:left">${isPagar ? 'Item' : 'Produto'}</th><th style="text-align:left">NF</th><th style="text-align:center">Parc.</th><th style="text-align:right">Valor</th>`
+    : `<th style="text-align:left">${dtLabel}</th><th style="text-align:left">Vencimento</th><th style="text-align:left">${nomeLabel}</th><th style="text-align:left">${isPagar ? 'Item' : 'Produto'}</th><th style="text-align:center">Parc.</th><th style="text-align:center">Status</th><th style="text-align:right">Valor</th>`;
   const vazio = `<tr><td colspan="${nCols}" style="text-align:center;color:#a8a29e;padding:24px">Nenhum lançamento neste indicador.</td></tr>`;
 
   let ov = document.getElementById('modal-rel-kpi');
@@ -8300,7 +8300,7 @@ function renderDashCharts() {
     });
   };
 
-  const prodLabel = prodFiltro ? getProdNome(prodFiltro) : 'Todos os Produtos';
+  const prodLabel = prodFiltro ? getProdNome(prodFiltro) : 'Todos os Itens';
   const comprasDatasets = [
     { label:`Compras — ${prodLabel}`, data: aplicarFiltroMes(comprasMes), backgroundColor:gradientFill('#2563eb'), borderColor:'#2563eb', borderWidth:2, borderRadius:4, type:'bar' }
   ];
@@ -8316,7 +8316,7 @@ function renderDashCharts() {
   const pagarSub = document.getElementById('chart-pagar-subtitulo');
   if (pagarSub) {
     const partes = [];
-    if (prodFiltro)    partes.push(`Produto (Pagar/Compras): ${prodLabel} — A Receber não é filtrado por produto`);
+    if (prodFiltro)    partes.push(`Item (Pagar/Compras): ${prodLabel} — A Receber não é filtrado por item`);
     if (catFiltro)     partes.push(`Categoria: ${getDfcCatNome(catFiltro)}`);
     if (subcatFiltro)  partes.push(`Subcategoria: ${getDfcSubNome(subcatFiltro)} — A Receber não usa subcategoria, por isso fica zerado`);
     pagarSub.textContent = partes.join('  •  ');
@@ -11562,7 +11562,7 @@ function abrirModalCategoriaMassa(tabela) {
   document.getElementById('catmassa-categoria').innerHTML = opts;
   const listaProd = tabela === 'lancamentos' ? db.produtos : db.prodvenda;
   const nomeFn = tabela === 'lancamentos' ? getProdNome : getProdVendaNome;
-  document.getElementById('catmassa-produto').innerHTML = '<option value="">Todos os produtos</option>' +
+  document.getElementById('catmassa-produto').innerHTML = '<option value="">Todos os itens</option>' +
     listaProd.map(p => `<option value="${p.id}">${nomeFn(p.id)}</option>`).join('');
   const catAtualEl = document.getElementById('catmassa-cat-atual');
   if (catAtualEl) catAtualEl.innerHTML = '<option value="">Qualquer categoria</option>' +
@@ -11597,7 +11597,7 @@ async function aplicarCategoriaMassa() {
   const catNome = (db.dfc_cats.find(c => c.id === catId) || {}).nome || '';
   const produtoId = document.getElementById('catmassa-produto').value;
   const nomeFn = tabela === 'lancamentos' ? getProdNome : getProdVendaNome;
-  const produtoTxt = produtoId ? ` (apenas produto "${nomeFn(produtoId)}")` : '';
+  const produtoTxt = produtoId ? ` (apenas item "${nomeFn(produtoId)}")` : '';
   if (!confirm(`Isso vai definir a categoria "${catNome}" em ${alvo.length} lançamento(s)${produtoTxt}. Confirma?`)) return;
 
   showLoading(true);
@@ -14255,7 +14255,7 @@ function _pdfDiaColsDef(pagina) {
   const defs = {
     apagar: [
       { key:'forn',      label:'Fornecedor',     get:p=>getFornNome(p.forn) },
-      { key:'prod',      label:'Produto',        get:p=>p.prod?getProdNome(p.prod):'—' },
+      { key:'prod',      label:'Item',           get:p=>p.prod?getProdNome(p.prod):'—' },
       { key:'cat',       label:'Categoria',      get:p=>p.catId?getDreCatNome(p.catId):'—' },
       { key:'parcela',   label:'Parcela',        get:p=>`${p.parcIdx}/${p.totalParc}` },
       { key:'valor',     label:'Valor Parcela',  get:p=>fmtBRL(p.valParc), num:true },
@@ -14267,7 +14267,7 @@ function _pdfDiaColsDef(pagina) {
     ],
     pagas: [
       { key:'forn',      label:'Fornecedor',     get:p=>getFornNome(p.forn) },
-      { key:'prod',      label:'Produto',        get:p=>p.prod?getProdNome(p.prod):'—' },
+      { key:'prod',      label:'Item',           get:p=>p.prod?getProdNome(p.prod):'—' },
       { key:'cat',       label:'Categoria',      get:p=>p.catId?getDreCatNome(p.catId):'—' },
       { key:'parcela',   label:'Parcela',        get:p=>`${p.parcIdx}/${p.totalParc}` },
       { key:'valor',     label:'Valor Parcela',  get:p=>fmtBRL(p.valParc), num:true },
