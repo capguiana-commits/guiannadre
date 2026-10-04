@@ -2003,6 +2003,9 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <label class="dre-mes-chip"><input type="checkbox" id="dre-mes-12" checked onchange="renderDre()" />Dez</label>
           <button class="btn btn-secondary btn-sm" onclick="dreMesesTodos(true)">Marcar todos</button>
           <button class="btn btn-secondary btn-sm" onclick="dreMesesTodos(false)">Ocultar todos</button>
+          <span style="width:1px;height:20px;background:#e7e5e4;margin:0 4px;"></span>
+          <button class="btn btn-secondary btn-sm" onclick="dreCategoriasTodas(true)" title="Mostra as categorias de todos os grupos">▾ Expandir categorias</button>
+          <button class="btn btn-secondary btn-sm" onclick="dreCategoriasTodas(false)" title="Mostra só os grupos, sem as categorias">▸ Recolher categorias</button>
         </div>
       </div>
 
@@ -12154,12 +12157,24 @@ async function setVarEstoque(mes, rawValor) {
 
 // Mostra/oculta as linhas de categoria de um grupo do DRE (clique na setinha
 // ao lado do nome do grupo). Preferência não é salva — reabre expandido.
+// Grupos com as categorias recolhidas. Guardado em memória para que o estado
+// se mantenha quando o DRE é redesenhado (troca de mês, variação de estoque...).
+let _dreGruposFechados = new Set();
+function _dreGrupoFechado(id) { return _dreGruposFechados.has(id); }
 function toggleDreCategorias(grupoId, el) {
   const rows = document.querySelectorAll('tr[data-cat-grupo="' + grupoId + '"]');
   if (!rows.length) return;
-  const oculto = rows[0].style.display === 'none';
-  rows.forEach(r => { r.style.display = oculto ? '' : 'none'; });
-  if (el) el.textContent = oculto ? '▾' : '▸';
+  const fechar = !_dreGruposFechados.has(grupoId);
+  if (fechar) _dreGruposFechados.add(grupoId); else _dreGruposFechados.delete(grupoId);
+  rows.forEach(r => { r.style.display = fechar ? 'none' : ''; });
+  if (el) el.textContent = fechar ? '▸' : '▾';
+}
+// Botões "Expandir categorias" / "Recolher categorias" do topo do DRE
+function dreCategoriasTodas(abrir) {
+  _dreGruposFechados = new Set();
+  if (!abrir) db.dre_grupos.forEach(g => _dreGruposFechados.add(g.id));
+  document.querySelectorAll('#dre-tabela-wrap tr[data-cat-grupo]').forEach(r => { r.style.display = abrir ? '' : 'none'; });
+  document.querySelectorAll('#dre-tabela-wrap .dre-cat-toggle').forEach(el => { el.textContent = abrir ? '▾' : '▸'; });
 }
 
 function renderDre() {
@@ -12362,7 +12377,7 @@ function renderDre() {
       : `<td class="dfc-col-total">${fmtDreVal(totalVal)}</td>`) + pctCell(totalVal, 'total', g.tipo === 'subtotal');
     const temCats = clicavel && db.dfc_cats.some(c => c.grupo === g.id);
     const nomeCell = temCats
-      ? `<span class="dre-cat-toggle" onclick="toggleDreCategorias('${g.id}', this)" title="Mostrar/ocultar categorias" style="cursor:pointer;display:inline-block;width:13px;color:#a8a29e;user-select:none;">▾</span>${g.nome}`
+      ? `<span class="dre-cat-toggle" onclick="toggleDreCategorias('${g.id}', this)" title="Mostrar/ocultar categorias" style="cursor:pointer;display:inline-block;width:13px;color:#a8a29e;user-select:none;">${_dreGrupoFechado(g.id) ? '▸' : '▾'}</span>${g.nome}`
       : g.nome;
     return `<tr class="${cls}"><td>${nomeCell}</td>${cells}${totalCell}</tr>`;
   };
@@ -12382,7 +12397,7 @@ function renderDre() {
     const totalCell = (Math.abs(totalVal) >= 0.005
       ? `<td class="dfc-col-total dre-cell-click" onclick="abrirDetalheDreGrupo('${parentG.id}','total','${c.id}')" title="Ver lançamentos desta categoria">${fmtDreVal(totalVal)}</td>`
       : `<td class="dfc-col-total">${fmtDreVal(totalVal)}</td>`) + pctCell(totalVal, 'total', false);
-    return `<tr class="dre-row-cat" data-cat-grupo="${parentG.id}"><td style="padding-left:26px;font-weight:400;color:#78716c;font-size:10.5px;">↳ ${c.nome}</td>${cells}${totalCell}</tr>`;
+    return `<tr class="dre-row-cat" data-cat-grupo="${parentG.id}"${_dreGrupoFechado(parentG.id) ? ' style="display:none"' : ''}><td style="padding-left:26px;font-weight:400;color:#78716c;font-size:10.5px;">↳ ${c.nome}</td>${cells}${totalCell}</tr>`;
   };
 
   // Linha "(Sem categoria)" — sobra entre o total do grupo e a soma das
@@ -12391,7 +12406,15 @@ function renderDre() {
   const linhaSemCategoria = (parentG, catsDoGrupo) => {
     const sinal = parentG.tipo === 'entrada' ? 1 : -1;
     const somaCatsCol = (col) => catsDoGrupo.reduce((s, c) => s + catBruto(c.id, col), 0);
-    const restoCol = (col) => valorBruto(parentG.id, col) - somaCatsCol(col);
+    // A Variação do Estoque é somada ao total do CPV, mas não pertence a nenhuma
+    // categoria — por isso é descontada aqui, para não aparecer como "(Sem categoria)".
+    const varEstCol = (col) => {
+      if (parentG.id !== cpvGrupoId || !varEstGrupoId) return 0;
+      const mapa = dreVarEstoque[ano] || {};
+      if (col === 'total') return mesesVisiveis.reduce((a, m) => a + (parseFloat(mapa[m]) || 0), 0);
+      return parseFloat(mapa[col]) || 0;
+    };
+    const restoCol = (col) => valorBruto(parentG.id, col) - somaCatsCol(col) - varEstCol(col);
     const temResto = mesesVisiveis.some(m => Math.abs(restoCol(m)) >= 0.005) || Math.abs(restoCol('total')) >= 0.005;
     if (!temResto) return '';
     const cells = mesesVisiveis.map(mes => {
@@ -12405,7 +12428,7 @@ function renderDre() {
     const totalCell = (Math.abs(totalVal) >= 0.005
       ? `<td class="dfc-col-total dre-cell-click" onclick="abrirDetalheDreGrupo('${parentG.id}','total','__sem_categoria__')" title="Ver lançamentos sem categoria">${fmtDreVal(totalVal)}</td>`
       : `<td class="dfc-col-total">${fmtDreVal(totalVal)}</td>`) + pctCell(totalVal, 'total', false);
-    return `<tr class="dre-row-cat" data-cat-grupo="${parentG.id}"><td style="padding-left:26px;font-weight:400;font-style:italic;color:#a8a29e;font-size:10.5px;">↳ (Sem categoria)</td>${cells}${totalCell}</tr>`;
+    return `<tr class="dre-row-cat" data-cat-grupo="${parentG.id}"${_dreGrupoFechado(parentG.id) ? ' style="display:none"' : ''}><td style="padding-left:26px;font-weight:400;font-style:italic;color:#a8a29e;font-size:10.5px;">↳ (Sem categoria)</td>${cells}${totalCell}</tr>`;
   };
   const linhaPercentual = (g) => {
     const cells = mesesVisiveis.map(mes => `<td>${fmtDrePercent(linhaCalc[g.id][mes])}</td>` + pctVazio(mes)).join('');
