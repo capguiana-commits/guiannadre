@@ -11549,8 +11549,12 @@ const DRE_ESTRUTURA_PADRAO = [
   { nome:'Receita Operacional Líquida (ROL)',   tipo:'subtotal', m:n => (n.includes('receita') && n.includes('liquida')) || /\brol\b/.test(n) },
   { nome:'Variação do Estoque',                 tipo:'saida',    m:n => n.includes('variac') && n.includes('estoque') },
   { nome:'CPV — Custo do Produto Vendido',      tipo:'saida',    classe:'variavel', m:n => /\b(cpv|cmv|cpsv)\b/.test(n) || (n.includes('custo') && n.includes('produto')) },
-  { nome:'Comissões',                           tipo:'saida',    classe:'variavel', m:n => n.includes('comiss') },
-  { nome:'Fretes',                              tipo:'saida',    classe:'variavel', m:n => n.includes('frete') },
+  // Comissões e Fretes viraram CATEGORIAS deste grupo. Se já existirem como
+  // grupos, o primeiro é renomeado e os demais são fundidos nele (fundir).
+  { nome:'Despesas Variáveis de Venda',         tipo:'saida',    classe:'variavel',
+    m:n => n.includes('variave') && n.includes('venda'),
+    m2:n => n.includes('comiss') || n.includes('frete'),
+    fundir:n => n.includes('comiss') || n.includes('frete') },
   { nome:'Margem de Contribuição',              tipo:'subtotal', m:n => n.includes('margem') && n.includes('contribuic') },
   { nome:'Despesas Administrativas',            tipo:'saida',    classe:'fixo', m:n => n.includes('administrativ') },
   { nome:'Despesas Comerciais',                 tipo:'saida',    classe:'fixo', m:n => n.includes('comerci') },
@@ -11569,6 +11573,7 @@ const DRE_ESTRUTURA_PADRAO = [
 const DRE_CATEGORIAS_PADRAO = [
   ['Receita Operacional Bruta', ['Receitas Com Produtos']],
   ['CPV — Custo do Produto Vendido', ['Despesas Com Produtos', 'Insumos De Produção', 'Manutenção (Produção)', 'Despesa Com RH']],
+  ['Despesas Variáveis de Venda', ['Comissões', 'Fretes']],
   ['Despesas Administrativas', ['Energia Elétrica Guisana', 'Água Escola', 'Água Fundos', 'Rissoletes', 'Manutenção Extintores',
     'Alpha Ambiental', 'Conta De Celular', 'Consultoria', 'Contabilidade Nova', 'Datamais Sistemas', 'Energia Elétrica Silo',
     'Seguro Empresa', 'Seguro Funcionários', 'Seguro Carros', 'Internet Unifique', 'Aluguel Empresa', 'Documentação Carros',
@@ -11594,15 +11599,28 @@ function _planoGruposDre() {
     const compat = g => !usados.has(g.id) && (p.tipo === 'subtotal' ? g.tipo === 'subtotal' : _ehValorDre(g.tipo));
     let g = existentes.find(g => compat(g) && normText(g.nome) === normText(p.nome));
     if (!g) g = existentes.find(g => compat(g) && p.m(normText(g.nome)));
+    if (!g && p.m2) g = existentes.find(g => compat(g) && p.m2(normText(g.nome)));
     if (g) usados.add(g.id);
-    return { padrao: p, ordem: (i + 1) * 10, existente: g || null };
+    return { padrao: p, ordem: (i + 1) * 10, existente: g || null, absorvidos: [] };
   });
+  // Grupos antigos que passam a ser categorias de um grupo padrão (ex.: os
+  // grupos "Comissões" e "Fretes" entram em "Despesas Variáveis de Venda").
+  plano.forEach(x => {
+    if (!x.padrao.fundir) return;
+    existentes.forEach(g => {
+      if (usados.has(g.id) || !_ehValorDre(g.tipo) || !x.padrao.fundir(normText(g.nome))) return;
+      usados.add(g.id);
+      x.absorvidos.push(g);
+    });
+  });
+  const absorvidosIds = new Set(plano.flatMap(x => x.absorvidos.map(g => g.id)));
   // Grupos fora do padrão: ficam logo depois do grupo padrão que os precedia.
   const ordemPorId = {};
   plano.forEach(x => { if (x.existente) ordemPorId[x.existente.id] = x.ordem; });
   const outros = [];
   let ancora = 0, k = 0;
   existentes.forEach(g => {
+    if (absorvidosIds.has(g.id)) return;
     if (ordemPorId[g.id] != null) { ancora = ordemPorId[g.id]; k = 0; return; }
     k++;
     outros.push({ grupo: g, ordem: ancora + Math.min(k, 9) });
@@ -11664,6 +11682,10 @@ function previaEstruturaPadraoDre() {
       else if (existente.nome !== padrao.nome) acao = `<span class="badge badge-blue">Renomear</span> <span style="color:#a8a29e;font-size:11px">de “${existente.nome}”</span>`;
       else acao = '<span class="badge badge-gray">Já existe</span>';
       if (existente && existente.tipo !== padrao.tipo) acao += ` <span style="color:#b45309;font-size:11px">tipo → ${_DRE_TIPO_CURTO[padrao.tipo]}</span>`;
+      it.x.absorvidos.forEach(a => {
+        const nCats = db.dfc_cats.filter(c => c.grupo === a.id).length;
+        acao += `<div style="font-size:11px;color:#b45309;margin-top:3px">Junta o grupo “${a.nome}”${nCats ? ` (${nCats} categoria(s) movida(s))` : ''}, que é excluído</div>`;
+      });
       const bold = padrao.tipo === 'subtotal' ? 'font-weight:700;color:#ea580c;' : '';
       linhasG.push(`<tr><td style="font-family:'DM Mono',monospace;color:#a8a29e">${it.ordem}</td><td style="${bold}">${padrao.nome}</td><td style="font-size:11px;color:#78716c">${_DRE_TIPO_CURTO[padrao.tipo]}</td><td>${acao}</td></tr>`);
     } else {
@@ -11727,6 +11749,21 @@ async function aplicarEstruturaPadraoDre() {
         if (ok) { db.dre_grupos.push(rec); x.id = rec.id; } else falhas.push('Grupo ' + p.nome);
       }
       if (x.id && p.classe && !dreGrupoClasses[x.id]) dreGrupoClasses[x.id] = p.classe;
+      // Funde grupos antigos: move as categorias deles e exclui o grupo vazio
+      if (x.id) for (const a of x.absorvidos) {
+        const cats = db.dfc_cats.filter(c => c.grupo === a.id);
+        let okCats = true;
+        if (cats.length) {
+          okCats = await sbFetch('dfc_categorias', 'PATCH', { grupo: x.id }, `?grupo=eq.${a.id}`);
+          if (okCats) cats.forEach(c => { c.grupo = x.id; }); else falhas.push('Mover categorias de ' + a.nome);
+        }
+        if (!okCats) continue;
+        const okDel = await sbFetch('dre_grupos', 'DELETE', null, `?id=eq.${a.id}`);
+        if (okDel) {
+          db.dre_grupos = db.dre_grupos.filter(g => g.id !== a.id);
+          delete dreGrupoClasses[a.id];
+        } else falhas.push('Excluir grupo ' + a.nome);
+      }
     }
     // 2) Grupos fora do padrão: só reposiciona
     for (const o of info.outros) {
