@@ -652,6 +652,44 @@ th.ef-th { padding:8px 8px 8px 12px; }
 }
 
 
+
+/* ══ CONTROLE DE ESTOQUE ══ */
+#page-est-lancamentos, #page-est-produtos { min-width:0; max-width:100%; }
+.est-filtros { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin:14px 0 16px; }
+.est-filtros .form-group { margin:0; min-width:130px; }
+.est-kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+.est-kpi { background:#fff; border:1px solid var(--border); border-radius:12px; padding:14px 16px; box-shadow:0 1px 3px rgba(15,30,58,.04); }
+.est-kpi-lbl { font-size:11px; font-weight:600; color:#a8a29e; text-transform:uppercase; letter-spacing:.5px; }
+.est-kpi-val { font-family:'DM Mono',monospace; font-size:19px; font-weight:600; color:#1f2937; margin-top:4px; }
+.est-kpi-sub { font-size:11.5px; color:#78716c; margin-top:2px; font-family:'DM Mono',monospace; }
+.est-up { color:#15803d !important; } .est-down { color:#dc2626 !important; } .est-zero { color:#a8a29e !important; }
+.est-tab td, .est-tab th { white-space:nowrap; padding-left:8px; padding-right:8px; }
+#page-est-lancamentos .est-tab th { font-size:10.5px; letter-spacing:.3px; }
+.est-tab .num { text-align:right; font-family:'DM Mono',monospace; font-size:12.5px; }
+.est-tab th.num { font-family:inherit; }
+.est-tab th.grp-ini { background:#f8fafc; } .est-tab th.grp-novo { background:#fff4ec; color:#c2410c; } .est-tab th.grp-var { background:#f0fdf4; color:#15803d; }
+.est-tab input.est-in { width:92px; padding:6px 9px; text-align:right; font-family:'DM Mono',monospace; font-size:12.5px; background:#fff; }
+.est-tab input.est-in.custo-alt { border-color:#f59e0b; background:#fffbeb; }
+.est-tab tr.est-sujo td { background:#fffaf5; }
+.est-tab tfoot td { font-weight:700; background:#faf9f8; border-top:2px solid #e7e5e4; }
+.est-seta { display:inline-block; width:14px; font-weight:700; }
+.est-status { display:inline-flex; align-items:center; gap:4px; padding:2px 9px; border-radius:20px; font-size:11px; font-weight:600; }
+.est-status.sub { background:#dcfce7; color:#166534; } .est-status.saiu { background:#fee2e2; color:#991b1b; } .est-status.igual { background:#f5f5f4; color:#78716c; } .est-status.pend { background:#fff7ed; color:#c2410c; border:1px dashed #fdba74; }
+.est-var-tab { width:100%; border-collapse:separate; border-spacing:0; font-size:14px; }
+.est-var-tab th { background:#f97316; color:#fff; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.3px; padding:12px 14px; text-align:center; border-right:2px solid #fff; position:static; }
+.est-var-tab th:first-child { background:#f97316; }
+.est-var-tab td { padding:9px 14px; border-bottom:1px solid #f0eeec; border-right:2px solid #fff; }
+.est-var-tab td.mes { font-weight:700; text-align:center; color:#1f2937; width:150px; }
+.est-var-tab td.val { font-family:'DM Mono',monospace; font-weight:600; }
+.est-var-tab td.val .rs { float:left; color:#57534e; }
+.est-var-tab td.val .v { float:right; }
+.est-var-tab tbody tr:nth-child(even) td { background:#fcfbfa; }
+.est-var-tab tbody tr:hover td { background:#fff4ec; }
+.est-var-tab tfoot td { background:#fff1e6; font-weight:700; border-top:2px solid #f97316; }
+.est-seta-up { color:#16a34a; } .est-seta-down { color:#dc2626; }
+.est-aviso { padding:12px 14px; border-radius:10px; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; font-size:13px; margin-bottom:14px; white-space:pre-line; }
+@media (max-width:900px) { .est-kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
 /* ── BOTÃO NOVO / PAINEL COLAPSÁVEL ── */
 .page-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -978,6 +1016,30 @@ th.ef-th { padding:8px 8px 8px 12px; }
         </div>
       </div>
 
+      <!-- GRUPO: Controle de Estoque -->
+      <div class="nav-group-header open" onclick="toggleNavGroup('grp-estoque',this)" style="margin-top:4px;">
+        <span>🗃️ Controle de Estoque</span>
+        <span class="nav-group-arrow">▶</span>
+      </div>
+      <div class="nav-group-items" id="grp-estoque" style="max-height:400px">
+        <div class="nav-sub-item" onclick="showPage('est-produtos')" id="nav-est-produtos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          Produtos
+        </div>
+        <div class="nav-sub-item" onclick="showPage('est-tipos')" id="nav-est-tipos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Tipos de Material
+        </div>
+        <div class="nav-sub-item" onclick="showPage('est-lancamentos')" id="nav-est-lancamentos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+          Lançamento Mensal
+        </div>
+        <div class="nav-sub-item" onclick="showPage('est-variacao')" id="nav-est-variacao">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 17 12 22 17 17"/><polyline points="7 7 12 2 17 7"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+          Variação do Estoque
+        </div>
+      </div>
+
       <!-- Admin -->
       <div class="nav-label" id="nav-label-admin" style="display:none;margin-top:8px;">Administração</div>
       <div class="nav-item" id="nav-item-usuarios" onclick="showPage('usuarios')" style="display:none">
@@ -995,6 +1057,91 @@ th.ef-th { padding:8px 8px 8px 12px; }
 
   <!-- MAIN -->
   <div class="main">
+
+
+    <!-- ══ CONTROLE DE ESTOQUE — PRODUTOS ══ -->
+    <div class="page" id="page-est-produtos">
+      <div class="page-header">
+        <div><div class="page-title">Produtos — Estoque</div><div class="page-sub" style="margin-bottom:0">Cadastro dos produtos controlados no estoque</div></div>
+        <button class="btn-novo" onclick="estAbrirProduto()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Produto
+        </button>
+      </div>
+      <div class="est-aviso" id="est-aviso-produtos" style="display:none"></div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Produtos Cadastrados</div>
+        <div class="form-group" style="max-width:340px;margin-bottom:14px">
+          <input type="text" id="est-prod-busca" placeholder="🔍 Buscar por código ou descrição..." oninput="estRenderProdutos()" />
+        </div>
+        <div class="table-scroll" style="overflow:auto"><table class="est-tab"><thead><tr>
+          <th>Código</th><th>Descrição</th><th>Tipo de Material</th><th style="text-align:center">Curva ABC</th><th style="text-align:center">Unid.</th>
+          <th class="num">Saldo Inicial</th><th>Data Saldo</th><th class="num">Custo Unit.</th><th class="num">Custo Total</th><th>Ações</th>
+        </tr></thead><tbody id="est-tb-produtos"><tr><td colspan="10" class="empty-state">Carregando...</td></tr></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ══ CONTROLE DE ESTOQUE — TIPOS DE MATERIAL ══ -->
+    <div class="page" id="page-est-tipos">
+      <div class="page-header">
+        <div><div class="page-title">Tipos de Material</div><div class="page-sub" style="margin-bottom:0">Classificação dos produtos do estoque</div></div>
+        <button class="btn-novo" onclick="estAbrirTipo()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Tipo
+        </button>
+      </div>
+      <div class="est-aviso" id="est-aviso-tipos" style="display:none"></div>
+      <div class="card" style="margin-top:16px;max-width:720px">
+        <div class="card-title">Tipos Cadastrados</div>
+        <div class="table-scroll"><table class="est-tab"><thead><tr>
+          <th>Tipo de Material</th><th style="text-align:center">Produtos vinculados</th><th>Ações</th>
+        </tr></thead><tbody id="est-tb-tipos"><tr><td colspan="3" class="empty-state">Carregando...</td></tr></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ══ CONTROLE DE ESTOQUE — LANÇAMENTO MENSAL ══ -->
+    <div class="page" id="page-est-lancamentos">
+      <div class="page-header">
+        <div><div class="page-title">Lançamento Mensal de Estoque</div><div class="page-sub" style="margin-bottom:0">Informe o saldo novo de cada produto no mês — a variação é calculada em quantidade e valor</div></div>
+        <button class="btn-novo" onclick="estSalvarLancamentos()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar Lançamentos
+        </button>
+      </div>
+      <div class="est-aviso" id="est-aviso-lanc" style="display:none"></div>
+      <div class="est-filtros">
+        <div class="form-group"><label>Mês</label><select id="est-l-mes" onchange="estRenderLancamentos()"><option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option><option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option><option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></div>
+        <div class="form-group"><label>Ano</label><select id="est-l-ano" onchange="estRenderLancamentos()"></select></div>
+      </div>
+      <div class="est-kpis">
+        <div class="est-kpi"><div class="est-kpi-lbl">Estoque Inicial</div><div class="est-kpi-val" id="est-k-ini">—</div><div class="est-kpi-sub" id="est-k-ini-q"></div></div>
+        <div class="est-kpi"><div class="est-kpi-lbl">Estoque Final</div><div class="est-kpi-val" id="est-k-fim">—</div><div class="est-kpi-sub" id="est-k-fim-q"></div></div>
+        <div class="est-kpi"><div class="est-kpi-lbl">Variação do Estoque</div><div class="est-kpi-val" id="est-k-var">—</div><div class="est-kpi-sub" id="est-k-var-sub"></div></div>
+        <div class="est-kpi"><div class="est-kpi-lbl">Produtos lançados</div><div class="est-kpi-val" id="est-k-lanc">—</div><div class="est-kpi-sub" id="est-k-lanc-sub"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Saldo inicial − saldo novo · positivo = estoque subiu · negativo = saiu do estoque</div>
+        <div class="table-scroll" style="max-height:600px;overflow:auto"><table class="est-tab"><thead><tr>
+          <th>Código</th><th>Descrição</th><th style="text-align:center">Curva</th><th style="text-align:center">Unid.</th>
+          <th class="num grp-ini">Saldo Inicial (Qtd)</th><th class="num grp-ini">Saldo Inicial (R$)</th>
+          <th class="num grp-novo">Saldo Novo (Qtd)</th><th class="num grp-novo">Custo Unit. (R$)</th><th class="num grp-novo">Saldo Novo (R$)</th>
+          <th class="num grp-var">Variação (Qtd)</th><th class="num grp-var">Variação (R$)</th><th style="text-align:center">Situação</th>
+        </tr></thead><tbody id="est-tb-lanc"></tbody><tfoot id="est-tf-lanc"></tfoot></table></div>
+      </div>
+    </div>
+
+    <!-- ══ CONTROLE DE ESTOQUE — VARIAÇÃO DO ESTOQUE ══ -->
+    <div class="page" id="page-est-variacao">
+      <div class="page-header">
+        <div><div class="page-title">Variação do Estoque</div><div class="page-sub" style="margin-bottom:0">Estoque inicial, final e variação mês a mês (em R$)</div></div>
+      </div>
+      <div class="est-aviso" id="est-aviso-var" style="display:none"></div>
+      <div class="est-filtros">
+        <div class="form-group"><label>Ano</label><select id="est-v-ano" onchange="estRenderVariacao()"></select></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="est-var-tab"><thead><tr>
+          <th></th><th>Estoque Inicial (R$)</th><th>Estoque Final (R$)</th><th>Variação do Estoque (R$)</th>
+        </tr></thead><tbody id="est-tb-var"></tbody><tfoot id="est-tf-var"></tfoot></table>
+      </div>
+    </div>
 
     <!-- ══ FORNECEDORES ══ -->
     <div class="page" id="page-fornecedores">
@@ -2825,6 +2972,72 @@ th.ef-th { padding:8px 8px 8px 12px; }
   </div>
 </div>
 
+<!-- ══ MODAL ESTOQUE — PRODUTO ══ -->
+<div class="modal-overlay" id="modal-est-produto">
+  <div class="modal lanc-modal">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">🗃️</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title" id="est-p-titulo">Novo Produto — Estoque</div>
+        <div class="lanc-head-sub">Controle de Estoque · campos com * são obrigatórios</div>
+      </div>
+      <button type="button" class="lanc-close" onclick="closeModal('modal-est-produto')" title="Fechar">✕</button>
+    </div>
+    <div class="lanc-body">
+      <input type="hidden" id="est-p-id" />
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">1</span>Identificação</div>
+        <div class="grid3 form-compacto">
+          <div class="form-group"><label>Código *</label><input id="est-p-codigo" type="text" placeholder="Ex.: 0001" /></div>
+          <div class="form-group" style="grid-column:span 2"><label>Descrição *</label><input id="est-p-desc" type="text" placeholder="Descrição do produto" /></div>
+          <div class="form-group"><label class="label-add">Tipo de Material<button type="button" class="btn-add-inline" title="Cadastrar novo tipo" onclick="estNovoTipoRapido()">+</button></label><select id="est-p-tipo"><option value="">Nenhum</option></select></div>
+          <div class="form-group"><label>Curva ABC</label><select id="est-p-curva"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option></select></div>
+          <div class="form-group"><label>Unidade de Medida *</label><select id="est-p-un"><option>UN</option><option>KG</option><option>G</option><option>TON</option><option>LT</option><option>ML</option><option>MT</option><option>M²</option><option>M³</option><option>CX</option><option>PC</option><option>PCT</option><option>RL</option><option>SC</option><option>FD</option><option>PAR</option><option>JG</option><option>CJ</option></select></div>
+        </div>
+      </div>
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">2</span>Saldo inicial e custo</div>
+        <div class="grid2 form-compacto">
+          <div class="form-group"><label>Saldo Inicial (Qtd)</label><input id="est-p-saldo" type="number" step="any" placeholder="0" oninput="estCalcCustoTotal()" /></div>
+          <div class="form-group"><label>Data do Saldo Inicial *</label><input id="est-p-dtsaldo" type="date" /></div>
+          <div class="form-group"><label>Custo Unitário (R$)</label><input id="est-p-custo" type="number" step="any" placeholder="0,00" oninput="estCalcCustoTotal()" /></div>
+          <div class="form-group"><label>Custo Total (R$)</label><input id="est-p-total" type="text" readonly style="background:#faf9f7;font-family:'DM Mono',monospace;font-weight:600" /></div>
+        </div>
+        <div class="lanc-note" style="margin-top:12px">Custo Total = Saldo Inicial × Custo Unitário. O saldo inicial vale a partir do mês da data informada.</div>
+      </div>
+    </div>
+    <div class="modal-footer lanc-foot">
+      <span class="lanc-foot-info">A tela só fecha pelo ✕ ou por Cancelar</span>
+      <button class="btn btn-secondary" onclick="closeModal('modal-est-produto')">Cancelar</button>
+      <button class="btn btn-primary" onclick="estSalvarProduto()">Salvar Produto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ESTOQUE — TIPO DE MATERIAL ══ -->
+<div class="modal-overlay" id="modal-est-tipo" style="z-index:310;">
+  <div class="modal lanc-modal" style="width:460px">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">🏷️</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title" id="est-t-titulo">Novo Tipo de Material</div>
+        <div class="lanc-head-sub">Controle de Estoque</div>
+      </div>
+      <button type="button" class="lanc-close" onclick="closeModal('modal-est-tipo')" title="Fechar">✕</button>
+    </div>
+    <div class="lanc-body">
+      <input type="hidden" id="est-t-id" />
+      <div class="lanc-sec">
+        <div class="form-group" style="margin:0"><label>Nome do Tipo *</label><input id="est-t-nome" type="text" placeholder="Ex.: Matéria-prima, Embalagem, Revenda..." onkeydown="if(event.key==='Enter')estSalvarTipo()" /></div>
+      </div>
+    </div>
+    <div class="modal-footer lanc-foot">
+      <button class="btn btn-secondary" onclick="closeModal('modal-est-tipo')">Cancelar</button>
+      <button class="btn btn-primary" onclick="estSalvarTipo()">Salvar Tipo</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-cliente">
   <div class="modal">
     <div class="modal-title">Editar Cliente</div>
@@ -3720,6 +3933,10 @@ const PAGES_CONFIG = [
   { id:'dre-analise-cat',   label:'DRE Análise por Categoria', grupo:'dre' },
   { id:'dre-analise-subcat',label:'DRE Análise por Subcategoria', grupo:'dre' },
   { id:'metas-categoria',   label:'Metas por Categoria', grupo:'dre' },
+  { id:'est-produtos',      label:'Estoque — Produtos',  grupo:'estoque' },
+  { id:'est-tipos',         label:'Estoque — Tipos de Material', grupo:'estoque' },
+  { id:'est-lancamentos',   label:'Estoque — Lançamento Mensal', grupo:'estoque' },
+  { id:'est-variacao',      label:'Estoque — Variação do Estoque', grupo:'estoque' },
 ];
 
 // ══════════════════════════════════════════
@@ -4367,6 +4584,7 @@ function showPage(p) {
   if (p === 'metas-categoria')   { carregarMetasCategoria().then(abrirMetasCategoria); }
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
+  if (p === 'est-produtos' || p === 'est-tipos' || p === 'est-lancamentos' || p === 'est-variacao') estAbrirPagina(p);
 }
 
 // Redesenha a tela em que o usuário está — usado depois de trocar de empresa,
@@ -4404,6 +4622,7 @@ function renderPaginaAtual() {
   if (p === 'dre-analise-cat')   { popularCategoriasAnalise(); renderAnaliseCategoria(); }
   if (p === 'dre-analise-subcat'){ popularCategoriasAnaliseSub(); renderAnaliseSubcategoria(); }
   if (p === 'metas-categoria')   { carregarMetasCategoria().then(abrirMetasCategoria); }
+  if (p === 'est-produtos' || p === 'est-tipos' || p === 'est-lancamentos' || p === 'est-variacao') estAbrirPagina(p);
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
 }
@@ -9158,7 +9377,7 @@ function applyNavPermissions() {
   // aqui, antes de decidir quais cabeçalhos de grupo continuam visíveis.
   aplicarOcultacoesMenu();
   // Ocultar cabeçalho do grupo se todos os itens estiverem ocultos
-  ['grp-pagar','grp-receber','grp-dfc','grp-dre'].forEach(grpId => {
+  ['grp-pagar','grp-receber','grp-dfc','grp-dre','grp-estoque'].forEach(grpId => {
     const grp = document.getElementById(grpId);
     if(!grp) return;
     const visivel = grp.querySelectorAll('.nav-sub-item:not([style*="none"])').length > 0;
@@ -9186,6 +9405,7 @@ async function renderUsuariosAdmin() {
     const pagReceber = PAGES_CONFIG.filter(pg=>pg.grupo==='receber');
     const pagDfc     = PAGES_CONFIG.filter(pg=>pg.grupo==='dfc');
     const pagDre     = PAGES_CONFIG.filter(pg=>pg.grupo==='dre');
+    const pagEstoque = PAGES_CONFIG.filter(pg=>pg.grupo==='estoque');
     const buildPerms = (pgs) => pgs.map(pg => {
       const checked = (u.pages || []).includes(pg.id);
       const disabled = isAdmin ? ' disabled-perm' : '';
@@ -9207,7 +9427,9 @@ async function renderUsuariosAdmin() {
       <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📊 DFC</div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${buildPerms(pagDfc)}</div>
       <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📈 DRE</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px">${buildPerms(pagDre)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${buildPerms(pagDre)}</div>
+      <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🗃️ Controle de Estoque</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">${buildPerms(pagEstoque)}</div>
     </div>`;
 
     // Último login deste usuário
@@ -15924,6 +16146,449 @@ window.APP_BUILD = '2026-08-10 · planeta-flores-empresa-unica';
 (function(){ var b = document.getElementById('sidebar-build'); if (b) b.textContent = 'build ' + window.APP_BUILD; })();
 
 // Telas (modais) NÃO fecham mais ao clicar fora — só pelo ✕ / Cancelar / Fechar.
+
+// ══════════════════════════════════════════════════════════════════
+// CONTROLE DE ESTOQUE
+// Tabelas no Supabase: est_tipos, est_produtos, est_lancamentos
+// (SQL de criação entregue junto com esta versão).
+// Lançamento mensal = contagem do saldo do produto no fim do mês.
+//   Saldo inicial do mês = saldo do último mês lançado antes dele
+//                          (ou o saldo inicial do cadastro);
+//   Variação = saldo novo − saldo inicial (Qtd e R$).
+//   Mês sem lançamento = estoque parado (final = inicial).
+// ══════════════════════════════════════════════════════════════════
+let estDb = { tipos: [], produtos: [], lancs: [] };
+let estCarregado = false, estErro = '';
+let _estIdx = null;
+const EST_MESES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+function estNum(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
+function estFmtQtd(v) { return (Math.round(estNum(v) * 1000) / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 3 }); }
+function estFmtR(v) { return estNum(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function estEsc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function estKey(ano, mes) { return Number(ano) * 12 + (Number(mes) - 1); }
+
+async function estCarregar(forcar) {
+  if (estCarregado && !forcar) return;
+  estErro = '';
+  const teste = await sbFetch('est_produtos', 'GET', null, '?limit=1');
+  if (teste === null) {
+    estErro = '⚠️ Não foi possível acessar as tabelas do Controle de Estoque.' + sbErroDetalhe() +
+      '\n\nRode o SQL de criação das tabelas (est_tipos, est_produtos, est_lancamentos) no SQL Editor do Supabase.';
+  }
+  const [t, p, l] = await Promise.all([
+    fetchAll('est_tipos', 'nome'),
+    fetchAll('est_produtos', 'codigo'),
+    fetchAll('est_lancamentos', 'ano')
+  ]);
+  estDb.tipos = t || []; estDb.produtos = p || []; estDb.lancs = l || [];
+  _estIdx = null;
+  estCarregado = !estErro;
+}
+
+function estMostrarErro() {
+  ['est-aviso-produtos','est-aviso-tipos','est-aviso-lanc','est-aviso-var'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = estErro; el.style.display = estErro ? 'block' : 'none'; }
+  });
+}
+
+async function estAbrirPagina(p) {
+  await estCarregar();
+  estMostrarErro();
+  estPopularAnos();
+  if (p === 'est-produtos')    estRenderProdutos();
+  if (p === 'est-tipos')       estRenderTipos();
+  if (p === 'est-lancamentos') estRenderLancamentos();
+  if (p === 'est-variacao')    estRenderVariacao();
+}
+
+function estPopularAnos() {
+  const atual = new Date().getFullYear();
+  const anos = new Set([atual - 1, atual, atual + 1]);
+  estDb.lancs.forEach(l => anos.add(Number(l.ano)));
+  estDb.produtos.forEach(p => { if (p.dt_saldo_inicial) anos.add(Number(p.dt_saldo_inicial.slice(0,4))); });
+  const lista = [...anos].filter(Boolean).sort((a,b) => a - b);
+  ['est-l-ano','est-v-ano'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const v = sel.value || String(atual);
+    sel.innerHTML = lista.map(a => `<option value="${a}">${a}</option>`).join('');
+    sel.value = lista.includes(Number(v)) ? v : String(atual);
+  });
+  const mes = document.getElementById('est-l-mes');
+  if (mes && !mes.dataset.init) { mes.value = String(new Date().getMonth() + 1); mes.dataset.init = '1'; }
+}
+
+function estTipoNome(id) { const t = estDb.tipos.find(x => x.id === id); return t ? t.nome : ''; }
+function estProdutosOrdenados() {
+  return [...estDb.produtos].sort((a,b) => String(a.codigo||'').localeCompare(String(b.codigo||''), 'pt-BR', { numeric: true }));
+}
+
+// Lançamentos de cada produto, ordenados por mês.
+function estIndice() {
+  if (_estIdx) return _estIdx;
+  _estIdx = {};
+  estDb.lancs.forEach(l => { (_estIdx[l.produto_id] = _estIdx[l.produto_id] || []).push(l); });
+  Object.values(_estIdx).forEach(arr => arr.sort((a,b) => estKey(a.ano,a.mes) - estKey(b.ano,b.mes)));
+  return _estIdx;
+}
+
+// Saldo de um produto num mês: inicial, final (Qtd e R$) e o lançamento do mês.
+function estSaldoMes(p, ano, mes) {
+  const k = estKey(ano, mes);
+  let ant = null, atual = null;
+  for (const l of (estIndice()[p.id] || [])) {
+    const lk = estKey(l.ano, l.mes);
+    if (lk < k) ant = l; else if (lk === k) { atual = l; break; } else break;
+  }
+  let iniQ = 0, iniV = 0;
+  if (ant) {
+    iniQ = estNum(ant.qtd); iniV = iniQ * estNum(ant.custo_unit);
+  } else {
+    const dt = p.dt_saldo_inicial;
+    const dk = dt ? estKey(dt.slice(0,4), dt.slice(5,7)) : -Infinity;
+    if (dk <= k) { iniQ = estNum(p.saldo_inicial); iniV = estNum(p.custo_total) || iniQ * estNum(p.custo_unit); }
+  }
+  const fimQ = atual ? estNum(atual.qtd) : iniQ;
+  const fimV = atual ? estNum(atual.qtd) * estNum(atual.custo_unit) : iniV;
+  return { iniQ, iniV, fimQ, fimV, atual };
+}
+
+// ── PRODUTOS ──
+function estRenderProdutos() {
+  const tb = document.getElementById('est-tb-produtos');
+  if (!tb) return;
+  const termo = normText((document.getElementById('est-prod-busca') || {}).value || '');
+  const lista = estProdutosOrdenados().filter(p => !termo || normText(p.codigo||'').includes(termo) || normText(p.descricao||'').includes(termo));
+  if (!lista.length) { tb.innerHTML = `<tr><td colspan="10" class="empty-state">${estDb.produtos.length ? 'Nenhum produto encontrado.' : 'Nenhum produto cadastrado.'}</td></tr>`; return; }
+  const corCurva = { A:'badge-red', B:'badge-yellow', C:'badge-green' };
+  tb.innerHTML = lista.map(p => `
+    <tr>
+      <td style="font-family:DM Mono,monospace;font-size:12px"><b>${estEsc(p.codigo||'—')}</b></td>
+      <td><b>${estEsc(p.descricao)}</b></td>
+      <td>${p.tipo_id ? '<span class="badge badge-blue">' + estEsc(estTipoNome(p.tipo_id)) + '</span>' : '<span style="color:#a8a29e">—</span>'}</td>
+      <td style="text-align:center">${p.curva_abc ? `<span class="badge ${corCurva[p.curva_abc]||'badge-gray'}">${p.curva_abc}</span>` : '—'}</td>
+      <td style="text-align:center"><span class="badge badge-gray">${estEsc(p.unidade||'—')}</span></td>
+      <td class="num">${estFmtQtd(p.saldo_inicial)}</td>
+      <td>${p.dt_saldo_inicial ? fmtDate(p.dt_saldo_inicial) : '—'}</td>
+      <td class="num">${fmtBRL(estNum(p.custo_unit))}</td>
+      <td class="num"><b>${fmtBRL(estNum(p.custo_total))}</b></td>
+      <td class="actions">
+        <button class="btn btn-secondary btn-sm" onclick="estAbrirProduto('${p.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="estExcluirProduto('${p.id}')">Excluir</button>
+      </td>
+    </tr>`).join('');
+}
+
+function estPopularTiposSelect(valor) {
+  const sel = document.getElementById('est-p-tipo');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Nenhum</option>' + [...estDb.tipos].sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+    .map(t => `<option value="${t.id}">${estEsc(t.nome)}</option>`).join('');
+  sel.value = valor || '';
+}
+
+function estAbrirProduto(id) {
+  const p = id ? estDb.produtos.find(x => x.id === id) : null;
+  document.getElementById('est-p-titulo').textContent = p ? 'Editar Produto — Estoque' : 'Novo Produto — Estoque';
+  document.getElementById('est-p-id').value = p ? p.id : '';
+  document.getElementById('est-p-codigo').value = p ? (p.codigo || '') : '';
+  document.getElementById('est-p-desc').value = p ? (p.descricao || '') : '';
+  estPopularTiposSelect(p ? p.tipo_id : '');
+  document.getElementById('est-p-curva').value = p ? (p.curva_abc || '') : '';
+  document.getElementById('est-p-un').value = p ? (p.unidade || 'UN') : 'UN';
+  document.getElementById('est-p-saldo').value = p ? (p.saldo_inicial ?? '') : '';
+  document.getElementById('est-p-dtsaldo').value = p ? (p.dt_saldo_inicial || '') : today();
+  document.getElementById('est-p-custo').value = p ? (p.custo_unit ?? '') : '';
+  estCalcCustoTotal();
+  openModal('modal-est-produto');
+  setTimeout(() => document.getElementById('est-p-codigo').focus(), 50);
+}
+
+function estCalcCustoTotal() {
+  const t = estNum(document.getElementById('est-p-saldo').value) * estNum(document.getElementById('est-p-custo').value);
+  document.getElementById('est-p-total').value = fmtBRL(t);
+}
+
+async function estSalvarProduto() {
+  const id = document.getElementById('est-p-id').value;
+  const codigo = document.getElementById('est-p-codigo').value.trim();
+  const descricao = document.getElementById('est-p-desc').value.trim();
+  const dt = document.getElementById('est-p-dtsaldo').value;
+  if (!codigo || !descricao) { alert('Preencha código e descrição.'); return; }
+  if (!dt) { alert('Informe a data do saldo inicial.'); return; }
+  if (estDb.produtos.some(p => p.id !== id && String(p.codigo||'').trim().toLowerCase() === codigo.toLowerCase())) {
+    alert('Já existe um produto com o código ' + codigo + '.'); return;
+  }
+  const saldo = estNum(document.getElementById('est-p-saldo').value);
+  const custo = estNum(document.getElementById('est-p-custo').value);
+  const rec = {
+    codigo, descricao,
+    tipo_id: document.getElementById('est-p-tipo').value || null,
+    curva_abc: document.getElementById('est-p-curva').value || null,
+    unidade: document.getElementById('est-p-un').value,
+    saldo_inicial: saldo,
+    dt_saldo_inicial: dt,
+    custo_unit: custo,
+    custo_total: Math.round(saldo * custo * 100) / 100
+  };
+  if (id) {
+    const ok = await sbFetch('est_produtos', 'PATCH', rec, `?id=eq.${id}`);
+    if (!ok) { alert('❌ Erro ao salvar o produto.' + sbErroDetalhe()); return; }
+    Object.assign(estDb.produtos.find(x => x.id === id), rec);
+  } else {
+    const novo = { id: uid(), ...rec };
+    const ok = await sbFetch('est_produtos', 'POST', novo);
+    if (!ok) { alert('❌ Erro ao salvar o produto.' + sbErroDetalhe()); return; }
+    estDb.produtos.push(novo);
+  }
+  _estIdx = null;
+  closeModal('modal-est-produto');
+  estPopularAnos(); estRenderProdutos();
+}
+
+async function estExcluirProduto(id) {
+  const p = estDb.produtos.find(x => x.id === id);
+  if (!p) return;
+  const lancs = estDb.lancs.filter(l => l.produto_id === id);
+  const aviso = lancs.length ? `\n\n⚠️ Os ${lancs.length} lançamento(s) mensais deste produto também serão excluídos.` : '';
+  if (!confirm(`Excluir o produto "${p.codigo} — ${p.descricao}"?${aviso}\n\nEssa ação não pode ser desfeita.`)) return;
+  if (lancs.length) {
+    const okL = await sbFetch('est_lancamentos', 'DELETE', null, `?produto_id=eq.${id}`);
+    if (!okL) { alert('❌ Erro ao excluir os lançamentos do produto.' + sbErroDetalhe()); return; }
+    estDb.lancs = estDb.lancs.filter(l => l.produto_id !== id);
+  }
+  const ok = await sbFetch('est_produtos', 'DELETE', null, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao excluir o produto.' + sbErroDetalhe()); return; }
+  estDb.produtos = estDb.produtos.filter(x => x.id !== id);
+  _estIdx = null;
+  estRenderProdutos();
+}
+
+// ── TIPOS DE MATERIAL ──
+let _estTipoDoProduto = false;
+function estRenderTipos() {
+  const tb = document.getElementById('est-tb-tipos');
+  if (!tb) return;
+  const lista = [...estDb.tipos].sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  if (!lista.length) { tb.innerHTML = '<tr><td colspan="3" class="empty-state">Nenhum tipo cadastrado.</td></tr>'; return; }
+  tb.innerHTML = lista.map(t => {
+    const n = estDb.produtos.filter(p => p.tipo_id === t.id).length;
+    return `<tr>
+      <td><b>${estEsc(t.nome)}</b></td>
+      <td style="text-align:center"><span class="badge badge-gray">${n}</span></td>
+      <td class="actions">
+        <button class="btn btn-secondary btn-sm" onclick="estAbrirTipo('${t.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="estExcluirTipo('${t.id}')">Excluir</button>
+      </td></tr>`;
+  }).join('');
+}
+function estAbrirTipo(id) {
+  const t = id ? estDb.tipos.find(x => x.id === id) : null;
+  _estTipoDoProduto = false;
+  document.getElementById('est-t-titulo').textContent = t ? 'Editar Tipo de Material' : 'Novo Tipo de Material';
+  document.getElementById('est-t-id').value = t ? t.id : '';
+  document.getElementById('est-t-nome').value = t ? t.nome : '';
+  openModal('modal-est-tipo');
+  setTimeout(() => document.getElementById('est-t-nome').focus(), 50);
+}
+function estNovoTipoRapido() { estAbrirTipo(); _estTipoDoProduto = true; }
+async function estSalvarTipo() {
+  const id = document.getElementById('est-t-id').value;
+  const nome = document.getElementById('est-t-nome').value.trim();
+  if (!nome) { alert('Informe o nome do tipo.'); return; }
+  if (estDb.tipos.some(t => t.id !== id && normText(t.nome) === normText(nome))) { alert('Já existe um tipo com esse nome.'); return; }
+  let novoId = id;
+  if (id) {
+    const ok = await sbFetch('est_tipos', 'PATCH', { nome }, `?id=eq.${id}`);
+    if (!ok) { alert('❌ Erro ao salvar o tipo.' + sbErroDetalhe()); return; }
+    estDb.tipos.find(x => x.id === id).nome = nome;
+  } else {
+    const novo = { id: uid(), nome };
+    const ok = await sbFetch('est_tipos', 'POST', novo);
+    if (!ok) { alert('❌ Erro ao salvar o tipo.' + sbErroDetalhe()); return; }
+    estDb.tipos.push(novo); novoId = novo.id;
+  }
+  closeModal('modal-est-tipo');
+  estRenderTipos();
+  if (_estTipoDoProduto) { estPopularTiposSelect(novoId); _estTipoDoProduto = false; }
+}
+async function estExcluirTipo(id) {
+  const t = estDb.tipos.find(x => x.id === id);
+  if (!t) return;
+  const n = estDb.produtos.filter(p => p.tipo_id === id).length;
+  if (n) { alert(`Não é possível excluir: ${n} produto(s) usam o tipo "${t.nome}". Altere esses produtos antes.`); return; }
+  if (!confirm(`Excluir o tipo "${t.nome}"?`)) return;
+  const ok = await sbFetch('est_tipos', 'DELETE', null, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao excluir o tipo.' + sbErroDetalhe()); return; }
+  estDb.tipos = estDb.tipos.filter(x => x.id !== id);
+  estRenderTipos();
+}
+
+// ── LANÇAMENTO MENSAL ──
+function _estVarHtml(v, ehValor) {
+  if (Math.abs(v) < 0.0005) return `<span class="est-zero">${ehValor ? '—' : '0'}</span>`;
+  const cls = v > 0 ? 'est-up' : 'est-down';
+  const seta = v > 0 ? '▲' : '▼';
+  const txt = ehValor ? fmtBRL(v) : (v > 0 ? '+' : '') + estFmtQtd(v);
+  return `<span class="${cls}"><span class="est-seta">${seta}</span>${txt}</span>`;
+}
+function _estStatusHtml(temQtd, varQ, varV) {
+  if (!temQtd) return '<span class="est-status pend">Sem lançamento</span>';
+  const ref = Math.abs(varQ) >= 0.0005 ? varQ : varV;
+  if (Math.abs(ref) < 0.0005) return '<span class="est-status igual">= Sem variação</span>';
+  return ref > 0 ? '<span class="est-status sub">▲ Estoque subiu</span>' : '<span class="est-status saiu">▼ Saiu do estoque</span>';
+}
+
+function estRenderLancamentos() {
+  const tb = document.getElementById('est-tb-lanc');
+  if (!tb) return;
+  const ano = Number(document.getElementById('est-l-ano').value);
+  const mes = Number(document.getElementById('est-l-mes').value);
+  const prods = estProdutosOrdenados();
+  if (!prods.length) {
+    tb.innerHTML = '<tr><td colspan="12" class="empty-state">Nenhum produto cadastrado. Cadastre em Controle de Estoque → Produtos.</td></tr>';
+    document.getElementById('est-tf-lanc').innerHTML = '';
+    estAtualizarTotais();
+    return;
+  }
+  tb.innerHTML = prods.map(p => {
+    const s = estSaldoMes(p, ano, mes);
+    const qtd = s.atual ? s.atual.qtd : '';
+    const custo = s.atual ? s.atual.custo_unit : (p.custo_unit ?? 0);
+    return `<tr id="est-row-${p.id}" data-pid="${p.id}" data-iniq="${s.iniQ}" data-iniv="${s.iniV}">
+      <td style="font-family:DM Mono,monospace;font-size:12px"><b>${estEsc(p.codigo||'—')}</b></td>
+      <td>${estEsc(p.descricao)}</td>
+      <td style="text-align:center">${estEsc(p.curva_abc||'—')}</td>
+      <td style="text-align:center"><span class="badge badge-gray">${estEsc(p.unidade||'—')}</span></td>
+      <td class="num">${estFmtQtd(s.iniQ)}</td>
+      <td class="num">${fmtBRL(s.iniV)}</td>
+      <td class="num"><input class="est-in" id="est-q-${p.id}" type="number" step="any" value="${qtd}" placeholder="${estFmtQtd(s.iniQ)}" oninput="estRecalcLinha('${p.id}')" /></td>
+      <td class="num"><input class="est-in${s.atual && estNum(custo) !== estNum(p.custo_unit) ? ' custo-alt' : ''}" id="est-c-${p.id}" type="number" step="any" value="${custo}" title="Custo do cadastro: ${fmtBRL(estNum(p.custo_unit))}" oninput="estRecalcLinha('${p.id}')" /></td>
+      <td class="num" id="est-nv-${p.id}"></td>
+      <td class="num" id="est-vq-${p.id}"></td>
+      <td class="num" id="est-vv-${p.id}"></td>
+      <td style="text-align:center" id="est-st-${p.id}"></td>
+    </tr>`;
+  }).join('');
+  prods.forEach(p => estRecalcLinha(p.id, true));
+  estAtualizarTotais();
+}
+
+function _estLinhaValores(pid) {
+  const tr = document.getElementById('est-row-' + pid);
+  const iniQ = estNum(tr.dataset.iniq), iniV = estNum(tr.dataset.iniv);
+  const qRaw = document.getElementById('est-q-' + pid).value;
+  const custo = estNum(document.getElementById('est-c-' + pid).value);
+  const temQtd = qRaw !== '';
+  const fimQ = temQtd ? estNum(qRaw) : iniQ;
+  const fimV = temQtd ? fimQ * custo : iniV;
+  return { iniQ, iniV, temQtd, fimQ, fimV, custo, varQ: fimQ - iniQ, varV: fimV - iniV };
+}
+
+function estRecalcLinha(pid, inicial) {
+  const v = _estLinhaValores(pid);
+  document.getElementById('est-nv-' + pid).innerHTML = v.temQtd ? fmtBRL(v.fimV) : '<span class="est-zero">—</span>';
+  document.getElementById('est-vq-' + pid).innerHTML = v.temQtd ? _estVarHtml(v.varQ, false) : '<span class="est-zero">—</span>';
+  document.getElementById('est-vv-' + pid).innerHTML = v.temQtd ? _estVarHtml(v.varV, true) : '<span class="est-zero">—</span>';
+  document.getElementById('est-st-' + pid).innerHTML = _estStatusHtml(v.temQtd, v.varQ, v.varV);
+  const p = estDb.produtos.find(x => x.id === pid);
+  const cIn = document.getElementById('est-c-' + pid);
+  if (cIn && p) cIn.classList.toggle('custo-alt', estNum(cIn.value) !== estNum(p.custo_unit));
+  if (!inicial) {
+    document.getElementById('est-row-' + pid).classList.add('est-sujo');
+    estAtualizarTotais();
+  }
+}
+
+function estAtualizarTotais() {
+  const linhas = [...document.querySelectorAll('#est-tb-lanc tr[data-pid]')];
+  let iniQ = 0, iniV = 0, fimQ = 0, fimV = 0, lanc = 0, sobe = 0, desce = 0;
+  linhas.forEach(tr => {
+    const v = _estLinhaValores(tr.dataset.pid);
+    iniQ += v.iniQ; iniV += v.iniV; fimQ += v.fimQ; fimV += v.fimV;
+    if (v.temQtd) { lanc++; if (v.varV > 0.0005) sobe++; else if (v.varV < -0.0005) desce++; }
+  });
+  const varV = fimV - iniV, varQ = fimQ - iniQ;
+  document.getElementById('est-k-ini').textContent = fmtBRL(iniV);
+  document.getElementById('est-k-ini-q').textContent = estFmtQtd(iniQ) + ' un. (soma das quantidades)';
+  document.getElementById('est-k-fim').textContent = fmtBRL(fimV);
+  document.getElementById('est-k-fim-q').textContent = estFmtQtd(fimQ) + ' un. (soma das quantidades)';
+  const kv = document.getElementById('est-k-var');
+  kv.innerHTML = _estVarHtml(varV, true);
+  document.getElementById('est-k-var-sub').textContent = Math.abs(varV) < 0.005 ? 'Sem variação' : (varV > 0 ? 'Estoque subiu' : 'Saiu do estoque');
+  document.getElementById('est-k-lanc').textContent = `${lanc} de ${linhas.length}`;
+  document.getElementById('est-k-lanc-sub').textContent = `${sobe} subiram · ${desce} saíram`;
+  const tf = document.getElementById('est-tf-lanc');
+  tf.innerHTML = linhas.length ? `<tr>
+    <td colspan="4">TOTAL</td>
+    <td class="num">${estFmtQtd(iniQ)}</td><td class="num">${fmtBRL(iniV)}</td>
+    <td class="num">${estFmtQtd(fimQ)}</td><td></td><td class="num">${fmtBRL(fimV)}</td>
+    <td class="num">${_estVarHtml(varQ, false)}</td><td class="num">${_estVarHtml(varV, true)}</td><td></td>
+  </tr>` : '';
+}
+
+async function estSalvarLancamentos() {
+  if (estErro) { alert(estErro); return; }
+  const ano = Number(document.getElementById('est-l-ano').value);
+  const mes = Number(document.getElementById('est-l-mes').value);
+  const linhas = [...document.querySelectorAll('#est-tb-lanc tr[data-pid]')];
+  let criados = 0, alterados = 0, excluidos = 0, erros = 0;
+  for (const tr of linhas) {
+    const pid = tr.dataset.pid;
+    const qRaw = document.getElementById('est-q-' + pid).value;
+    const custo = estNum(document.getElementById('est-c-' + pid).value);
+    const atual = estDb.lancs.find(l => l.produto_id === pid && Number(l.ano) === ano && Number(l.mes) === mes);
+    if (qRaw === '') {
+      if (atual) {
+        const ok = await sbFetch('est_lancamentos', 'DELETE', null, `?id=eq.${atual.id}`);
+        if (ok) { estDb.lancs = estDb.lancs.filter(l => l.id !== atual.id); excluidos++; } else erros++;
+      }
+      continue;
+    }
+    const qtd = estNum(qRaw);
+    if (atual) {
+      if (estNum(atual.qtd) === qtd && estNum(atual.custo_unit) === custo) continue;
+      const ok = await sbFetch('est_lancamentos', 'PATCH', { qtd, custo_unit: custo }, `?id=eq.${atual.id}`);
+      if (ok) { atual.qtd = qtd; atual.custo_unit = custo; alterados++; } else erros++;
+    } else {
+      const novo = { id: uid(), produto_id: pid, ano, mes, qtd, custo_unit: custo };
+      const ok = await sbFetch('est_lancamentos', 'POST', novo);
+      if (ok) { estDb.lancs.push(novo); criados++; } else erros++;
+    }
+  }
+  _estIdx = null;
+  estRenderLancamentos();
+  const nomeMes = EST_MESES[mes - 1] + '/' + ano;
+  if (erros) alert(`⚠️ ${nomeMes}: ${erros} erro(s) ao salvar.` + sbErroDetalhe());
+  else if (!criados && !alterados && !excluidos) alert(`Nada a salvar em ${nomeMes}: nenhuma alteração.`);
+  else alert(`✅ ${nomeMes} salvo: ${criados} novo(s), ${alterados} alterado(s), ${excluidos} removido(s).`);
+}
+
+// ── VARIAÇÃO DO ESTOQUE (por ano) ──
+function estRenderVariacao() {
+  const tb = document.getElementById('est-tb-var');
+  if (!tb) return;
+  const ano = Number(document.getElementById('est-v-ano').value);
+  const yy = String(ano).slice(2);
+  const prods = estDb.produtos;
+  const meses = [];
+  for (let m = 1; m <= 12; m++) {
+    let ini = 0, fim = 0;
+    prods.forEach(p => { const s = estSaldoMes(p, ano, m); ini += s.iniV; fim += s.fimV; });
+    meses.push({ m, ini, fim, v: fim - ini });
+  }
+  const cel = v => `<td class="val"><span class="rs">R$</span><span class="v">${estFmtR(v)}</span></td>`;
+  const celVar = v => {
+    const zero = Math.abs(v) < 0.005;
+    const up = v >= 0 || zero;
+    return `<td class="val"><span class="rs"><span class="${up ? 'est-seta-up' : 'est-seta-down'}" style="font-size:15px;margin-right:8px">${up ? '▲' : '▼'}</span>${!zero && v < 0 ? '-R$' : 'R$'}</span><span class="v ${zero ? '' : (v > 0 ? 'est-up' : 'est-down')}">${zero ? '-' : estFmtR(Math.abs(v))}</span></td>`;
+  };
+  tb.innerHTML = meses.map(x => `<tr><td class="mes">${EST_MESES[x.m - 1]}/${yy}</td>${cel(x.ini)}${cel(x.fim)}${celVar(x.v)}</tr>`).join('');
+  const tot = meses[11].fim - meses[0].ini;
+  document.getElementById('est-tf-var').innerHTML = `<tr><td class="mes">Total ${ano}</td>${cel(meses[0].ini)}${cel(meses[11].fim)}${celVar(tot)}</tr>`;
+}
 </script>
 </body>
 </html>
