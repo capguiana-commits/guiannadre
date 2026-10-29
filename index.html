@@ -174,6 +174,19 @@
 .multi-del { width:30px; height:30px; border-radius:8px; border:1px solid #e7e5e4; background:#fff; color:#a8a29e; cursor:pointer; font-size:13px; }
 .multi-del:hover { background:#fef2f2; color:#dc2626; border-color:#fecaca; }
 .multi-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px; }
+.multi-foot { flex-wrap:wrap; }
+.multi-previa { margin-top:12px; border:1px solid #f0eeec; border-radius:10px; padding:10px 12px; background:#fcfbfa; }
+.multi-previa-tit { font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#78716c; margin-bottom:8px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.multi-previa-tit .dif { color:#dc2626; text-transform:none; letter-spacing:0; }
+.multi-previa-tit .ok { color:#16a34a; text-transform:none; letter-spacing:0; }
+.multi-previa-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:6px 10px; max-height:260px; overflow:auto; }
+.mp-item { display:grid; grid-template-columns:78px 1fr 92px; gap:6px; align-items:center; font-size:12px; }
+.mp-item .mp-lbl { color:#57534e; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mp-item input { padding:4px 6px !important; font-size:12px !important; height:28px; }
+.multi-foot > .btn { white-space:nowrap; }
+.multi-parc { display:flex; align-items:center; gap:8px; font-size:13px; color:#57534e; margin:0 auto 0 4px; font-weight:500; white-space:nowrap; }
+.multi-parc select { width:150px; padding:6px 10px; }
+.multi-total { white-space:nowrap; }
 .multi-total { font-size:12.5px; font-weight:700; color:var(--lm); font-family:'DM Mono',monospace; }
 @media (max-width:700px) { .multi-head { display:none; } .multi-row { grid-template-columns:1fr 1fr; padding:10px; border:1px solid #efedeb; border-radius:10px; } .multi-row .m-obs { grid-column:1/-1; } }
 @media (max-width:700px) {
@@ -826,6 +839,54 @@ th.ef-th { padding:8px 8px 8px 12px; }
 }
 .btn-pdf:hover { background:#faf9f7; color:#ea580c; border-color:#ea580c; }
 .btn-pdf svg { width:13px; height:13px; flex-shrink:0; }
+
+/* ══ Telas de lançamentos / contas: layout compacto ══ */
+.pg-compacta .page-header { margin-bottom:12px; align-items:center; }
+.pg-compacta .page-title { font-size:19px; }
+.pg-compacta .page-sub { font-size:12px; margin-bottom:0; }
+.pg-compacta .page-header > div:last-child, .pg-compacta .ph-acoes { display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+.pg-compacta .page-header .btn, .pg-compacta .page-header .btn-novo { padding:7px 14px; font-size:12.5px; }
+.pg-compacta .page-header .btn-pdf { padding:6px 10px; }
+.pg-compacta .btn-pdf[style*="0f766e"] { color:#fff; border-color:#0f766e; }
+/* KPIs */
+.pg-compacta .grid4 { gap:10px; margin-bottom:12px !important; }
+.pg-compacta .card.kpi { padding:10px 14px; margin-bottom:0; border-radius:10px; }
+.pg-compacta .kpi-val { font-size:19px; line-height:1.2; }
+.pg-compacta .kpi-lbl { font-size:10px; margin-top:2px; }
+/* Card de filtros + tabela */
+.pg-compacta .card { padding:14px 16px; margin-bottom:12px; position:relative; }
+.pg-compacta .card-title { margin-bottom:8px; }
+.pg-compacta .filter-row { display:grid; grid-template-columns:repeat(auto-fill, minmax(132px, 1fr)); gap:8px 10px; align-items:end; margin-bottom:12px; }
+.pg-compacta .filter-row .form-group { min-width:0; margin-bottom:0; }
+.pg-compacta .filter-row label { font-size:11px; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pg-compacta .filter-row input, .pg-compacta .filter-row select { width:100% !important; height:32px; padding:5px 9px !important; font-size:12.5px !important; }
+.pg-compacta .filter-row > div:not(.form-group) { display:flex; gap:6px; align-self:end; }
+.pg-compacta .filter-row > div:not(.form-group):has(.btn + .btn) { grid-column:span 2; }
+.pg-compacta .filter-row .btn { height:32px; padding:0 12px; font-size:12.5px; white-space:nowrap; }
+/* Botão "Colunas" no canto do card, na mesma linha do título "Filtros" */
+.pg-compacta .ef-colbar { position:absolute; top:10px; right:16px; margin:0; }
+.pg-compacta .ef-colbtn { padding:4px 10px; font-size:11.5px; }
+/* Tabela: ocupa o resto da tela e fica alinhada */
+.pg-compacta .table-scroll { max-height:max(320px, calc(100vh - 330px)); overflow:auto; border:1px solid #f0eeec; border-radius:8px; }
+.pg-compacta table { font-size:12.5px; }
+.pg-compacta th { padding:8px 10px; font-size:10.5px; white-space:nowrap; vertical-align:middle; }
+.pg-compacta th.ef-th { padding:8px 6px 8px 10px; }
+.pg-compacta td { padding:7px 10px; vertical-align:middle; white-space:nowrap; max-width:280px; overflow:hidden; text-overflow:ellipsis; }
+.pg-compacta td .badge { white-space:nowrap; }
+.pg-compacta tbody tr:nth-child(even) td { background:#fcfbfa; }
+.pg-compacta tbody tr:hover td { background:#fff7ed; }
+.pg-compacta td .btn { padding:5px 10px; font-size:12px; }
+.pg-compacta td:last-child { max-width:none; overflow:visible; white-space:nowrap; }
+.pg-compacta td:last-child .btn + .btn { margin-left:4px; }
+.pg-compacta td .btn, .pg-compacta td .btn-sm { padding:3px 9px; font-size:11.5px; line-height:1.4; }
+.pg-compacta tbody td { padding-top:6px; padding-bottom:6px; }
+.pg-compacta td .badge { padding:2px 8px; font-size:11px; }
+.pg-compacta .juros-config-card { padding:6px 14px !important; margin-bottom:10px !important; border-radius:10px; }
+.pg-compacta .juros-config-card input { height:28px; padding:3px 8px !important; }
+/* Combos com busca do filtro: mesma altura dos demais campos */
+.pg-compacta .filter-row .ef-combo-trigger { height:32px; min-height:32px; padding:0 9px; font-size:12.5px; display:flex; align-items:center; justify-content:space-between; box-sizing:border-box; }
+.pg-compacta .filter-row .ef-combo-wrap { width:100%; }
+.pg-compacta .filter-row input[type=date] { font-size:12px !important; }
 </style>
 </head>
 <body>
@@ -1245,9 +1306,10 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
 
     <!-- ══ LANÇAMENTOS ══ -->
-    <div class="page" id="page-lancamentos">
+    <div class="page pg-compacta" id="page-lancamentos">
       <div class="page-header">
         <div><div class="page-title">Lançamentos — Contas a Pagar</div><div class="page-sub" style="margin-bottom:0">Registro de compras de itens</div></div>
+        <div class="ph-acoes">
         <button class="btn-pdf" onclick="imprimirPagina('lancamentos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> PDF</button>
         <button class="btn btn-secondary" onclick="abrirModalCategoriaMassa('lancamentos')">🏷️ Categoria em Massa</button>
         <button class="btn btn-secondary" onclick="abrirContasFixas()">🔁 Contas Fixas</button>
@@ -1255,6 +1317,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
         <button class="btn-novo" id="btn-novo-lanc" onclick="abrirModalLanc()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo
         </button>
+        </div>
       </div>
       <div class="card">
         <div class="card-title">Filtros</div>
@@ -1321,7 +1384,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
 
     <!-- ══ A PAGAR ══ -->
-    <div class="page" id="page-apagar">
+    <div class="page pg-compacta" id="page-apagar">
       <div class="page-header"><div><div class="page-title">Contas a Pagar</div><div class="page-sub" style="margin-bottom:0">Parcelas em aberto e próximas do vencimento</div></div><div style="display:flex;gap:8px"><button class="btn-pdf" onclick="abrirPdfDia('apagar')" style="background:#0f766e">📅 PDF por Dia</button><button class="btn-pdf" onclick="imprimirPagina('apagar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> PDF</button></div></div>
       <div id="apagar-kpis" class="grid4" style="margin-bottom:20px;"></div>
       <div class="card">
@@ -1390,7 +1453,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
 
     <!-- ══ PAGAS ══ -->
-    <div class="page" id="page-pagas">
+    <div class="page pg-compacta" id="page-pagas">
       <div class="page-header"><div><div class="page-title">Contas Pagas</div><div class="page-sub" style="margin-bottom:0">Histórico de pagamentos realizados</div></div><div style="display:flex;gap:8px"><button class="btn-pdf" onclick="abrirPdfDia('pagas')" style="background:#0f766e">📅 PDF por Dia</button><button class="btn-pdf" onclick="imprimirPagina('pagas')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> PDF</button></div></div>
       <div id="pagas-kpis" class="grid4" style="margin-bottom:20px;"></div>
       <div class="card">
@@ -1569,7 +1632,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
 
     <!-- ══ LANÇAMENTOS RECEBER ══ -->
-    <div class="page" id="page-lancreceber">
+    <div class="page pg-compacta" id="page-lancreceber">
       <div class="page-header">
         <div><div class="page-title">Lançamentos — Contas a Receber</div><div class="page-sub" style="margin-bottom:0">Registro de vendas e receitas</div></div>
         <div style="display:flex;gap:8px;">
@@ -1643,7 +1706,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
 
     <!-- ══ A RECEBER ══ -->
-    <div class="page" id="page-areceber">
+    <div class="page pg-compacta" id="page-areceber">
       <div class="page-header"><div><div class="page-title">Contas a Receber</div><div class="page-sub" style="margin-bottom:0">Parcelas em aberto</div></div><div style="display:flex;gap:8px"><button class="btn-pdf" onclick="abrirPdfDia('areceber')" style="background:#0f766e">📅 PDF por Dia</button><button class="btn-pdf" onclick="imprimirPagina('areceber')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> PDF</button></div></div>
 
       <!-- Config de Juros -->
@@ -1725,7 +1788,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     </div>
 
     <!-- ══ RECEBIDO ══ -->
-    <div class="page" id="page-recebido">
+    <div class="page pg-compacta" id="page-recebido">
       <div class="page-header"><div><div class="page-title">Contas Recebidas</div><div class="page-sub" style="margin-bottom:0">Histórico de recebimentos realizados</div></div><div style="display:flex;gap:8px"><button class="btn-pdf" onclick="abrirPdfDia('recebido')" style="background:#0f766e">📅 PDF por Dia</button><button class="btn-pdf" onclick="imprimirPagina('recebido')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> PDF</button></div></div>
       <div id="recebido-kpis" class="grid4" style="margin-bottom:20px;"></div>
       <div class="card">
@@ -2877,15 +2940,19 @@ th.ef-th { padding:8px 8px 8px 12px; }
         <label class="lanc-switch">
           <input type="checkbox" id="l-multi" onchange="toggleMultiLanc('l')" />
           <span class="trk"></span>
-          <span>Lançar várias contas de uma vez<small>Fica tudo em um único lançamento: o valor total é a soma das contas e cada conta vira uma parcela, todas no mesmo mês</small></span>
+          <span>Lançar várias contas de uma vez<small>Fica tudo em um único lançamento: o valor total é a soma das contas e cada conta vira uma parcela, todas no mesmo mês. Se quiser, parcele todas as contas de uma vez (cada parcela vence 1 mês depois da anterior)</small></span>
         </label>
         <div id="l-multi-bloco" style="display:none;margin-top:14px">
           <div class="multi-head"><span>Valor (R$) *</span><span>Vencimento *</span><span>Tipo</span><span>Banco / Conta</span><span>Observação</span><span></span></div>
           <div id="l-multi-linhas"></div>
           <div class="multi-foot">
             <button type="button" class="btn btn-secondary btn-sm" onclick="addMultiLinha('l')">＋ Adicionar conta</button>
+            <label class="multi-parc">Parcelar cada conta em
+              <select id="l-multi-parc" onchange="atualizarMultiTotal('l')"></select>
+            </label>
             <span class="multi-total" id="l-multi-total"></span>
           </div>
+          <div id="l-multi-previa" class="multi-previa" style="display:none"></div>
           <div class="lanc-note" style="margin-top:10px">Data, fornecedor, item, NF, categoria, "Incluído no Financeiro" e "Pago?" valem para todas as linhas.</div>
         </div>
       </div>
@@ -6174,9 +6241,67 @@ function toggleMultiLanc(px) {
     const rec = document.getElementById('l-sec-recorr');
     if (rec) rec.style.display = on ? 'none' : '';
   }
+  const sp = document.getElementById(px + '-multi-parc');
+  if (sp && !sp.options.length) {
+    sp.innerHTML = Array.from({length: 24}, (_, i) => `<option value="${i + 1}">${i + 1}x${i ? '' : ' (sem parcelar)'}</option>`).join('');
+  }
   const box = document.getElementById(px + '-multi-linhas');
   if (on && box && !box.children.length) { addMultiLinha(px); addMultiLinha(px); }
 }
+// Soma meses mantendo o dia; se o mês não tem esse dia (ex.: 31), usa o último dia do mês
+function _somaMesesDia(dt, k) {
+  const [y, m, d] = dt.split('-').map(Number);
+  const ult = new Date(y, m - 1 + k + 1, 0).getDate();
+  const x = new Date(y, m - 1 + k, Math.min(d, ult));
+  return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`;
+}
+// Gera as parcelas planejadas (contas × nº de parcelas), em ordem de parcela e conta
+function _gerarParcsMulti(linhas, nParc) {
+  const parcs = [];
+  for (let p = 1; p <= nParc; p++) {
+    linhas.forEach((l, ci) => {
+      const cents = Math.round(l.valor * 100), base = Math.floor(cents / nParc);
+      const v = (p === nParc ? cents - base * (nParc - 1) : base) / 100;
+      parcs.push({ conta: ci + 1, p, dtprev: l.dtprev ? _somaMesesDia(l.dtprev, p - 1) : '', valor: v, tipo: l.tipo, banco: l.banco,
+        obs: nParc > 1 ? (l.obs ? `${l.obs} (${p}/${nParc})` : `${p}/${nParc}`) : l.obs });
+    });
+  }
+  return parcs;
+}
+function _linhasMultiBrutas() {
+  return [...document.querySelectorAll('#l-multi-linhas .multi-row')].map(r => ({
+    valor: parseFloat(r.querySelector('.m-valor').value) || 0, dtprev: r.querySelector('.m-dtprev').value,
+    tipo: r.querySelector('.m-tipo').value, banco: r.querySelector('.m-banco').value, obs: r.querySelector('.m-obs').value.trim()
+  })).filter(l => l.valor || l.obs);
+}
+// Prévia editável das parcelas (só quando parcelado): data e valor de cada uma podem ser ajustados.
+// Mudar as contas ou o nº de parcelas gera a prévia de novo.
+function renderMultiPrevia(fixas) {
+  const box = document.getElementById('l-multi-previa');
+  if (!box) return;
+  const nParc = multiNParc('l');
+  const linhas = _linhasMultiBrutas();
+  if (nParc <= 1 || !linhas.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
+  const parcs = _gerarParcsMulti(linhas, nParc);
+  if (fixas && fixas.datas.length === parcs.length) parcs.forEach((x, i) => { x.dtprev = fixas.datas[i] || x.dtprev; if (fixas.valores[i] != null) x.valor = fixas.valores[i]; });
+  box.style.display = 'block';
+  box.innerHTML = `<div class="multi-previa-tit"><span>📅 Parcelas planejadas — ajuste a data e o valor se precisar</span><span id="l-mp-soma"></span></div>
+    <div class="multi-previa-grid">${parcs.map((x, i) => `<div class="mp-item">
+      <span class="mp-lbl" title="Conta ${x.conta} — parcela ${x.p}/${nParc}">C${x.conta} · ${x.p}/${nParc}</span>
+      <input type="date" class="mp-dt" value="${x.dtprev}" />
+      <input type="number" step="0.01" min="0" class="mp-val" value="${x.valor.toFixed(2)}" oninput="atualizarSomaPrevia()" />
+    </div>`).join('')}</div>`;
+  atualizarSomaPrevia();
+}
+function atualizarSomaPrevia() {
+  const el = document.getElementById('l-mp-soma'); if (!el) return;
+  const soma = [...document.querySelectorAll('#l-multi-previa .mp-val')].reduce((s, i) => s + (parseFloat(i.value) || 0), 0);
+  const tot = _linhasMultiBrutas().reduce((s, l) => s + l.valor, 0);
+  const dif = Math.round((soma - tot) * 100) / 100;
+  el.className = dif ? 'dif' : 'ok';
+  el.textContent = dif ? `Soma das parcelas ${fmtBRL(soma)} — diferença de ${fmtBRL(dif)}` : `Soma das parcelas: ${fmtBRL(soma)} ✓`;
+}
+function multiNParc(px) { const el = document.getElementById(px + '-multi-parc'); return el ? (parseInt(el.value) || 1) : 1; }
 
 function addMultiLinha(px, vals) {
   const box = document.getElementById(px + '-multi-linhas');
@@ -6200,7 +6325,7 @@ function addMultiLinha(px, vals) {
   row.className = 'multi-row';
   row.innerHTML = `
     <input type="number" step="0.01" min="0" class="m-valor" placeholder="0,00" oninput="atualizarMultiTotal('${px}')" />
-    <input type="date" class="m-dtprev" value="${dt}" />
+    <input type="date" class="m-dtprev" value="${dt}" onchange="atualizarMultiTotal('${px}')" />
     <select class="m-tipo">${optTipo}</select>
     <select class="m-banco">${optBanco}</select>
     <input type="text" class="m-obs" placeholder="Observação desta conta" />
@@ -6228,7 +6353,11 @@ function atualizarMultiTotal(px) {
   if (!el) return;
   const rows = [...document.querySelectorAll('#' + px + '-multi-linhas .multi-row')];
   const tot = rows.reduce((s, r) => s + (parseFloat(r.querySelector('.m-valor').value) || 0), 0);
-  el.textContent = rows.length ? `${rows.length} conta(s) · Total: ${fmtBRL(tot)}` : '';
+  const np = multiNParc(px);
+  el.textContent = !rows.length ? '' : np > 1
+    ? `${rows.length} conta(s) × ${np}x = ${rows.length * np} parcelas · Total: ${fmtBRL(tot)}`
+    : `${rows.length} conta(s) · Total: ${fmtBRL(tot)}`;
+  if (px === 'l') renderMultiPrevia();
 }
 
 function resetMulti(px) {
@@ -6239,6 +6368,7 @@ function resetMulti(px) {
   const chk = document.getElementById(px + '-multi');
   const box = document.getElementById(px + '-multi-linhas');
   if (box) box.innerHTML = '';
+  const sp = document.getElementById(px + '-multi-parc'); if (sp && sp.options.length) sp.value = '1';
   if (chk && chk.checked) { chk.checked = false; toggleMultiLanc(px); }
   atualizarMultiTotal(px);
 }
@@ -6293,20 +6423,39 @@ async function saveLancamentoMulti() {
   }
   const empresa_id = empresaDoForm('l-empresa');
   if (empresa_id === null) return;
-  const n = linhas.length;
+  // Parcelamento: cada conta é dividida em nParc parcelas mensais (a 1ª no vencimento informado)
+  const nParc = multiNParc('l');
+  const parcs = _gerarParcsMulti(linhas, nParc);
+  // Datas e valores ajustados na prévia
+  if (nParc > 1) {
+    const dts = [...document.querySelectorAll('#l-multi-previa .mp-dt')];
+    const vls = [...document.querySelectorAll('#l-multi-previa .mp-val')];
+    if (dts.length === parcs.length) {
+      for (let i = 0; i < parcs.length; i++) {
+        const v = parseFloat(vls[i].value) || 0;
+        if (!dts[i].value) { alert(`Parcela C${parcs[i].conta} · ${parcs[i].p}/${nParc}: informe a data.`); dts[i].focus(); return; }
+        if (v <= 0) { alert(`Parcela C${parcs[i].conta} · ${parcs[i].p}/${nParc}: informe um valor maior que zero.`); vls[i].focus(); return; }
+        parcs[i].dtprev = dts[i].value; parcs[i].valor = Math.round(v * 100) / 100;
+      }
+      const soma = Math.round(parcs.reduce((s, x) => s + x.valor, 0) * 100) / 100;
+      const tot = Math.round(linhas.reduce((s, l) => s + l.valor, 0) * 100) / 100;
+      if (soma !== tot) { alert(`A soma das parcelas (${fmtBRL(soma)}) precisa ser igual ao total das contas (${fmtBRL(tot)}).`); return; }
+    }
+  }
+  const n = parcs.length;
   const antigo = editId ? db.lancamentos.find(x => x.id === editId) : null;
   const ant = antigo ? _parseParcelas(antigo.parcela_datas) : null;
   // Status por conta: "Pago = Sim" quita todas; senão mantém o que já estava pago (na edição)
   const pagos = [], dtpagos = [];
   for (let i = 0; i < n; i++) {
     if (pago === 'sim') { pagos.push(true); dtpagos.push(dtpago); }
-    else if (ant && antigo.pago !== 'sim') { pagos.push(ant.pagos[i] === true); dtpagos.push(ant.pagos[i] === true ? (ant.dtpagos[i] || '') : ''); }
+    else if (ant && antigo.pago !== 'sim' && (antigo.parcelas || 1) === n) { pagos.push(ant.pagos[i] === true); dtpagos.push(ant.pagos[i] === true ? (ant.dtpagos[i] || '') : ''); }
     else { pagos.push(false); dtpagos.push(''); }
   }
   const valorTotal = Math.round(linhas.reduce((s, l) => s + l.valor, 0) * 100) / 100;
   const dados = {
     empresa_id, dtcompra,
-    dtprev: linhas.map(l => l.dtprev).sort()[0],
+    dtprev: parcs.map(l => l.dtprev).sort()[0],
     nf: document.getElementById('l-nf').value,
     forn: document.getElementById('l-forn').value,
     prod: document.getElementById('l-prod').value,
@@ -6318,10 +6467,10 @@ async function saveLancamentoMulti() {
     subcat: document.getElementById('l-subcat') ? document.getElementById('l-subcat').value : '',
     obs: document.getElementById('l-obs').value.trim(),
     parcela_datas: JSON.stringify({
-      datas: linhas.map(l => l.dtprev), valores: linhas.map(l => l.valor),
+      datas: parcs.map(l => l.dtprev), valores: parcs.map(l => l.valor),
       pagos, dtpagos,
-      bancos: linhas.map(l => l.banco), tipos: linhas.map(l => l.tipo), obss: linhas.map(l => l.obs),
-      multi: true
+      bancos: parcs.map(l => l.banco), tipos: parcs.map(l => l.tipo), obss: parcs.map(l => l.obs),
+      multi: true, nparc: nParc, contas: linhas
     })
   };
   if (antigo) {
@@ -6360,6 +6509,14 @@ function abrirEdicaoMultiPagar(l) {
   toggleDataPagamento('l-pago','l-dtpago-grp','l-dtpago');
   if (l.pago === 'sim') document.getElementById('l-dtpago').value = l.dtpago || '';
   document.getElementById('l-obs').value = l.obs || '';
+  if (pp.contas && pp.contas.length) {
+    toggleMultiLanc('l'); // garante o seletor de parcelas preenchido
+    document.getElementById('l-multi-bloco').style.display = 'none';
+    pp.contas.forEach(c => addMultiLinha('l', c));
+    document.getElementById('l-multi-parc').value = String(pp.nparc || 1);
+    atualizarMultiTotal('l');
+    renderMultiPrevia({ datas: pp.datas, valores: pp.valores });
+  } else {
   const n = l.parcelas || 1;
   for (let i = 0; i < n; i++) {
     addMultiLinha('l', {
@@ -6367,6 +6524,7 @@ function abrirEdicaoMultiPagar(l) {
       dtprev: pp.datas[i] || l.dtprev || '',
       tipo: pp.tipos[i] || '', banco: pp.bancos[i] || '', obs: pp.obss[i] || ''
     });
+  }
   }
   document.getElementById('l-multi').checked = true;
   toggleMultiLanc('l');
@@ -9590,13 +9748,14 @@ function _parseParcelas(raw) {
   if (Array.isArray(obj)) return { ...vazio, datas: obj }; // legado
   // multi = lançamento criado pelo modo "Várias contas": cada parcela tem banco, tipo e observação próprios
   return { datas: obj.datas || [], valores: obj.valores || [], pagos: obj.pagos || [], dtpagos: obj.dtpagos || [],
-    bancos: obj.bancos || [], tipos: obj.tipos || [], obss: obj.obss || [], multi: !!obj.multi };
+    bancos: obj.bancos || [], tipos: obj.tipos || [], obss: obj.obss || [], multi: !!obj.multi,
+    nparc: obj.nparc || 1, contas: obj.contas || null };
 }
 
 // Atualiza o status de pagamento de UMA parcela específica dentro do JSON
 // unificado salvo em parcela_datas, preservando datas/valores já existentes.
 function _setParcelaPagoStatus(l, parcIdx, pago, dtpago, banco, tipo) {
-  const { datas, valores, pagos, dtpagos, bancos, tipos, obss, multi } = _parseParcelas(l.parcela_datas);
+  const { datas, valores, pagos, dtpagos, bancos, tipos, obss, multi, nparc, contas } = _parseParcelas(l.parcela_datas);
   const n = l.parcelas || 1;
   const novosPagos = pagos.slice(0, n);
   const novosDtpagos = dtpagos.slice(0, n);
@@ -9608,7 +9767,8 @@ function _setParcelaPagoStatus(l, parcIdx, pago, dtpago, banco, tipo) {
     // Preserva os dados por parcela; o banco/tipo informados no pagamento valem só para esta parcela
     if (banco) bancos[parcIdx - 1] = banco;
     if (tipo !== undefined && tipo !== null && pago) tipos[parcIdx - 1] = tipo;
-    return JSON.stringify({ datas, valores, pagos: novosPagos, dtpagos: novosDtpagos, bancos, tipos, obss, multi: true });
+    return JSON.stringify({ datas, valores, pagos: novosPagos, dtpagos: novosDtpagos, bancos, tipos, obss, multi: true,
+      ...(contas ? { nparc, contas } : {}) });
   }
   return JSON.stringify({ datas, valores, pagos: novosPagos, dtpagos: novosDtpagos });
 }
