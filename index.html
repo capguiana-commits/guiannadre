@@ -761,6 +761,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
   font-size:15px; font-weight:700; line-height:1; padding:0;
   display:inline-flex; align-items:center; justify-content:center;
   transition:.15s; font-family:inherit;
+  margin:-6px 0; /* não aumenta a altura do rótulo → campos alinhados */
 }
 .btn-add-inline:hover { background:#ea580c; color:#fff; border-color:#ea580c; }
 
@@ -1282,7 +1283,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div class="form-group"><label>Subcategoria</label>
             <select id="lf-subcat" onchange="renderLancamentos()" title="Filtra pela subcategoria escolhida no lançamento"><option value="">Todas</option></select>
           </div>
-          <div class="form-group"><label>Item</label>
+          <div class="form-group"><label>Item/Fornecedor</label>
             <select id="lf-prod" onchange="renderLancamentos()"><option value="">Todos</option></select>
           </div>
           <div class="form-group"><label>Status Pagamento</label>
@@ -1313,7 +1314,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="clearLancamentoFiltros()">Limpar Filtros</button></div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-lancamentos-row">
-          <th>Data Compra</th><th>Fornecedor</th><th>Item</th><th>Categoria</th><th>Valor</th><th>Parcelas</th>
+          <th>Data Compra</th><th>Fornecedor</th><th>Item/Fornecedor</th><th>Categoria</th><th>Valor</th><th>Parcelas</th>
           <th>Prev. Pgto</th><th>Lead Time</th><th>NF</th><th>Financeiro</th><th>Pago</th><th>Ações</th>
         </tr></thead><tbody id="tb-lancamentos"><tr><td colspan="12" class="empty-state">Nenhum lançamento registrado.</td></tr></tbody></table></div>
       </div>
@@ -1341,7 +1342,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div class="form-group"><label>Fornecedor</label>
             <select id="af-forn" onchange="renderApagar()"><option value="">Todos</option></select>
           </div>
-          <div class="form-group"><label>Item</label>
+          <div class="form-group"><label>Item/Fornecedor</label>
             <select id="af-prod" onchange="renderApagar()"><option value="">Todos</option></select>
           </div>
           <div class="form-group"><label>Grupo</label>
@@ -1383,7 +1384,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           </div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-apagar-row">
-          <th>Fornecedor</th><th>Item</th><th>Categoria</th><th>Parcela</th><th>Valor Parcela</th><th>Dt. Compra</th><th>Vencimento</th><th>Situação</th><th>NF</th><th>Financeiro</th><th>Ações</th>
+          <th>Fornecedor</th><th>Item/Fornecedor</th><th>Categoria</th><th>Parcela</th><th>Valor Parcela</th><th>Dt. Compra</th><th>Vencimento</th><th>Situação</th><th>NF</th><th>Financeiro</th><th>Ações</th>
         </tr></thead><tbody id="tb-apagar"><tr><td colspan="11" class="empty-state">Nenhuma parcela em aberto.</td></tr></tbody></table></div>
       </div>
     </div>
@@ -1410,7 +1411,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div class="form-group"><label>Fornecedor</label>
             <select id="pgf-forn" onchange="renderPagas()"><option value="">Todos</option></select>
           </div>
-          <div class="form-group"><label>Item</label>
+          <div class="form-group"><label>Item/Fornecedor</label>
             <select id="pgf-prod" onchange="renderPagas()"><option value="">Todos</option></select>
           </div>
           <div class="form-group"><label>Grupo</label>
@@ -1437,7 +1438,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div style="align-self:flex-end"><button class="btn btn-secondary" onclick="clearPagasFiltros()">Limpar</button></div>
         </div>
         <div class="table-scroll"><table><thead><tr id="th-pagas-row">
-          <th>Fornecedor</th><th>Item</th><th>Categoria</th><th>Parcela</th><th>Valor Parcela</th><th>Vencimento</th><th>Data Compra</th><th>Data Pgto</th><th>Forma Pgto</th><th>NF</th><th>Financeiro</th><th>Ações</th>
+          <th>Fornecedor</th><th>Item/Fornecedor</th><th>Categoria</th><th>Parcela</th><th>Valor Parcela</th><th>Vencimento</th><th>Data Compra</th><th>Data Pgto</th><th>Forma Pgto</th><th>NF</th><th>Financeiro</th><th>Ações</th>
         </tr></thead><tbody id="tb-pagas"><tr><td colspan="12" class="empty-state">Nenhuma parcela paga.</td></tr></tbody></table></div>
       </div>
     </div>
@@ -2815,7 +2816,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
     <div class="lanc-head">
       <div class="lanc-head-ico">📦</div>
       <div class="lanc-head-txt">
-        <div class="modal-title">Novo Lançamento — Pagamento</div>
+        <div class="modal-title" id="l-modal-titulo">Novo Lançamento — Pagamento</div><input type="hidden" id="l-edit-id" />
         <div class="lanc-head-sub">Conta a pagar · campos com * são obrigatórios</div>
       </div>
       <button type="button" class="lanc-close" onclick="fecharModalLanc()" title="Fechar">✕</button>
@@ -2831,7 +2832,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
           <div class="form-group"><label>Valor Total (R$) *</label><input id="l-valor" type="number" step="0.01" placeholder="0,00" onchange="atualizarParcelasDoForm('l-parcelas','l-parcela-dates')" /></div>
           <div class="form-group"><label>Nº da Nota Fiscal</label><input id="l-nf" type="text" placeholder="000000" /></div>
           <div class="form-group"><label class="label-add">Fornecedor<button type="button" class="btn-add-inline" title="Cadastrar novo fornecedor" onclick="abrirCadastroRapido('fornecedor','l-forn')">+</button></label><select id="l-forn"><option value="">Selecione...</option></select></div>
-          <div class="form-group"><label class="label-add">Item<button type="button" class="btn-add-inline" title="Cadastrar novo item" onclick="abrirCadastroRapido('produto','l-prod')">+</button></label><select id="l-prod"><option value="">Nenhum (opcional)</option></select></div>
+          <div class="form-group"><label class="label-add">Item/Fornecedor<button type="button" class="btn-add-inline" title="Cadastrar novo item" onclick="abrirCadastroRapido('produto','l-prod')">+</button></label><select id="l-prod"><option value="">Nenhum (opcional)</option></select></div>
         </div>
       </div>
 
@@ -2876,7 +2877,7 @@ th.ef-th { padding:8px 8px 8px 12px; }
         <label class="lanc-switch">
           <input type="checkbox" id="l-multi" onchange="toggleMultiLanc('l')" />
           <span class="trk"></span>
-          <span>Lançar várias contas de uma vez<small>Cada linha vira um lançamento com valor, vencimento, tipo, banco e observação próprios</small></span>
+          <span>Lançar várias contas de uma vez<small>Fica tudo em um único lançamento: o valor total é a soma das contas e cada conta vira uma parcela, todas no mesmo mês</small></span>
         </label>
         <div id="l-multi-bloco" style="display:none;margin-top:14px">
           <div class="multi-head"><span>Valor (R$) *</span><span>Vencimento *</span><span>Tipo</span><span>Banco / Conta</span><span>Observação</span><span></span></div>
@@ -6177,7 +6178,7 @@ function toggleMultiLanc(px) {
   if (on && box && !box.children.length) { addMultiLinha(px); addMultiLinha(px); }
 }
 
-function addMultiLinha(px) {
+function addMultiLinha(px, vals) {
   const box = document.getElementById(px + '-multi-linhas');
   if (!box) return;
   const linhas = box.querySelectorAll('.multi-row');
@@ -6186,7 +6187,7 @@ function addMultiLinha(px) {
   let dt = '', tipo = '', banco = '';
   if (ult) {
     const d = ult.querySelector('.m-dtprev').value;
-    dt = d ? parcelaVencimento(d, 2, 2) : '';
+    dt = d ? (px === 'l' ? d : parcelaVencimento(d, 2, 2)) : '';
     tipo = ult.querySelector('.m-tipo').value;
     banco = ult.querySelector('.m-banco').value;
   } else {
@@ -6204,11 +6205,16 @@ function addMultiLinha(px) {
     <select class="m-banco">${optBanco}</select>
     <input type="text" class="m-obs" placeholder="Observação desta conta" />
     <button type="button" class="multi-del" title="Remover esta conta" onclick="removerMultiLinha('${px}', this)">✕</button>`;
-  row.querySelector('.m-tipo').value = tipo;
-  row.querySelector('.m-banco').value = banco;
+  row.querySelector('.m-tipo').value = vals ? (vals.tipo || '') : tipo;
+  row.querySelector('.m-banco').value = vals ? (vals.banco || '') : banco;
+  if (vals) {
+    row.querySelector('.m-valor').value = vals.valor != null ? vals.valor : '';
+    row.querySelector('.m-dtprev').value = vals.dtprev || '';
+    row.querySelector('.m-obs').value = vals.obs || '';
+  }
   box.appendChild(row);
   atualizarMultiTotal(px);
-  row.querySelector('.m-valor').focus();
+  if (!vals) row.querySelector('.m-valor').focus();
 }
 
 function removerMultiLinha(px, btn) {
@@ -6226,6 +6232,10 @@ function atualizarMultiTotal(px) {
 }
 
 function resetMulti(px) {
+  if (px === 'l') {
+    const ed = document.getElementById('l-edit-id'); if (ed) ed.value = '';
+    const t = document.getElementById('l-modal-titulo'); if (t) t.textContent = 'Novo Lançamento — Pagamento';
+  }
   const chk = document.getElementById(px + '-multi');
   const box = document.getElementById(px + '-multi-linhas');
   if (box) box.innerHTML = '';
@@ -6260,7 +6270,12 @@ function lerMultiLinhas(px, statusQuitado) {
   return linhas;
 }
 
+// A pagar: todas as contas viram UM lançamento, com valor total = soma das
+// linhas e uma parcela por linha (vencimento, valor, tipo, banco e observação
+// próprios, guardados em parcela_datas com multi:true). Todas as contas precisam
+// vencer no mesmo mês.
 async function saveLancamentoMulti() {
+  const editId = document.getElementById('l-edit-id').value;
   const dtcompra = document.getElementById('l-dtcompra').value;
   if (!dtcompra) { alert('Preencha a data da compra.'); return; }
   if (!validarSubcategoria('l-catdre','l-subcat')) return;
@@ -6269,31 +6284,93 @@ async function saveLancamentoMulti() {
   if (pago === 'sim' && !dtpago) { alert('Informe a data do pagamento.'); document.getElementById('l-dtpago').focus(); return; }
   const linhas = lerMultiLinhas('l', pago);
   if (!linhas) return;
+  const mesRef = linhas[0].dtprev.slice(0, 7);
+  const fora = linhas.findIndex(l => l.dtprev.slice(0, 7) !== mesRef);
+  if (fora >= 0) {
+    const [a, m] = mesRef.split('-');
+    alert(`Todas as contas precisam vencer no mesmo mês (${m}/${a}).\nA conta ${fora + 1} vence em ${fmtDate(linhas[fora].dtprev)}.`);
+    return;
+  }
   const empresa_id = empresaDoForm('l-empresa');
   if (empresa_id === null) return;
-  const obsGeral = document.getElementById('l-obs').value.trim();
-  const base = {
-    empresa_id,
+  const n = linhas.length;
+  const antigo = editId ? db.lancamentos.find(x => x.id === editId) : null;
+  const ant = antigo ? _parseParcelas(antigo.parcela_datas) : null;
+  // Status por conta: "Pago = Sim" quita todas; senão mantém o que já estava pago (na edição)
+  const pagos = [], dtpagos = [];
+  for (let i = 0; i < n; i++) {
+    if (pago === 'sim') { pagos.push(true); dtpagos.push(dtpago); }
+    else if (ant && antigo.pago !== 'sim') { pagos.push(ant.pagos[i] === true); dtpagos.push(ant.pagos[i] === true ? (ant.dtpagos[i] || '') : ''); }
+    else { pagos.push(false); dtpagos.push(''); }
+  }
+  const valorTotal = Math.round(linhas.reduce((s, l) => s + l.valor, 0) * 100) / 100;
+  const dados = {
+    empresa_id, dtcompra,
+    dtprev: linhas.map(l => l.dtprev).sort()[0],
     nf: document.getElementById('l-nf').value,
     forn: document.getElementById('l-forn').value,
     prod: document.getElementById('l-prod').value,
+    valor: valorTotal, parcelas: n,
     financeiro: document.getElementById('l-financeiro').value,
     pago, dtpago,
+    tipo_pag: linhas[0].tipo, banco: linhas[0].banco,
     cat_dre: document.getElementById('l-catdre') ? document.getElementById('l-catdre').value : '',
-    subcat: document.getElementById('l-subcat') ? document.getElementById('l-subcat').value : ''
+    subcat: document.getElementById('l-subcat') ? document.getElementById('l-subcat').value : '',
+    obs: document.getElementById('l-obs').value.trim(),
+    parcela_datas: JSON.stringify({
+      datas: linhas.map(l => l.dtprev), valores: linhas.map(l => l.valor),
+      pagos, dtpagos,
+      bancos: linhas.map(l => l.banco), tipos: linhas.map(l => l.tipo), obss: linhas.map(l => l.obs),
+      multi: true
+    })
   };
-  let criados = 0;
-  for (const l of linhas) {
-    const rec = { id: uid(), dtcompra, dtprev: l.dtprev, ...base, valor: l.valor, parcelas: 1, parcela_datas: null,
-      tipo_pag: l.tipo, banco: l.banco, obs: l.obs || obsGeral };
+  if (antigo) {
+    const ok = await sbFetch('lancamentos', 'PATCH', dados, `?id=eq.${antigo.id}`);
+    if (!ok) { alert('❌ Erro ao salvar as alterações.' + sbErroDetalhe()); return; }
+    Object.assign(antigo, dados);
+  } else {
+    const rec = { id: uid(), ...dados };
     const ok = await sbFetch('lancamentos', 'POST', rec);
-    if (!ok) { alert(`❌ Erro ao salvar (${criados} de ${linhas.length} já gravados).` + sbErroDetalhe()); break; }
-    db.lancamentos.push(rec); criados++;
+    if (!ok) { alert('❌ Erro ao salvar o lançamento.' + sbErroDetalhe()); return; }
+    db.lancamentos.push(rec);
   }
-  if (!criados) return;
+  bumpDbVer();
   clearLancamento(); closeModal('modal-novo-lanc');
   renderLancamentos(); renderApagar(); renderPagas(); populateYearSelects();
-  if (criados === linhas.length) alert(`✅ ${criados} lançamento(s) a pagar criado(s).`);
+}
+
+// Edição de um lançamento criado em "Várias contas": reabre a tela de
+// lançamento com todas as contas para alterar.
+function abrirEdicaoMultiPagar(l) {
+  populateFornSelects(); populateProdSelects(); populateBancoSelects();
+  populateFormasPagSelects(); populateDreCatSelects();
+  clearLancamento();
+  const pp = _parseParcelas(l.parcela_datas);
+  document.getElementById('l-edit-id').value = l.id;
+  document.getElementById('l-modal-titulo').textContent = 'Editar Lançamento — Pagamento';
+  document.getElementById('l-dtcompra').value = l.dtcompra || '';
+  document.getElementById('l-nf').value = l.nf || '';
+  document.getElementById('l-forn').value = l.forn || '';
+  document.getElementById('l-prod').value = l.prod || '';
+  document.getElementById('l-catdre').value = l.cat_dre || '';
+  onCategoriaChange('l-catdre','l-subcat');
+  document.getElementById('l-subcat').value = l.subcat || '';
+  document.getElementById('l-financeiro').value = l.financeiro || 'nao';
+  document.getElementById('l-pago').value = l.pago === 'sim' ? 'sim' : 'nao';
+  toggleDataPagamento('l-pago','l-dtpago-grp','l-dtpago');
+  if (l.pago === 'sim') document.getElementById('l-dtpago').value = l.dtpago || '';
+  document.getElementById('l-obs').value = l.obs || '';
+  const n = l.parcelas || 1;
+  for (let i = 0; i < n; i++) {
+    addMultiLinha('l', {
+      valor: pp.valores[i] != null ? pp.valores[i] : (l.valor / n),
+      dtprev: pp.datas[i] || l.dtprev || '',
+      tipo: pp.tipos[i] || '', banco: pp.bancos[i] || '', obs: pp.obss[i] || ''
+    });
+  }
+  document.getElementById('l-multi').checked = true;
+  toggleMultiLanc('l');
+  openModal('modal-novo-lanc');
 }
 
 async function saveLancReceberMulti() {
@@ -6524,7 +6601,7 @@ function renderLancamentos() {
   const colsLanc = [
     { key:'dtcompra', label:'Data Compra', get:l=>l.dtcompra, display:l=>fmtDate(l.dtcompra) },
     { key:'forn', label:'Fornecedor', get:l=>getFornNome(l.forn) },
-    { key:'prod', label:'Item', get:l=>l.prod?getProdNome(l.prod):null },
+    { key:'prod', label:'Item/Fornecedor', get:l=>l.prod?getProdNome(l.prod):null },
     { key:'cat', label:'Categoria', get:l=>{ const c=_catDeLanc(l); return c?getDreCatNome(c):null; } },
     { key:'valor', label:'Valor', get:l=>l.valor||0, display:l=>fmtBRL(l.valor) },
     { key:'parcelas', label:'Parcelas', get:l=>l.parcelas||1, display:l=>`${l.parcelas}x` },
@@ -6583,6 +6660,7 @@ function clearLancamentoFiltros() {
 function editLancamento(id) {
   const l = db.lancamentos.find(x=>x.id===id);
   if(!l) return;
+  if (_parseParcelas(l.parcela_datas).multi) { abrirEdicaoMultiPagar(l); return; }
   document.getElementById('edit-lanc-id').value = id;
   document.getElementById('edit-dtcompra').value = l.dtcompra;
   document.getElementById('edit-dtprev').value = l.dtprev||'';
@@ -6683,7 +6761,7 @@ function _buildParcelas() {
   const parcelas = [];
   db.lancamentos.forEach(l => {
     const n = l.parcelas || 1;
-    const { datas: manualDates, valores: manualValores, pagos, dtpagos } = _parseParcelas(l.parcela_datas);
+    const { datas: manualDates, valores: manualValores, pagos, dtpagos, bancos: pBancos, tipos: pTipos } = _parseParcelas(l.parcela_datas);
     for(let i=1; i<=n; i++) {
       const venc = (manualDates[i-1]) ? manualDates[i-1] : parcelaVencimento(l.dtprev, i, n);
       // Cada parcela tem seu próprio status de pagamento (array "pagos"/"dtpagos"
@@ -6706,8 +6784,8 @@ function _buildParcelas() {
         dtpago,
         nf: l.nf,
         financeiro: l.financeiro,
-        banco: l.banco || '',
-        tipoPag: l.tipo_pag || '',
+        banco: pBancos[i-1] || l.banco || '',
+        tipoPag: pTipos[i-1] || l.tipo_pag || '',
         juros: l.juros ?? null,
         catId,
         subcat: l.subcat || '',
@@ -7316,7 +7394,7 @@ function renderApagar() {
   // Colunas para o filtro/ordenação estilo Excel no cabeçalho da tabela
   const colsApagar = [
     { key:'forn', label:'Fornecedor', get:p=>getFornNome(p.forn) },
-    { key:'prod', label:'Item', get:p=>p.prod?getProdNome(p.prod):null },
+    { key:'prod', label:'Item/Fornecedor', get:p=>p.prod?getProdNome(p.prod):null },
     { key:'cat', label:'Categoria', get:p=>p.catId?getDreCatNome(p.catId):null },
     { key:'parcela', label:'Parcela', get:p=>p.parcIdx+(p.totalParc/1000), display:p=>`${p.parcIdx}/${p.totalParc}` },
     { key:'valor', label:'Valor Parcela', get:p=>p.valParc, display:p=>fmtBRL(p.valParc) },
@@ -7376,10 +7454,13 @@ function marcarPago(id, parcIdx) {
   document.getElementById('modal-pago-id').value = id;
   document.getElementById('modal-pago-parc').value = parcIdx || 1;
   document.getElementById('modal-pago-data').value = today();
+  const _pp = _parseParcelas(l.parcela_datas);
+  const _ix = (parcIdx || 1) - 1;
+  const tipoIni = (_pp.multi && _pp.tipos[_ix]) || l.tipo_pag || '';
   const selPagForma = document.getElementById('modal-pago-tipo-pag');
-  selPagForma.innerHTML = _montarOptsFormas(getFormasPagamento(), l.tipo_pag || '', '+ Cadastrar nova forma de pagamento...');
-  selPagForma.value = l.tipo_pag || '';
-  document.getElementById('modal-pago-banco').value = l.banco || '';
+  selPagForma.innerHTML = _montarOptsFormas(getFormasPagamento(), tipoIni, '+ Cadastrar nova forma de pagamento...');
+  selPagForma.value = tipoIni;
+  document.getElementById('modal-pago-banco').value = (_pp.multi && _pp.bancos[_ix]) || l.banco || '';
   openModal('modal-pago');
 }
 
@@ -7408,20 +7489,20 @@ async function confirmarPago() {
   const l = db.lancamentos.find(x=>x.id===id);
   if(!l) return;
   const n = l.parcelas || 1;
-  l.banco = banco;
-  l.tipo_pag = tipoPag;
+  const ehMulti = _parseParcelas(l.parcela_datas).multi;
+  if (!ehMulti) { l.banco = banco; l.tipo_pag = tipoPag; }
 
-  if (n > 1) {
+  if (n > 1 || ehMulti) {
     // Lançamento parcelado: marca só a parcela selecionada, guardando o status
     // por parcela dentro de parcela_datas para não afetar as demais parcelas.
-    l.parcela_datas = _setParcelaPagoStatus(l, parcIdx, true, dtpago);
+    l.parcela_datas = _setParcelaPagoStatus(l, parcIdx, true, dtpago, banco, tipoPag);
     const { pagos } = _parseParcelas(l.parcela_datas);
     const todasPagas = pagos.slice(0, n).every(p => p === true);
     // l.pago/l.dtpago (nível do lançamento) só refletem "tudo pago", para
     // manter compatibilidade com Dashboard/DFC, que ainda leem esses campos.
     l.pago = todasPagas ? 'sim' : 'nao';
     l.dtpago = todasPagas ? dtpago : '';
-    await sbFetch('lancamentos', 'PATCH', {parcela_datas: l.parcela_datas, pago: l.pago, dtpago: l.dtpago, banco, tipo_pag: tipoPag}, `?id=eq.${id}`);
+    await sbFetch('lancamentos', 'PATCH', {parcela_datas: l.parcela_datas, pago: l.pago, dtpago: l.dtpago, banco: l.banco, tipo_pag: l.tipo_pag}, `?id=eq.${id}`);
   } else {
     l.pago = 'sim';
     l.dtpago = dtpago;
@@ -7505,7 +7586,7 @@ async function confirmarMarcarPagoMassa() {
       let ok;
       if (n > 1) {
         // Cada parcela é datada com o seu próprio vencimento.
-        parcelas.forEach(p => { l.parcela_datas = _setParcelaPagoStatus(l, p.parcIdx, true, p.venc); });
+        parcelas.forEach(p => { l.parcela_datas = _setParcelaPagoStatus(l, p.parcIdx, true, p.venc, banco); });
         const { pagos, dtpagos } = _parseParcelas(l.parcela_datas);
         const todasPagas = pagos.slice(0, n).every(x => x === true);
         l.pago = todasPagas ? 'sim' : 'nao';
@@ -7602,7 +7683,7 @@ async function confirmarMarcarRecebidoMassa() {
       let ok;
       if (n > 1) {
         // Cada parcela é datada com o seu próprio vencimento.
-        parcelas.forEach(p => { l.parcela_datas = _setParcelaPagoStatus(l, p.parcIdx, true, p.venc); });
+        parcelas.forEach(p => { l.parcela_datas = _setParcelaPagoStatus(l, p.parcIdx, true, p.venc, banco); });
         const { pagos, dtpagos } = _parseParcelas(l.parcela_datas);
         const todasRecebidas = pagos.slice(0, n).every(x => x === true);
         l.recebido = todasRecebidas ? 'sim' : 'nao';
@@ -7932,7 +8013,7 @@ function renderPagas() {
   // Colunas para o filtro/ordenação estilo Excel no cabeçalho da tabela
   const colsPagas = [
     { key:'forn', label:'Fornecedor', get:p=>getFornNome(p.forn) },
-    { key:'prod', label:'Item', get:p=>p.prod?getProdNome(p.prod):null },
+    { key:'prod', label:'Item/Fornecedor', get:p=>p.prod?getProdNome(p.prod):null },
     { key:'cat', label:'Categoria', get:p=>p.catId?getDreCatNome(p.catId):null },
     { key:'parcela', label:'Parcela', get:p=>p.parcIdx+(p.totalParc/1000), display:p=>`${p.parcIdx}/${p.totalParc}` },
     { key:'valor', label:'Valor Parcela', get:p=>p.valParc, display:p=>fmtBRL(p.valParc) },
@@ -9503,16 +9584,19 @@ function syncTotalParcelaValores(containerid, n, selectId) {
 
 function _parseParcelas(raw) {
   // Retorna { datas: [...], valores: [...], pagos: [...], dtpagos: [...] } independente do formato salvo
-  if (!raw) return { datas: [], valores: [], pagos: [], dtpagos: [] };
+  const vazio = { datas: [], valores: [], pagos: [], dtpagos: [], bancos: [], tipos: [], obss: [], multi: false };
+  if (!raw) return vazio;
   const obj = typeof raw === 'string' ? JSON.parse(raw) : raw;
-  if (Array.isArray(obj)) return { datas: obj, valores: [], pagos: [], dtpagos: [] }; // legado
-  return { datas: obj.datas || [], valores: obj.valores || [], pagos: obj.pagos || [], dtpagos: obj.dtpagos || [] };
+  if (Array.isArray(obj)) return { ...vazio, datas: obj }; // legado
+  // multi = lançamento criado pelo modo "Várias contas": cada parcela tem banco, tipo e observação próprios
+  return { datas: obj.datas || [], valores: obj.valores || [], pagos: obj.pagos || [], dtpagos: obj.dtpagos || [],
+    bancos: obj.bancos || [], tipos: obj.tipos || [], obss: obj.obss || [], multi: !!obj.multi };
 }
 
 // Atualiza o status de pagamento de UMA parcela específica dentro do JSON
 // unificado salvo em parcela_datas, preservando datas/valores já existentes.
-function _setParcelaPagoStatus(l, parcIdx, pago, dtpago) {
-  const { datas, valores, pagos, dtpagos } = _parseParcelas(l.parcela_datas);
+function _setParcelaPagoStatus(l, parcIdx, pago, dtpago, banco, tipo) {
+  const { datas, valores, pagos, dtpagos, bancos, tipos, obss, multi } = _parseParcelas(l.parcela_datas);
   const n = l.parcelas || 1;
   const novosPagos = pagos.slice(0, n);
   const novosDtpagos = dtpagos.slice(0, n);
@@ -9520,6 +9604,12 @@ function _setParcelaPagoStatus(l, parcIdx, pago, dtpago) {
   while (novosDtpagos.length < n) novosDtpagos.push('');
   novosPagos[parcIdx - 1] = pago;
   novosDtpagos[parcIdx - 1] = pago ? dtpago : '';
+  if (multi) {
+    // Preserva os dados por parcela; o banco/tipo informados no pagamento valem só para esta parcela
+    if (banco) bancos[parcIdx - 1] = banco;
+    if (tipo !== undefined && tipo !== null && pago) tipos[parcIdx - 1] = tipo;
+    return JSON.stringify({ datas, valores, pagos: novosPagos, dtpagos: novosDtpagos, bancos, tipos, obss, multi: true });
+  }
   return JSON.stringify({ datas, valores, pagos: novosPagos, dtpagos: novosDtpagos });
 }
 
@@ -15623,7 +15713,7 @@ function _pdfDiaColsDef(pagina) {
   const defs = {
     apagar: [
       { key:'forn',      label:'Fornecedor',     get:p=>getFornNome(p.forn) },
-      { key:'prod',      label:'Item',           get:p=>p.prod?getProdNome(p.prod):'—' },
+      { key:'prod',      label:'Item/Fornecedor', get:p=>p.prod?getProdNome(p.prod):'—' },
       { key:'cat',       label:'Categoria',      get:p=>p.catId?getDreCatNome(p.catId):'—' },
       { key:'parcela',   label:'Parcela',        get:p=>`${p.parcIdx}/${p.totalParc}` },
       { key:'valor',     label:'Valor Parcela',  get:p=>fmtBRL(p.valParc), num:true },
@@ -15635,7 +15725,7 @@ function _pdfDiaColsDef(pagina) {
     ],
     pagas: [
       { key:'forn',      label:'Fornecedor',     get:p=>getFornNome(p.forn) },
-      { key:'prod',      label:'Item',           get:p=>p.prod?getProdNome(p.prod):'—' },
+      { key:'prod',      label:'Item/Fornecedor', get:p=>p.prod?getProdNome(p.prod):'—' },
       { key:'cat',       label:'Categoria',      get:p=>p.catId?getDreCatNome(p.catId):'—' },
       { key:'parcela',   label:'Parcela',        get:p=>`${p.parcIdx}/${p.totalParc}` },
       { key:'valor',     label:'Valor Parcela',  get:p=>fmtBRL(p.valParc), num:true },
