@@ -165,6 +165,17 @@
 .lanc-foot .btn-primary { background:var(--lm); box-shadow:0 4px 12px var(--lm-ring); }
 .lanc-foot .btn-primary:hover { filter:brightness(1.08); background:var(--lm); }
 .lanc-modal .parcela-grid { max-height:220px; }
+/* Vários lançamentos (lote) */
+.multi-head, .multi-row { display:grid; grid-template-columns:110px 138px minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr) 30px; gap:8px; align-items:center; }
+.multi-head { font-size:10.5px; font-weight:700; color:#78716c; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+.multi-row { margin-bottom:8px; }
+.multi-row input, .multi-row select { padding:7px 9px !important; font-size:12.5px; }
+.multi-row .m-valor { font-family:'DM Mono',monospace; text-align:right; }
+.multi-del { width:30px; height:30px; border-radius:8px; border:1px solid #e7e5e4; background:#fff; color:#a8a29e; cursor:pointer; font-size:13px; }
+.multi-del:hover { background:#fef2f2; color:#dc2626; border-color:#fecaca; }
+.multi-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:4px; }
+.multi-total { font-size:12.5px; font-weight:700; color:var(--lm); font-family:'DM Mono',monospace; }
+@media (max-width:700px) { .multi-head { display:none; } .multi-row { grid-template-columns:1fr 1fr; padding:10px; border:1px solid #efedeb; border-radius:10px; } .multi-row .m-obs { grid-column:1/-1; } }
 @media (max-width:700px) {
   .lanc-modal .grid3.form-compacto, .lanc-modal .grid2.form-compacto { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
   .lanc-body { padding:16px 14px 4px; } .lanc-head { padding:18px 16px; } .lanc-modal .modal-footer.lanc-foot { padding:12px 16px; }
@@ -2860,7 +2871,25 @@ th.ef-th { padding:8px 8px 8px 12px; }
         </div>
       </div>
 
-      <div class="lanc-sec">
+      <div class="lanc-sec" id="l-sec-multi">
+        <div class="lanc-sec-title"><span class="n">+</span>Vários lançamentos<span class="hint">mesmo fornecedor, contas diferentes</span></div>
+        <label class="lanc-switch">
+          <input type="checkbox" id="l-multi" onchange="toggleMultiLanc('l')" />
+          <span class="trk"></span>
+          <span>Lançar várias contas de uma vez<small>Cada linha vira um lançamento com valor, vencimento, tipo, banco e observação próprios</small></span>
+        </label>
+        <div id="l-multi-bloco" style="display:none;margin-top:14px">
+          <div class="multi-head"><span>Valor (R$) *</span><span>Vencimento *</span><span>Tipo</span><span>Banco / Conta</span><span>Observação</span><span></span></div>
+          <div id="l-multi-linhas"></div>
+          <div class="multi-foot">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addMultiLinha('l')">＋ Adicionar conta</button>
+            <span class="multi-total" id="l-multi-total"></span>
+          </div>
+          <div class="lanc-note" style="margin-top:10px">Data, fornecedor, item, NF, categoria, "Incluído no Financeiro" e "Pago?" valem para todas as linhas.</div>
+        </div>
+      </div>
+
+      <div class="lanc-sec" id="l-sec-recorr">
         <div class="lanc-sec-title"><span class="n">4</span>Recorrência</div>
         <label class="lanc-switch">
           <input type="checkbox" id="l-fixa" onchange="toggleContaFixaVigencia()" />
@@ -2955,6 +2984,24 @@ th.ef-th { padding:8px 8px 8px 12px; }
         <div id="lr-parcela-dates" style="display:none;margin-top:14px;">
           <div class="lanc-note" style="margin-bottom:10px">📅 Datas de recebimento de cada parcela (opcional — substitui a geração automática mensal)</div>
           <div id="lr-parcela-dates-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;"></div>
+        </div>
+      </div>
+
+      <div class="lanc-sec" id="lr-sec-multi">
+        <div class="lanc-sec-title"><span class="n">+</span>Vários lançamentos<span class="hint">mesmo cliente, contas diferentes</span></div>
+        <label class="lanc-switch">
+          <input type="checkbox" id="lr-multi" onchange="toggleMultiLanc('lr')" />
+          <span class="trk"></span>
+          <span>Lançar várias contas de uma vez<small>Cada linha vira um lançamento com valor, vencimento, tipo, banco e observação próprios</small></span>
+        </label>
+        <div id="lr-multi-bloco" style="display:none;margin-top:14px">
+          <div class="multi-head"><span>Valor (R$) *</span><span>Vencimento *</span><span>Tipo</span><span>Banco / Conta</span><span>Observação</span><span></span></div>
+          <div id="lr-multi-linhas"></div>
+          <div class="multi-foot">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addMultiLinha('lr')">＋ Adicionar conta</button>
+            <span class="multi-total" id="lr-multi-total"></span>
+          </div>
+          <div class="lanc-note" style="margin-top:10px">Data, cliente, item, NF, categoria, "Incluído no Financeiro" e "Recebido?" valem para todas as linhas.</div>
         </div>
       </div>
 
@@ -6094,7 +6141,198 @@ function _dataComDiaFixo(ano, mes, dia) {
   return `${ano}-${String(mes).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 }
 
+// ══════════════════════════════════════════════════════════════════
+// VÁRIOS LANÇAMENTOS (LOTE) — Novo Lançamento a Pagar / a Receber
+// px = 'l' (pagar) ou 'lr' (receber). Cada linha vira 1 lançamento à vista,
+// com valor, vencimento, tipo, banco e observação próprios; os demais
+// campos do formulário (data, fornecedor/cliente, item, NF, categoria,
+// financeiro, pago/recebido) valem para todas as linhas.
+// ══════════════════════════════════════════════════════════════════
+// Campos do formulário normal que somem no modo lote (são definidos por linha)
+const MULTI_OCULTA = {
+  l:  ['l-valor','l-dtprev','l-parcelas','l-tipo-pag','l-banco'],
+  lr: ['lr-valor','lr-dtprev','lr-parcelas','lr-tipo-pag','lr-banco']
+};
+function multiAtivo(px) { const el = document.getElementById(px + '-multi'); return !!(el && el.checked); }
+
+function toggleMultiLanc(px) {
+  const on = multiAtivo(px);
+  document.getElementById(px + '-multi-bloco').style.display = on ? 'block' : 'none';
+  MULTI_OCULTA[px].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const g = el.closest('.form-group'); if (g) g.style.display = on ? 'none' : '';
+  });
+  if (on) {
+    const parc = document.getElementById(px + '-parcelas');
+    if (parc) { parc.value = '1'; toggleParcelaDates(px + '-parcelas', px + '-parcela-dates'); }
+  }
+  // Conta fixa e lote não combinam: esconde a recorrência no modo lote
+  if (px === 'l') {
+    const fixa = document.getElementById('l-fixa');
+    if (on && fixa && fixa.checked) { fixa.checked = false; toggleContaFixaVigencia(); }
+    const rec = document.getElementById('l-sec-recorr');
+    if (rec) rec.style.display = on ? 'none' : '';
+  }
+  const box = document.getElementById(px + '-multi-linhas');
+  if (on && box && !box.children.length) { addMultiLinha(px); addMultiLinha(px); }
+}
+
+function addMultiLinha(px) {
+  const box = document.getElementById(px + '-multi-linhas');
+  if (!box) return;
+  const linhas = box.querySelectorAll('.multi-row');
+  const ult = linhas.length ? linhas[linhas.length - 1] : null;
+  // Sugestões a partir da linha anterior: vencimento +1 mês, mesmo tipo e banco
+  let dt = '', tipo = '', banco = '';
+  if (ult) {
+    const d = ult.querySelector('.m-dtprev').value;
+    dt = d ? parcelaVencimento(d, 2, 2) : '';
+    tipo = ult.querySelector('.m-tipo').value;
+    banco = ult.querySelector('.m-banco').value;
+  } else {
+    dt = document.getElementById(px === 'l' ? 'l-dtcompra' : 'lr-dtvenda').value || today();
+  }
+  const formas = px === 'l' ? getFormasPagamento() : getFormasRecebimento();
+  const optTipo = '<option value="">Não informado</option>' + formas.map(f => `<option value="${f}">${f}</option>`).join('');
+  const optBanco = '<option value="">Não informado</option>' + db.bancos.map(b => `<option value="${b.id}">${b.nome}</option>`).join('');
+  const row = document.createElement('div');
+  row.className = 'multi-row';
+  row.innerHTML = `
+    <input type="number" step="0.01" min="0" class="m-valor" placeholder="0,00" oninput="atualizarMultiTotal('${px}')" />
+    <input type="date" class="m-dtprev" value="${dt}" />
+    <select class="m-tipo">${optTipo}</select>
+    <select class="m-banco">${optBanco}</select>
+    <input type="text" class="m-obs" placeholder="Observação desta conta" />
+    <button type="button" class="multi-del" title="Remover esta conta" onclick="removerMultiLinha('${px}', this)">✕</button>`;
+  row.querySelector('.m-tipo').value = tipo;
+  row.querySelector('.m-banco').value = banco;
+  box.appendChild(row);
+  atualizarMultiTotal(px);
+  row.querySelector('.m-valor').focus();
+}
+
+function removerMultiLinha(px, btn) {
+  const row = btn.closest('.multi-row');
+  if (row) row.remove();
+  atualizarMultiTotal(px);
+}
+
+function atualizarMultiTotal(px) {
+  const el = document.getElementById(px + '-multi-total');
+  if (!el) return;
+  const rows = [...document.querySelectorAll('#' + px + '-multi-linhas .multi-row')];
+  const tot = rows.reduce((s, r) => s + (parseFloat(r.querySelector('.m-valor').value) || 0), 0);
+  el.textContent = rows.length ? `${rows.length} conta(s) · Total: ${fmtBRL(tot)}` : '';
+}
+
+function resetMulti(px) {
+  const chk = document.getElementById(px + '-multi');
+  const box = document.getElementById(px + '-multi-linhas');
+  if (box) box.innerHTML = '';
+  if (chk && chk.checked) { chk.checked = false; toggleMultiLanc(px); }
+  atualizarMultiTotal(px);
+}
+
+// Lê e valida as linhas. Retorna a lista ou null (já avisou o usuário).
+function lerMultiLinhas(px, statusQuitado) {
+  const rows = [...document.querySelectorAll('#' + px + '-multi-linhas .multi-row')];
+  const linhas = [];
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const l = {
+      valor: parseFloat(r.querySelector('.m-valor').value) || 0,
+      dtprev: r.querySelector('.m-dtprev').value,
+      tipo: r.querySelector('.m-tipo').value,
+      banco: r.querySelector('.m-banco').value,
+      obs: r.querySelector('.m-obs').value.trim()
+    };
+    const vazia = !l.valor && !l.obs;
+    if (vazia) continue; // linha em branco é ignorada
+    if (l.valor <= 0) { alert(`Conta ${i + 1}: informe um valor maior que zero.`); return null; }
+    if (!l.dtprev) { alert(`Conta ${i + 1}: informe o vencimento.`); return null; }
+    if (statusQuitado === 'sim' && !l.banco) {
+      alert(`Conta ${i + 1}: selecione o banco/conta — todo lançamento marcado como ${px === 'l' ? 'pago' : 'recebido'} precisa ter um banco.`);
+      return null;
+    }
+    linhas.push(l);
+  }
+  if (!linhas.length) { alert('Adicione pelo menos uma conta com valor.'); return null; }
+  return linhas;
+}
+
+async function saveLancamentoMulti() {
+  const dtcompra = document.getElementById('l-dtcompra').value;
+  if (!dtcompra) { alert('Preencha a data da compra.'); return; }
+  if (!validarSubcategoria('l-catdre','l-subcat')) return;
+  const pago = document.getElementById('l-pago').value;
+  const dtpago = pago === 'sim' ? (document.getElementById('l-dtpago').value || '') : '';
+  if (pago === 'sim' && !dtpago) { alert('Informe a data do pagamento.'); document.getElementById('l-dtpago').focus(); return; }
+  const linhas = lerMultiLinhas('l', pago);
+  if (!linhas) return;
+  const empresa_id = empresaDoForm('l-empresa');
+  if (empresa_id === null) return;
+  const obsGeral = document.getElementById('l-obs').value.trim();
+  const base = {
+    empresa_id,
+    nf: document.getElementById('l-nf').value,
+    forn: document.getElementById('l-forn').value,
+    prod: document.getElementById('l-prod').value,
+    financeiro: document.getElementById('l-financeiro').value,
+    pago, dtpago,
+    cat_dre: document.getElementById('l-catdre') ? document.getElementById('l-catdre').value : '',
+    subcat: document.getElementById('l-subcat') ? document.getElementById('l-subcat').value : ''
+  };
+  let criados = 0;
+  for (const l of linhas) {
+    const rec = { id: uid(), dtcompra, dtprev: l.dtprev, ...base, valor: l.valor, parcelas: 1, parcela_datas: null,
+      tipo_pag: l.tipo, banco: l.banco, obs: l.obs || obsGeral };
+    const ok = await sbFetch('lancamentos', 'POST', rec);
+    if (!ok) { alert(`❌ Erro ao salvar (${criados} de ${linhas.length} já gravados).` + sbErroDetalhe()); break; }
+    db.lancamentos.push(rec); criados++;
+  }
+  if (!criados) return;
+  clearLancamento(); closeModal('modal-novo-lanc');
+  renderLancamentos(); renderApagar(); renderPagas(); populateYearSelects();
+  if (criados === linhas.length) alert(`✅ ${criados} lançamento(s) a pagar criado(s).`);
+}
+
+async function saveLancReceberMulti() {
+  const dtvenda = document.getElementById('lr-dtvenda').value;
+  const cliente = document.getElementById('lr-cliente').value;
+  if (!dtvenda || !cliente) { alert('Preencha a data da venda e o cliente.'); return; }
+  const recebido = document.getElementById('lr-recebido').value;
+  const dtrecebido = recebido === 'sim' ? (document.getElementById('lr-dtrecebido').value || '') : '';
+  if (recebido === 'sim' && !dtrecebido) { alert('Informe a data do recebimento.'); document.getElementById('lr-dtrecebido').focus(); return; }
+  const linhas = lerMultiLinhas('lr', recebido);
+  if (!linhas) return;
+  const empresa_id = empresaDoForm('lr-empresa');
+  if (empresa_id === null) return;
+  const obsGeral = document.getElementById('lr-obs').value.trim();
+  const base = {
+    empresa_id, dtvenda, cliente,
+    nf: document.getElementById('lr-nf').value,
+    prod: document.getElementById('lr-prod').value,
+    financeiro: document.getElementById('lr-financeiro').value,
+    recebido, dtrecebido,
+    cat_dre: document.getElementById('lr-catdre') ? document.getElementById('lr-catdre').value : '',
+    juros: parseFloat(document.getElementById('lr-juros').value) || null
+  };
+  let criados = 0;
+  for (const l of linhas) {
+    const rec = { id: uid(), ...base, dtprev: l.dtprev, valor: l.valor, parcelas: 1, parcela_datas: null,
+      tipo_pag: l.tipo, banco: l.banco, obs: l.obs || obsGeral };
+    const ok = await sbFetch('lancreceber', 'POST', rec);
+    if (!ok) { alert(`❌ Erro ao salvar (${criados} de ${linhas.length} já gravados).` + sbErroDetalhe()); break; }
+    db.lancreceber.push(rec); criados++;
+  }
+  if (!criados) return;
+  clearLancReceber(); closeModal('modal-novo-lr');
+  renderLancReceber(); renderAReceber(); renderRecebido(); populateYearSelectsReceber(); renderDashboard();
+  if (criados === linhas.length) alert(`✅ ${criados} lançamento(s) a receber criado(s).`);
+}
+
 async function saveLancamento() {
+  if (multiAtivo('l')) return saveLancamentoMulti();
   const dtcompra = document.getElementById('l-dtcompra').value;
   const forn = document.getElementById('l-forn').value;
   const prod = document.getElementById('l-prod').value;
@@ -6205,6 +6443,7 @@ async function saveLancamento() {
 }
 
 function clearLancamento() {
+  resetMulti('l');
   // Zera TODOS os campos do formulário. Antes, categoria, subcategoria,
   // tipo de pagamento e banco ficavam com o valor do lançamento anterior.
   ['l-dtcompra','l-dtprev','l-nf','l-obs','l-valor',
@@ -9773,6 +10012,7 @@ async function deleteProdVenda(id) {
 // LANÇAMENTOS RECEBER
 // ══════════════════════════════════════════════════════════
 async function saveLancReceber() {
+  if (multiAtivo('lr')) return saveLancReceberMulti();
   const dtvenda=document.getElementById('lr-dtvenda').value;
   const cliente=document.getElementById('lr-cliente').value;
   const valor=parseFloat(document.getElementById('lr-valor').value);
@@ -9811,6 +10051,7 @@ async function saveLancReceber() {
   populateYearSelectsReceber(); renderDashboard();
 }
 function clearLancReceber() {
+  resetMulti('lr');
   ['lr-dtvenda','lr-dtprev','lr-nf','lr-obs'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('lr-cliente').value='';
   document.getElementById('lr-prod').value='';
