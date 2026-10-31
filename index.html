@@ -7257,9 +7257,11 @@ async function updateLancamento(opts) {
   const id = document.getElementById('edit-lanc-id').value;
   const l = db.lancamentos.find(x=>x.id===id);
   if(!l) return false;
+  const _travaCC = document.getElementById('edit-pago-seg').dataset.trava === '1';
+  if (_travaCC) opts.forcarAberto = true; // conta paga no cartão: mantém o pagamento como está
   const pago = opts.forcarAberto ? (l.pago === 'sim' ? 'sim' : 'nao') : document.getElementById('edit-pago').value;
-  const banco = pago === 'sim' ? document.getElementById('edit-banco').value : (opts.forcarAberto ? (l.banco||'') : '');
-  const dtpago = pago === 'sim' ? document.getElementById('edit-dtpago').value : '';
+  const banco = pago === 'sim' && !opts.forcarAberto ? document.getElementById('edit-banco').value : (opts.forcarAberto ? (l.banco||'') : '');
+  const dtpago = pago === 'sim' && !opts.forcarAberto ? document.getElementById('edit-dtpago').value : (opts.forcarAberto ? (l.dtpago||'') : '');
   if (pago === 'sim' && !dtpago && !opts.forcarAberto) { alert('Informe a data do pagamento.'); document.getElementById('edit-dtpago').focus(); return false; }
   if (!opts.forcarAberto && !validarBancoObrigatorio(pago, banco)) return false;
   if (!validarSubcategoria('edit-catdre','edit-subcat')) return false;
