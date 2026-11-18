@@ -1287,6 +1287,10 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Gestão de Usuários
       </div>
+      <div class="nav-item" id="nav-item-backup" onclick="showPage('backup')" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Backup
+      </div>
     </nav>
     <div class="sidebar-footer">
       <div class="sf-card">
@@ -1700,6 +1704,51 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
     </div>
 
     <!-- ══ GESTÃO DE USUÁRIOS ══ -->
+    <!-- ══ BACKUP ══ -->
+    <div class="page" id="page-backup">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Backup <span class="admin-only-badge">🔒 Admin</span></div>
+          <div class="page-sub" style="margin-bottom:0">Cópia de todas as tabelas do sistema (.json) gravada numa pasta deste computador, no horário configurado.</div>
+        </div>
+      </div>
+      <div class="est-aviso" id="bk-aviso" style="display:none"></div>
+      <div class="card" style="max-width:720px">
+        <div class="card-title">Configuração (vale para este computador)</div>
+        <div class="form-group">
+          <label>Pasta de destino</label>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <button class="btn btn-secondary" id="bk-btn-pasta" onclick="bkEscolherPasta()">📁 Escolher pasta</button>
+            <span id="bk-pasta-nome" style="font-size:13px;color:#57534e">Nenhuma pasta escolhida</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end">
+          <div class="form-group">
+            <label>Horário do backup</label>
+            <input type="time" id="bk-hora" value="18:00" style="width:140px" />
+          </div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="bk-ativo" style="width:auto" /> Backup automático diário ativado</label>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="bkSalvarConfig()">Salvar configuração</button>
+          <button class="btn btn-secondary" id="bk-btn-agora" onclick="bkExecutar(true)">⬇ Fazer backup agora</button>
+        </div>
+        <div style="margin-top:16px;font-size:12px;color:#78716c;line-height:1.6">
+          • Funciona no Chrome ou Edge (computador). O navegador mostra só o nome da pasta, não o caminho completo.<br>
+          • O backup roda se o sistema estiver aberto no horário. Se estiver fechado, roda assim que o sistema for aberto depois do horário (uma vez por dia).<br>
+          • Depois de fechar o navegador, o Chrome pode pedir para autorizar a pasta de novo — aparece um aviso com o botão “Autorizar”.
+        </div>
+      </div>
+      <div class="card" style="max-width:720px;margin-top:16px">
+        <div class="card-title">Status</div>
+        <div id="bk-status" style="font-size:13px;color:#44403c;margin-bottom:12px">—</div>
+        <div class="card-title" style="margin-top:8px">Últimos backups neste computador</div>
+        <div id="bk-historico" style="font-size:12px;font-family:'DM Mono',monospace;color:#57534e"></div>
+      </div>
+    </div>
+
     <div class="page" id="page-usuarios">
       <div class="page-header">
         <div>
@@ -4740,7 +4789,10 @@ async function fetchAll(table, order='') {
   // disparamos as próximas em blocos simultâneos.
   const limit = 1000;
   const PARALELO = 4;
-  const orderParam = order ? `order=${order}&` : '';
+  // Paginação com offset só é confiável com ordem ÚNICA. Ordenar só por data/nome
+  // (valores repetidos) deixa o Postgres devolver as linhas empatadas em ordem
+  // diferente a cada página — algumas repetem e outras somem. O "id" desempata.
+  const orderParam = `order=${order ? order + ',' : ''}id&`;
   const fEmp = filtroEmpresaQuery(table);
   const pagina = off => sbFetch(table, 'GET', null, `?${orderParam}limit=${limit}&offset=${off}${fEmp}`);
 
@@ -4763,6 +4815,26 @@ async function fetchAll(table, order='') {
     if (acabou) break;
     offset += PARALELO * limit;
   }
+  // Segurança extra: remove duplicados por id (caso a base mude durante a busca).
+  const vistos = new Set();
+  return all.filter(r => { if (!r || r.id == null) return true; if (vistos.has(r.id)) return false; vistos.add(r.id); return true; });
+}
+
+// Igual ao fetchAll, mas para consultas com filtro (ex.: config ?key=like.xxx:*).
+// O Supabase devolve no máximo 1.000 linhas por consulta, então busca em páginas.
+async function fetchAllParams(table, params = '') {
+  const limit = 1000;
+  const base = params ? (params.startsWith('?') ? params : '?' + params) : '?';
+  const sep = base === '?' ? '' : '&';
+  const temOrder = /(^|[?&])order=/.test(base);
+  let all = [], offset = 0;
+  while (true) {
+    const lote = await sbFetch(table, 'GET', null, `${base}${sep}${temOrder ? '' : 'order=id&'}limit=${limit}&offset=${offset}`);
+    if (lote === null) return offset === 0 ? null : all;
+    all = all.concat(lote);
+    if (lote.length < limit) break;
+    offset += limit;
+  }
   return all;
 }
 
@@ -4776,14 +4848,14 @@ async function loadAllData() {
       fetchAll('lancamentos', 'dtcompra'),    // 2
       fetchAll('faturamento', 'mes'),         // 3
       fetchAll('recebimentos', 'mes'),        // 4
-      sbFetch('metas', 'GET', null, ''),      // 5
+      fetchAll('metas'),                      // 5
       fetchAll('clientes', 'nome'),           // 6
       fetchAll('prodvenda', 'nome'),          // 7
       fetchAll('lancreceber', 'dtvenda'),     // 8
       fetchAll('dfc_categorias', 'nome'),     // 9
       fetchAll('dfc_lancamentos', 'data'),    // 10
       fetchAll('bancos', 'nome'),             // 11
-      sbFetch('dre_grupos', 'GET', null, '?order=ordem&limit=1000'), // 12
+      fetchAll('dre_grupos', 'ordem'), // 12
       fetchAll('transferencias', 'data'),     // 13
       // Formas de pagamento/recebimento cadastradas pelo usuário (além das padrão).
       // Guardadas na tabela "config" que já existe — sem tabela nova.
@@ -4993,7 +5065,7 @@ function _finalizarLogin(found) {
   if (sll) sll.textContent = prev ? 'Último acesso: ' + fmtTs(prev.ts) : 'Primeiro acesso';
   // Mostrar/ocultar nav admin
   const isAdmin = found.role === 'admin';
-  ['nav-label-admin','nav-item-usuarios'].forEach(id => {
+  ['nav-label-admin','nav-item-usuarios','nav-item-backup'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = isAdmin ? '' : 'none';
   });
@@ -5094,6 +5166,7 @@ function showPage(p) {
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
   if (p === 'est-produtos' || p === 'est-tipos' || p === 'est-lancamentos' || p === 'est-variacao') estAbrirPagina(p);
+  if (p === 'backup')            bkRenderTela();
 }
 
 // Redesenha a tela em que o usuário está — usado depois de trocar de empresa,
@@ -5135,6 +5208,7 @@ function renderPaginaAtual() {
   if (p === 'est-produtos' || p === 'est-tipos' || p === 'est-lancamentos' || p === 'est-variacao') estAbrirPagina(p);
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
+  if (p === 'backup')            bkRenderTela();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -6540,7 +6614,7 @@ async function _fixaIndetRemover(grupo) {
 }
 async function fixaEstenderIndeterminadas() {
   try {
-    const rows = await sbFetch('config', 'GET', null, '?key=like.fixa_indet:*&limit=5000');
+    const rows = await fetchAllParams('config', '?key=like.fixa_indet:*');
     fixaIndet = {};
     (rows || []).forEach(r => { try { fixaIndet[String(r.key).slice('fixa_indet:'.length)] = JSON.parse(r.value) || {}; } catch (e) {} });
     const horizonte = _fixaHorizonte();
@@ -8485,8 +8559,8 @@ async function confirmarMarcarRecebidoMassa() {
 async function backupLancamentos() {
   console.log('Buscando dados direto do banco (lancamentos + lancreceber)...');
   const [pagar, receber] = await Promise.all([
-    sbFetch('lancamentos', 'GET', null, '?select=*'),
-    sbFetch('lancreceber', 'GET', null, '?select=*')
+    fetchAll('lancamentos', 'dtcompra'),
+    fetchAll('lancreceber', 'dtvenda')
   ]);
   if (!pagar || !receber) {
     console.error('Não foi possível buscar os dados para backup. Nada foi baixado.');
@@ -8521,11 +8595,15 @@ async function backupLancamentos() {
 // no mesmo dia mesmo com múltiplos logins do admin.
 // ══════════════════════════════════════════
 
+// Todas as tabelas do sistema que entram no backup.
+const BACKUP_TABELAS = ['empresas','fornecedores','produtos','lancamentos','faturamento','recebimentos',
+  'metas','clientes','prodvenda','lancreceber','dfc_categorias','dfc_subcategorias','dfc_lancamentos',
+  'bancos','dre_grupos','transferencias','pedidos_cancelados','reposicoes','cartoes','cartao_despesas',
+  'config','est_tipos','est_produtos','est_lancamentos'];
+
 // Busca, direto do banco, todas as tabelas de dados do sistema.
 async function buscarDadosCompletos() {
-  const nomes = ['empresas','fornecedores','produtos','lancamentos','faturamento','recebimentos',
-    'metas','clientes','prodvenda','lancreceber','dfc_categorias','dfc_lancamentos',
-    'bancos','dre_grupos','transferencias','pedidos_cancelados','reposicoes'];
+  const nomes = BACKUP_TABELAS;
   const results = await Promise.allSettled(nomes.map(t => fetchAll(t)));
   const dados = {};
   let algumaFalha = false;
@@ -8577,6 +8655,8 @@ async function gerarBackupCompleto() {
 // no carregamento do app (initApp).
 async function verificarBackupAutomatico() {
   try {
+    // Se este computador tem o backup em pasta ativado (tela Backup), ele substitui o download diário.
+    if (bkConfig().ativo) return;
     const dataHoje = today();
     const res = await sbFetch('config', 'GET', null, '?key=eq.ultimo_backup_automatico&limit=1');
     const registro = (res && res[0]) ? JSON.parse(res[0].value) : null;
@@ -8595,6 +8675,181 @@ async function verificarBackupAutomatico() {
     console.error('[BACKUP] Erro na verificação do backup automático diário:', e);
   }
 }
+
+// ══════════════════════════════════════════
+// TELA DE BACKUP — pasta + horário (por computador)
+// A pasta é escolhida pelo navegador (File System Access API — Chrome/Edge)
+// e o "atalho" para ela fica guardado no IndexedDB deste computador.
+// Horário/ativo/histórico ficam no localStorage. A cada minuto o sistema
+// confere se já passou do horário e se o backup de hoje ainda não foi feito.
+// ══════════════════════════════════════════
+const BK_CFG_KEY = 'cap_backup_cfg';
+let _bkTimer = null, _bkRodando = false;
+
+function bkSuportado() { return typeof window.showDirectoryPicker === 'function'; }
+function bkHojeLocal(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function bkConfig() {
+  try { return Object.assign({ ativo: false, hora: '18:00', ultimo: null, historico: [] }, JSON.parse(localStorage.getItem(BK_CFG_KEY) || '{}')); }
+  catch (e) { return { ativo: false, hora: '18:00', ultimo: null, historico: [] }; }
+}
+function bkGravarConfig(cfg) { try { localStorage.setItem(BK_CFG_KEY, JSON.stringify(cfg)); } catch (e) {} }
+
+// IndexedDB: guarda o handle da pasta (não dá para guardar em localStorage).
+function _bkIdb() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open('cap_backup', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('handles');
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function bkGetPasta() {
+  try {
+    const db_ = await _bkIdb();
+    return await new Promise(res => {
+      const q = db_.transaction('handles').objectStore('handles').get('pasta');
+      q.onsuccess = () => res(q.result || null); q.onerror = () => res(null);
+    });
+  } catch (e) { return null; }
+}
+async function bkSetPasta(h) {
+  const db_ = await _bkIdb();
+  await new Promise((res, rej) => {
+    const tx = db_.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(h, 'pasta');
+    tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+  });
+}
+async function bkPermissao(h, pedir) {
+  if (!h) return false;
+  const opt = { mode: 'readwrite' };
+  try {
+    if ((await h.queryPermission(opt)) === 'granted') return true;
+    if (pedir && (await h.requestPermission(opt)) === 'granted') return true;
+  } catch (e) {}
+  return false;
+}
+
+async function bkEscolherPasta() {
+  if (!bkSuportado()) { alert('Este navegador não permite escolher pasta. Use o Chrome ou o Edge no computador.'); return; }
+  try {
+    const h = await window.showDirectoryPicker({ id: 'cap-backup', mode: 'readwrite' });
+    await bkSetPasta(h);
+    await bkPermissao(h, true);
+    bkRenderTela();
+  } catch (e) { if (e && e.name !== 'AbortError') alert('Não foi possível usar essa pasta: ' + (e.message || e)); }
+}
+
+function bkSalvarConfig() {
+  const cfg = bkConfig();
+  const hora = document.getElementById('bk-hora').value;
+  if (!/^\d{2}:\d{2}$/.test(hora)) { alert('Informe um horário válido.'); return; }
+  cfg.hora = hora;
+  cfg.ativo = document.getElementById('bk-ativo').checked;
+  bkGravarConfig(cfg);
+  bkIniciarAgendador();
+  bkRenderTela();
+  alert(cfg.ativo ? `✅ Backup automático ativado: todo dia às ${hora}.` : 'Backup automático desativado.');
+}
+
+async function bkRenderTela() {
+  const cfg = bkConfig();
+  const aviso = document.getElementById('bk-aviso');
+  if (!aviso) return;
+  if (!bkSuportado()) {
+    aviso.textContent = '⚠️ Este navegador não permite gravar em pasta. Abra o sistema no Chrome ou no Edge (computador). O botão "Fazer backup agora" vai baixar o arquivo na pasta Downloads.';
+    aviso.style.display = 'block';
+  } else aviso.style.display = 'none';
+  document.getElementById('bk-hora').value = cfg.hora || '18:00';
+  document.getElementById('bk-ativo').checked = !!cfg.ativo;
+  const h = await bkGetPasta();
+  const ok = h ? await bkPermissao(h, false) : false;
+  document.getElementById('bk-pasta-nome').innerHTML = h
+    ? `📂 <b>${estEsc(h.name)}</b> ${ok ? '<span style="color:#16a34a">(autorizada)</span>' : '<span style="color:#dc2626">(precisa autorizar — clique em Escolher pasta ou em Fazer backup agora)</span>'}`
+    : 'Nenhuma pasta escolhida';
+  const u = cfg.ultimo;
+  let st = u ? `Último backup: <b>${new Date(u.ts).toLocaleString('pt-BR')}</b> — ${estEsc(u.arquivo || '')}${u.erro ? ` <span style="color:#dc2626">(${estEsc(u.erro)})</span>` : ''}` : 'Nenhum backup feito neste computador ainda.';
+  st += `<br>Agendamento: ${cfg.ativo ? `<b>ativo</b>, todo dia às <b>${estEsc(cfg.hora)}</b>` : '<b>desativado</b>'}`;
+  document.getElementById('bk-status').innerHTML = st;
+  document.getElementById('bk-historico').innerHTML = (cfg.historico || []).length
+    ? cfg.historico.map(x => `${new Date(x.ts).toLocaleString('pt-BR')} · ${estEsc(x.arquivo)} · ${x.ok ? '✅' : '⚠️ ' + estEsc(x.erro || 'falha')}`).join('<br>')
+    : '—';
+}
+
+// manual = clique do usuário (pode pedir permissão e mostra alert).
+async function bkExecutar(manual) {
+  if (_bkRodando) return;
+  _bkRodando = true;
+  const btn = document.getElementById('bk-btn-agora');
+  if (btn) { btn.disabled = true; btn.textContent = 'Gerando backup...'; }
+  const cfg = bkConfig();
+  const agora = new Date();
+  const nome = `backup-planetaflores-${bkHojeLocal(agora)}_${String(agora.getHours()).padStart(2,'0')}h${String(agora.getMinutes()).padStart(2,'0')}.json`;
+  let registro = { ts: agora.toISOString(), data: bkHojeLocal(agora), arquivo: nome, ok: false };
+  try {
+    const h = bkSuportado() ? await bkGetPasta() : null;
+    const autorizada = h ? await bkPermissao(h, manual) : false;
+    if (!manual && !autorizada) { bkMostrarPendente(); return; }
+    const { dados, algumaFalha } = await buscarDadosCompletos();
+    const json = JSON.stringify({ geradoEm: agora.toISOString(), ...dados }, null, 2);
+    if (autorizada) {
+      const fh = await h.getFileHandle(nome, { create: true });
+      const w = await fh.createWritable();
+      await w.write(json); await w.close();
+    } else {
+      baixarBackupLocal(nome, json); // sem pasta: baixa em Downloads
+    }
+    registro.ok = !algumaFalha;
+    if (algumaFalha) registro.erro = 'alguma tabela falhou — backup parcial';
+    bkEsconderPendente();
+    if (manual) alert(`${algumaFalha ? '⚠️ Backup parcial' : '✅ Backup gerado'}: ${nome}\n${autorizada ? 'Gravado na pasta "' + h.name + '".' : 'Baixado na pasta Downloads (nenhuma pasta autorizada).'}`);
+  } catch (e) {
+    registro.erro = (e && e.message) || String(e);
+    console.error('[BACKUP] Falha:', e);
+    if (manual) alert('❌ Erro ao gerar backup: ' + registro.erro);
+  } finally {
+    if (registro.ok || registro.erro) {
+      const c = bkConfig();
+      c.ultimo = registro;
+      c.historico = [registro, ...(c.historico || [])].slice(0, 15);
+      bkGravarConfig(c);
+    }
+    _bkRodando = false;
+    if (btn) { btn.disabled = false; btn.textContent = '⬇ Fazer backup agora'; }
+    if (paginaVisivel('backup')) bkRenderTela();
+  }
+}
+
+// Verifica a cada minuto se é hora do backup de hoje.
+async function bkVerificarAgendado() {
+  const cfg = bkConfig();
+  if (!cfg.ativo || !bkSuportado()) return;
+  const agora = new Date();
+  const hhmm = `${String(agora.getHours()).padStart(2,'0')}:${String(agora.getMinutes()).padStart(2,'0')}`;
+  if (hhmm < (cfg.hora || '18:00')) return;
+  if (cfg.ultimo && cfg.ultimo.data === bkHojeLocal(agora) && !cfg.ultimo.erro) return; // já feito hoje
+  if (cfg.ultimo && cfg.ultimo.data === bkHojeLocal(agora) && cfg.ultimo.erro && cfg.ultimo.ok === false && (agora - new Date(cfg.ultimo.ts)) < 30 * 60000) return; // falhou há pouco: espera 30 min
+  await bkExecutar(false);
+}
+function bkIniciarAgendador() {
+  if (_bkTimer) clearInterval(_bkTimer);
+  _bkTimer = setInterval(() => { bkVerificarAgendado().catch(e => console.error('[BACKUP]', e)); }, 60000);
+  setTimeout(() => { bkVerificarAgendado().catch(e => console.error('[BACKUP]', e)); }, 5000);
+}
+
+// Aviso quando chega a hora mas o navegador precisa de um clique para liberar a pasta.
+let _bkAdiadoAte = 0;
+function bkMostrarPendente() {
+  if (document.getElementById('bk-pendente') || Date.now() < _bkAdiadoAte) return;
+  const d = document.createElement('div');
+  d.id = 'bk-pendente';
+  d.style.cssText = 'position:fixed;right:20px;bottom:20px;z-index:9999;background:#fff;border:1.5px solid #ea580c;border-radius:10px;padding:14px 16px;box-shadow:0 8px 24px rgba(0,0,0,.15);font-size:13px;max-width:320px';
+  d.innerHTML = '<b>Backup agendado pendente</b><br>O navegador precisa da sua autorização para gravar na pasta de backup.<div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-primary" onclick="bkExecutar(true)">Autorizar e fazer backup</button><button class="btn btn-secondary" onclick="_bkAdiadoAte = Date.now() + 30*60000; bkEsconderPendente()">Depois</button></div>';
+  document.body.appendChild(d);
+}
+function bkEsconderPendente() { const d = document.getElementById('bk-pendente'); if (d) d.remove(); }
 
 async function estornarPago(id, parcIdx) {
   if(!confirm('Deseja desfazer o pagamento e mover esta parcela de volta para "A Pagar"?')) return;
@@ -9344,7 +9599,7 @@ function renderDashboard() {
 let dreMetas = {};
 async function carregarDreMetas() {
   try {
-    const rows = await sbFetch('config', 'GET', null, '?key=like.dre_metas:*');
+    const rows = await fetchAllParams('config', '?key=like.dre_metas:*');
     dreMetas = {};
     (rows || []).forEach(c => {
       const ano = c.key.split(':')[1];
@@ -9383,7 +9638,7 @@ async function salvarDreMetasAno(ano) {
 // com key começando em "dre_metas:" — incluindo duplicatas (sobra do bug
 // antigo de DELETE+POST) e o valor exato que está gravado em cada uma.
 window.diagMetas = async function() {
-  const rows = await sbFetch('config', 'GET', null, '?key=like.dre_metas:*&select=*');
+  const rows = await fetchAllParams('config', '?key=like.dre_metas:*&select=*');
   console.log('[diagMetas] resposta bruta do Supabase:', rows);
   if (rows === null) {
     console.warn('[diagMetas] GET falhou (veja o erro logo acima, do sbFetch). Provável causa: RLS de SELECT na tabela "config" bloqueando a leitura.');
@@ -10565,7 +10820,7 @@ async function renderUsuariosAdmin() {
 
 async function loadUserActivity() {
   try {
-    const rows = await sbFetch('config', 'GET', null, '?key=like.activity:*&order=key');
+    const rows = await fetchAllParams('config', '?key=like.activity:*&order=key,id');
     const activityMap = {};
     (rows || []).forEach(r => {
       const uname = (r.key || '').replace(/^activity:/, '');
@@ -12399,7 +12654,7 @@ let metasCategoria = {}; // metasCategoria['<catId>:<ano>'] = { mes: valor }
 
 async function carregarMetasCategoria() {
   try {
-    const rows = await sbFetch('config', 'GET', null, '?key=like.metas_cat:*');
+    const rows = await fetchAllParams('config', '?key=like.metas_cat:*');
     metasCategoria = {};
     (rows || []).forEach(c => {
       const partes = c.key.split(':'); // metas_cat : catId : ano
@@ -13688,31 +13943,30 @@ function parseContabil(s) {
 }
 
 async function carregarVarEstoque() {
+  // A Variação do Estoque do DRE vem da tela "Controle de Estoque → Variação do
+  // Estoque" (Estoque Final − Estoque Inicial de cada mês, em R$). Não é mais
+  // digitada no DRE. Ex.: estoque caiu R$ 435 em out → −435; subiu R$ 725 em nov → +725.
   try {
-    const rows = await sbFetch('config', 'GET', null, '?key=like.var_estoque:*');
+    await estCarregar(true);
     dreVarEstoque = {};
-    (rows || []).forEach(c => {
-      const ano = c.key.split(':')[1];
-      try { dreVarEstoque[ano] = JSON.parse(c.value) || {}; } catch(e) { dreVarEstoque[ano] = {}; }
+    if (estErro) return;
+    const anos = new Set([new Date().getFullYear()]);
+    estDb.lancs.forEach(l => anos.add(Number(l.ano)));
+    estDb.produtos.forEach(p => { if (p.dt_saldo_inicial) anos.add(Number(p.dt_saldo_inicial.slice(0,4))); });
+    const sel = document.getElementById('dre-ano');
+    if (sel && sel.value) anos.add(Number(sel.value));
+    anos.forEach(ano => {
+      if (!ano) return;
+      const mapa = {};
+      for (let m = 1; m <= 12; m++) {
+        let ini = 0, fim = 0;
+        estDb.produtos.forEach(p => { const s = estSaldoMes(p, ano, m); ini += s.iniV; fim += s.fimV; });
+        const v = Math.round((fim - ini) * 100) / 100;
+        if (Math.abs(v) >= 0.005) mapa[m] = v;
+      }
+      dreVarEstoque[ano] = mapa;
     });
   } catch(e) { console.error('Erro ao carregar variação de estoque:', e); }
-}
-
-async function salvarVarEstoque(ano) {
-  const key = 'var_estoque:' + ano;
-  await sbFetch('config', 'DELETE', null, `?key=eq.${encodeURIComponent(key)}`);
-  await sbFetch('config', 'POST', { id: uid(), key, value: JSON.stringify(dreVarEstoque[ano] || {}) });
-}
-
-// Chamada pelos campos editáveis da linha de Variação de Estoque no DRE.
-async function setVarEstoque(mes, rawValor) {
-  const ano = parseInt(document.getElementById('dre-ano').value);
-  if (!ano) return;
-  const v = parseContabil(rawValor);
-  if (!dreVarEstoque[ano]) dreVarEstoque[ano] = {};
-  if (v === 0) delete dreVarEstoque[ano][mes]; else dreVarEstoque[ano][mes] = v;
-  await salvarVarEstoque(ano);
-  renderDre();
 }
 
 // Mostra/oculta as linhas de categoria de um grupo do DRE (clique na setinha
@@ -14007,13 +14261,15 @@ function renderDre() {
 
   // Linha da Variação de Estoque: células editáveis em formato contábil (digite
   // + ou −). O valor é gravado e somado ao CPV automaticamente.
+  // Linha da Variação de Estoque: valor vindo da tela "Variação do Estoque"
+  // (somente leitura). O valor é somado ao CPV automaticamente.
   const linhaVarEstoque = (g) => {
     const mapaAno = dreVarEstoque[ano] || {};
     const cells = mesesVisiveis.map(mes => {
       const val = parseFloat(mapaAno[mes]) || 0;
-      const disp = fmtContabil(val);
       const cor = val < 0 ? '#dc2626' : '#1f2937';
-      return `<td style="padding:2px 4px"><input type="text" inputmode="decimal" value="${disp}" onchange="setVarEstoque(${mes}, this.value)" onfocus="this.select()" title="Variação de estoque do mês (+ soma ao CPV, − reduz o CPV)" placeholder="0,00" style="width:100%;min-width:88px;text-align:right;font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;border:1px solid #e7e5e4;border-radius:6px;background:#fff;color:${cor}" /></td>` + pctCell(val, mes, false);
+      const disp = Math.abs(val) < 0.005 ? '<span class="dfc-val-zero">—</span>' : `<span style="color:${cor}">${fmtContabil(val)}</span>`;
+      return `<td title="Vem da tela Controle de Estoque → Variação do Estoque">${disp}</td>` + pctCell(val, mes, false);
     }).join('');
     let soma = 0; mesesVisiveis.forEach(mes => { soma += parseFloat(mapaAno[mes]) || 0; });
     const totalCell = `<td class="dfc-col-total">${Math.abs(soma) < 0.005 ? '<span class="dfc-val-zero">—</span>' : (soma > 0 ? '+ ' : '− ') + fmtBRL(Math.abs(soma))}</td>`;
@@ -15692,6 +15948,7 @@ async function initApp() {
   // Restrito ao usuário admin (outros perfis não disparam o backup).
   if (currentUser && currentUser.role === 'admin') {
     setTimeout(() => { verificarBackupAutomatico().catch(e => console.error('[BACKUP] Falha inesperada:', e)); }, 3000);
+    bkIniciarAgendador();
   }
 }
 
