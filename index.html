@@ -1098,6 +1098,76 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .prj-chk-item input { width:16px; height:16px; }
 .prj-chk-item.ok span { color:#a8a29e; text-decoration:line-through; }
 .prj-acoes-etapa { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+/* Funil de conversão */
+.prj-funil { display:flex; flex-direction:column; gap:6px; }
+.prj-funil-row { display:grid; grid-template-columns:200px 1fr 150px; gap:12px; align-items:center; font-size:12.5px; }
+.prj-funil-row .nm { display:flex; align-items:center; gap:7px; font-weight:600; color:#44403c; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.prj-funil-track { display:flex; justify-content:center; }
+.prj-funil-bar { height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:12px; font-family:'DM Mono',monospace; min-width:34px; transition:width .3s; }
+.prj-funil-row .pc { font-size:11.5px; color:#57534e; text-align:right; line-height:1.3; }
+.prj-funil-row .pc b { color:#1f2937; font-family:'DM Mono',monospace; }
+.prj-funil-row .pc .queda { color:#dc2626; }
+.prj-funil-resumo { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+.prj-funil-resumo div { background:#faf9f7; border:1px solid #efedeb; border-radius:10px; padding:8px 12px; font-size:12px; color:#57534e; }
+.prj-funil-resumo b { font-family:'DM Mono',monospace; font-size:15px; color:#1f2937; display:block; }
+@media (max-width:900px){ .prj-funil-row { grid-template-columns:110px 1fr 100px; } }
+/* Gantt */
+.gt-wrap { border:1px solid #ece9e6; border-radius:14px; background:#fff; overflow:hidden; }
+.gt-scroll { overflow:auto; max-height:calc(100vh - 260px); position:relative; }
+.gt-grid { display:grid; grid-template-columns:320px auto; min-width:max-content; }
+.gt-left-h, .gt-left { position:sticky; left:0; z-index:3; background:#fff; border-right:1px solid #ece9e6; }
+.gt-left-h { z-index:5; top:0; position:sticky; display:flex; align-items:flex-end; padding:0 14px 8px; font-size:10.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:#a8a29e; height:56px; border-bottom:1px solid #ece9e6; box-sizing:border-box; }
+.gt-head { position:sticky; top:0; z-index:4; background:#fff; border-bottom:1px solid #ece9e6; height:56px; box-sizing:border-box; }
+.gt-head-r1, .gt-head-r2 { position:relative; height:28px; }
+.gt-head-r1 > div, .gt-head-r2 > div { position:absolute; top:0; bottom:0; border-left:1px solid #f1efed; font-size:11px; color:#57534e; display:flex; align-items:center; padding-left:6px; box-sizing:border-box; white-space:nowrap; overflow:hidden; }
+.gt-head-r1 > div { font-weight:700; color:#1f2937; text-transform:capitalize; border-left-color:#e7e5e4; }
+.gt-head-r2 > div { font-size:10.5px; color:#a8a29e; justify-content:center; padding-left:0; }
+.gt-head-r2 > div.hj { background:#2563eb; color:#fff; font-weight:700; border-radius:4px; }
+.gt-left { height:50px; padding:6px 14px; box-sizing:border-box; border-bottom:1px solid #f5f4f2; cursor:pointer; display:flex; flex-direction:column; justify-content:center; }
+.gt-left:hover, .gt-row:hover { background:#fafaf9; }
+.gt-left .t1 { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:#1f2937; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.gt-left .t1 .cd { font-family:'DM Mono',monospace; font-size:11px; color:#a8a29e; font-weight:500; }
+.gt-left .t2 { display:flex; align-items:center; gap:6px; font-size:11px; color:#78716c; margin-top:3px; white-space:nowrap; overflow:hidden; }
+.gt-row { position:relative; height:50px; border-bottom:1px solid #f5f4f2; box-sizing:border-box; cursor:pointer; }
+.gt-bg { position:absolute; top:0; bottom:0; pointer-events:none; }
+.gt-bg.fds { background:rgba(120,113,108,.05); }
+.gt-bg.mes { border-left:1px solid #efedeb; }
+.gt-hoje { position:absolute; top:0; bottom:0; width:2px; background:#2563eb; z-index:2; pointer-events:none; }
+.gt-bar { position:absolute; top:15px; height:20px; display:flex; border-radius:6px; overflow:hidden; box-shadow:0 1px 3px rgba(15,30,58,.18); }
+.gt-seg { height:100%; position:relative; }
+.gt-seg + .gt-seg { border-left:1px solid rgba(255,255,255,.6); }
+.gt-seg.prev { opacity:.32; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.55) 0 4px, transparent 4px 8px); }
+.gt-estouro { position:absolute; top:15px; height:20px; border-radius:0 6px 6px 0; background:repeating-linear-gradient(45deg, rgba(220,38,38,.28) 0 5px, rgba(220,38,38,.10) 5px 10px); border:1px dashed #dc2626; border-left:none; box-sizing:border-box; }
+.gt-entrega { position:absolute; top:17px; width:14px; height:14px; transform:translateX(-7px) rotate(45deg); border-radius:2px; background:#1f2937; border:2px solid #fff; box-shadow:0 0 0 1px #1f2937; z-index:2; }
+.gt-entrega.atr { background:#dc2626; box-shadow:0 0 0 1px #dc2626; }
+.gt-entrega.ok { background:#16a34a; box-shadow:0 0 0 1px #16a34a; }
+.gt-lbl { position:absolute; top:17px; font-size:11px; font-weight:600; color:#57534e; white-space:nowrap; pointer-events:none; }
+.gt-legenda { display:flex; flex-wrap:wrap; gap:14px; padding:10px 14px; border-top:1px solid #ece9e6; font-size:11.5px; color:#57534e; align-items:center; }
+.gt-legenda span.sw { display:inline-block; width:18px; height:10px; border-radius:3px; vertical-align:middle; margin-right:5px; }
+.gt-tip { position:fixed; z-index:500; background:#1f2937; color:#fff; font-size:12px; border-radius:10px; padding:10px 12px; pointer-events:none; box-shadow:0 8px 24px rgba(0,0,0,.25); max-width:320px; line-height:1.5; display:none; }
+.gt-tip b { color:#fff; } .gt-tip .mu { color:#cbd5e1; }
+.gt-zoom { display:inline-flex; border:1px solid #e7e5e4; border-radius:9px; overflow:hidden; }
+.gt-zoom button { border:none; background:#fff; padding:8px 13px; font-size:12.5px; cursor:pointer; color:#57534e; font-weight:600; }
+.gt-zoom button.on { background:#1f2937; color:#fff; }
+/* Parcelas do projeto */
+.prj-parc-grid { display:grid; grid-template-columns:60px 1fr 1fr; gap:8px; align-items:center; font-size:12.5px; }
+.prj-parc-grid input { padding:7px 9px; }
+.prj-dif { font-size:12px; margin-top:8px; font-weight:600; }
+/* 5W2H */
+.acao-kanban { display:grid; grid-template-columns:repeat(4,minmax(220px,1fr)); gap:12px; overflow-x:auto; }
+.acao-col { background:#f7f6f4; border:1px solid #ece9e6; border-radius:14px; border-top:4px solid var(--c); min-height:120px; }
+.acao-col h4 { margin:0; padding:10px 12px; font-size:12.5px; color:#1f2937; display:flex; justify-content:space-between; border-bottom:1px solid #ece9e6; }
+.acao-col .bd { padding:10px; }
+.acao-card { background:#fff; border:1px solid #e7e5e4; border-radius:10px; padding:10px 11px; margin-bottom:9px; cursor:pointer; border-left:4px solid var(--s,#d6d3d1); }
+.acao-card:hover { box-shadow:0 4px 12px rgba(15,30,58,.10); }
+.acao-card .t { font-weight:700; font-size:13px; color:#1f2937; }
+.acao-card .m { font-size:11.5px; color:#78716c; margin-top:4px; }
+.acao-prog { height:6px; background:#f1efed; border-radius:4px; overflow:hidden; margin-top:7px; }
+.acao-prog span { display:block; height:100%; background:#16a34a; }
+.acao-w { display:inline-flex; width:22px; height:22px; border-radius:6px; background:var(--lm-soft,#fff1e6); color:var(--lm,#ea580c); font-size:10.5px; font-weight:800; align-items:center; justify-content:center; margin-right:6px; }
+.acao-coment { border-left:3px solid #e7e5e4; padding:6px 0 6px 12px; margin-bottom:8px; font-size:13px; }
+.acao-coment .h { font-size:11px; color:#a8a29e; margin-bottom:2px; }
+.acao-tab td.w { max-width:220px; white-space:normal; font-size:12.5px; }
 </style>
 </head>
 <body>
@@ -1355,13 +1425,37 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
           Projetos
         </div>
+        <div class="nav-sub-item" onclick="showPage('proj-gantt')" id="nav-proj-gantt">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="4" x2="3" y2="20"/><rect x="5" y="5" width="9" height="3" rx="1"/><rect x="9" y="10.5" width="10" height="3" rx="1"/><rect x="13" y="16" width="8" height="3" rx="1"/></svg>
+          Cronograma (Gantt)
+        </div>
         <div class="nav-sub-item" onclick="showPage('proj-painel')" id="nav-proj-painel">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Painel de Projetos
         </div>
+        <div class="nav-sub-item" onclick="showPage('proj-cancelados')" id="nav-proj-cancelados">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          Projetos Cancelados
+        </div>
         <div class="nav-sub-item" onclick="showPage('proj-etapas')" id="nav-proj-etapas">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
           Etapas
+        </div>
+      </div>
+
+      <!-- GRUPO: Plano de Ação 5W2H -->
+      <div class="nav-group-header open" onclick="toggleNavGroup('grp-acao',this)" style="margin-top:4px;">
+        <span>Plano de Ação 5W2H</span>
+        <span class="nav-group-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="nav-group-items" id="grp-acao" style="max-height:400px">
+        <div class="nav-sub-item" onclick="showPage('acao-lista')" id="nav-acao-lista">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Planos de Ação
+        </div>
+        <div class="nav-sub-item" onclick="showPage('acao-painel')" id="nav-acao-painel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+          Painel 5W2H
         </div>
       </div>
 
@@ -1442,6 +1536,15 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
       </div>
       <div class="est-aviso prj-aviso" style="display:none"></div>
       <div class="prj-kpis" id="prj-kpis" style="margin-top:16px"></div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+          <div class="card-title" style="margin:0">Funil de conversão por etapa</div>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center;font-size:12px;color:#78716c">Projetos vendidos/criados em
+            <select id="prj-funil-ano" onchange="prjRenderFunil()" style="width:auto;padding:6px 10px"></select>
+          </div>
+        </div>
+        <div id="prj-funil"></div>
+      </div>
       <div class="prj-grid2">
         <div class="card"><div class="card-title">Projetos em andamento por etapa</div><div id="prj-p-etapas"></div></div>
         <div class="card"><div class="card-title">Tempo médio em cada etapa (dias) × prazo padrão</div><div id="prj-p-tempo"></div></div>
@@ -1473,6 +1576,113 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
       </div>
     </div>
 
+
+    <!-- ══ PROJETOS — GANTT ══ -->
+    <div class="page" id="page-proj-gantt">
+      <div class="page-header">
+        <div><div class="page-title">Cronograma de Projetos</div><div class="page-sub" style="margin-bottom:0">Gantt com as etapas já realizadas, a previsão das próximas e a data de entrega prometida</div></div>
+        <button class="btn-novo" onclick="prjAbrirProjeto()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Projeto
+        </button>
+      </div>
+      <div class="est-aviso prj-aviso" style="display:none"></div>
+      <div class="prj-filtros" style="margin-top:12px">
+        <div class="form-group"><label>Buscar</label><input type="text" id="gt-busca" placeholder="🔍 Código, projeto ou cliente" oninput="prjRenderGantt()" /></div>
+        <div class="form-group"><label>Responsável</label><select id="gt-resp" onchange="prjRenderGantt()"><option value="">Todos</option></select></div>
+        <div class="form-group"><label>Mostrar</label><select id="gt-status" onchange="prjRenderGantt()"><option value="ativos">Em andamento e pausados</option><option value="todos">Inclui concluídos</option></select></div>
+        <div class="form-group"><label>Ordenar por</label><select id="gt-ordem" onchange="prjRenderGantt()"><option value="entrega">Entrega prometida</option><option value="inicio">Início</option><option value="codigo">Código</option><option value="risco">Risco de atraso</option></select></div>
+        <div class="form-group" style="min-width:auto"><label>Escala</label>
+          <div class="gt-zoom" id="gt-zoom"><button data-z="dia" onclick="prjGanttZoom('dia')">Dias</button><button data-z="semana" onclick="prjGanttZoom('semana')" class="on">Semanas</button><button data-z="mes" onclick="prjGanttZoom('mes')">Meses</button></div>
+        </div>
+        <button class="btn btn-secondary" style="margin-bottom:1px" onclick="prjGanttHoje()">📍 Hoje</button>
+      </div>
+      <div class="prj-kpis" id="gt-kpis"></div>
+      <div class="gt-wrap">
+        <div class="gt-scroll" id="gt-scroll"><div id="gt-grid"></div></div>
+        <div class="gt-legenda" id="gt-legenda"></div>
+      </div>
+      <div class="gt-tip" id="gt-tip"></div>
+    </div>
+
+    <!-- ══ PROJETOS — CANCELADOS ══ -->
+    <div class="page" id="page-proj-cancelados">
+      <div class="page-header">
+        <div><div class="page-title">Projetos Cancelados</div><div class="page-sub" style="margin-bottom:0">Quais projetos foram perdidos, em que etapa e por quê</div></div>
+      </div>
+      <div class="est-aviso prj-aviso" style="display:none"></div>
+      <div class="prj-filtros" style="margin-top:12px">
+        <div class="form-group"><label>Cancelados de</label><input type="date" id="pc-de" onchange="prjRenderCancelados()" /></div>
+        <div class="form-group"><label>até</label><input type="date" id="pc-ate" onchange="prjRenderCancelados()" /></div>
+        <div class="form-group"><label>Motivo</label><select id="pc-motivo" onchange="prjRenderCancelados()"><option value="">Todos</option></select></div>
+        <div class="form-group"><label>Responsável</label><select id="pc-resp" onchange="prjRenderCancelados()"><option value="">Todos</option></select></div>
+        <button class="btn btn-secondary" style="margin-bottom:1px" onclick="['pc-de','pc-ate','pc-motivo','pc-resp'].forEach(i=>document.getElementById(i).value='');prjRenderCancelados()">Limpar</button>
+      </div>
+      <div class="prj-kpis" id="pc-kpis"></div>
+      <div class="prj-grid2">
+        <div class="card"><div class="card-title">Cancelamentos por motivo</div><div id="pc-g-motivo"></div></div>
+        <div class="card"><div class="card-title">Em que etapa o projeto foi cancelado</div><div id="pc-g-etapa"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Lista de cancelados</div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr>
+          <th>Cancelado em</th><th>Código</th><th>Projeto</th><th>Cliente</th><th>Etapa</th><th>Motivo</th><th>Detalhe</th><th class="num">Valor</th><th>Ações</th>
+        </tr></thead><tbody id="pc-tb"></tbody></table></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+          <div class="card-title" style="margin:0">Motivos de cancelamento</div>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <input type="text" id="pc-novo-motivo" placeholder="Novo motivo..." style="width:260px" onkeydown="if(event.key==='Enter')prjAddMotivo('pc-novo-motivo')" />
+            <button class="btn btn-primary" onclick="prjAddMotivo('pc-novo-motivo')">+ Adicionar</button>
+          </div>
+        </div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Motivo</th><th style="text-align:center">Projetos</th><th>Ações</th></tr></thead><tbody id="pc-tb-motivos"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ══ PLANO DE AÇÃO 5W2H — LISTA ══ -->
+    <div class="page" id="page-acao-lista">
+      <div class="page-header">
+        <div><div class="page-title">Planos de Ação 5W2H</div><div class="page-sub" style="margin-bottom:0">O quê · Por quê · Onde · Quando · Quem · Como · Quanto</div></div>
+        <button class="btn-novo" onclick="acaoAbrir()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Plano
+        </button>
+      </div>
+      <div class="est-aviso acao-aviso" style="display:none"></div>
+      <div class="prj-kpis" id="acao-kpis" style="margin-top:16px"></div>
+      <div class="card">
+        <div class="prj-filtros">
+          <div class="form-group"><label>Buscar</label><input type="text" id="acao-busca" placeholder="🔍 Texto do plano" oninput="acaoRenderLista()" /></div>
+          <div class="form-group"><label>Situação</label><select id="acao-f-status" onchange="acaoRenderLista()"><option value="">Todas</option><option value="abertos" selected>Em aberto (pendentes + andamento)</option><option value="pendente">Pendente</option><option value="andamento">Em andamento</option><option value="atrasado">Atrasados</option><option value="concluido">Concluído</option><option value="cancelado">Cancelado</option></select></div>
+          <div class="form-group"><label>Responsável (Quem)</label><select id="acao-f-quem" onchange="acaoRenderLista()"><option value="">Todos</option></select></div>
+          <div class="form-group"><label>Prazo até</label><input type="date" id="acao-f-ate" onchange="acaoRenderLista()" /></div>
+          <div class="form-group" style="min-width:auto"><label>Visualizar</label>
+            <div class="gt-zoom"><button id="acao-v-lista" class="on" onclick="acaoVisao('lista')">Lista</button><button id="acao-v-quadro" onclick="acaoVisao('quadro')">Quadro</button></div>
+          </div>
+        </div>
+        <div id="acao-wrap-lista" class="table-scroll" style="overflow:auto"><table class="acao-tab"><thead><tr>
+          <th>Nº</th><th>O quê</th><th>Por quê</th><th>Quem</th><th>Onde</th><th>Quando</th><th>Como</th><th class="num">Quanto</th><th>Progresso</th><th>Situação</th><th>Ações</th>
+        </tr></thead><tbody id="acao-tb"></tbody></table></div>
+        <div id="acao-wrap-quadro" style="display:none"><div class="acao-kanban" id="acao-kanban"></div></div>
+      </div>
+    </div>
+
+    <!-- ══ PLANO DE AÇÃO 5W2H — PAINEL ══ -->
+    <div class="page" id="page-acao-painel">
+      <div class="page-header">
+        <div><div class="page-title">Painel 5W2H</div><div class="page-sub" style="margin-bottom:0">Andamento dos planos de ação, responsáveis e prazos</div></div>
+      </div>
+      <div class="est-aviso acao-aviso" style="display:none"></div>
+      <div class="prj-kpis" id="acao-p-kpis" style="margin-top:16px"></div>
+      <div class="prj-grid2">
+        <div class="card"><div class="card-title">Planos por situação</div><div id="acao-p-status"></div></div>
+        <div class="card"><div class="card-title">Por responsável (em aberto × atrasados × concluídos)</div><div id="acao-p-quem"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Atrasados e vencendo nos próximos 15 dias</div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Quando</th><th>Nº</th><th>O quê</th><th>Quem</th><th>Progresso</th><th>Situação</th></tr></thead><tbody id="acao-p-prazos"></tbody></table></div>
+      </div>
+    </div>
     <!-- ══ CONTROLE DE ESTOQUE — PRODUTOS ══ -->
     <div class="page" id="page-est-produtos">
       <div class="page-header">
@@ -3483,7 +3693,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 
 
 <!-- ══ MODAL PROJETOS — CADASTRO ══ -->
-<div class="modal-overlay" id="modal-prj-projeto">
+<div class="modal-overlay" id="modal-prj-projeto" style="z-index:250;">
   <div class="modal lanc-modal">
     <div class="lanc-head">
       <div class="lanc-head-ico">🪚</div>
@@ -3513,7 +3723,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <div class="form-group"><label>Entrega prometida</label><input id="prj-f-dtentrega" type="date" /></div>
           <div class="form-group"><label>Prioridade</label><select id="prj-f-pri"><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></div>
           <div class="form-group" id="prj-f-etapa-wrap"><label>Etapa inicial *</label><select id="prj-f-etapa"></select></div>
-          <div class="form-group"><label>Status</label><select id="prj-f-status"><option value="ativo">Em andamento</option><option value="pausado">Pausado</option><option value="concluido">Concluído</option><option value="cancelado">Cancelado</option></select></div>
+          <div class="form-group"><label>Status</label><select id="prj-f-status"><option value="ativo">Em andamento</option><option value="pausado">Pausado</option><option value="concluido">Concluído</option></select></div>
         </div>
       </div>
       <div class="lanc-sec">
@@ -3576,6 +3786,131 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
   </div>
 </div>
 
+
+<!-- ══ MODAL PROJETOS — CANCELAR ══ -->
+<div class="modal-overlay" id="modal-prj-cancelar" style="z-index:260;">
+  <div class="modal lanc-modal" style="width:520px">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">🚫</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title">Cancelar projeto</div>
+        <div class="lanc-head-sub" id="prj-c-sub"></div>
+      </div>
+      <button type="button" class="lanc-close" onclick="closeModal('modal-prj-cancelar')" title="Fechar">✕</button>
+    </div>
+    <div class="lanc-body">
+      <input type="hidden" id="prj-c-id" />
+      <div class="lanc-sec">
+        <div class="form-group"><label class="label-add">Motivo do cancelamento *<button type="button" class="btn-add-inline" title="Cadastrar novo motivo" onclick="var w=document.getElementById('prj-c-novo-wrap');w.style.display=w.style.display==='none'?'flex':'none';document.getElementById('prj-c-novo').focus()">+</button></label>
+          <select id="prj-c-motivo"><option value="">Selecione...</option></select></div>
+        <div id="prj-c-novo-wrap" style="display:none;gap:8px;margin:-6px 0 14px">
+          <input type="text" id="prj-c-novo" placeholder="Novo motivo" onkeydown="if(event.key==='Enter')prjAddMotivo('prj-c-novo','prj-c-motivo')" />
+          <button type="button" class="btn btn-secondary" onclick="prjAddMotivo('prj-c-novo','prj-c-motivo')">Adicionar</button>
+        </div>
+        <div class="form-group"><label>Detalhes</label><textarea id="prj-c-obs" rows="3" placeholder="Ex.: fechou com concorrente por R$ 2 mil a menos"></textarea></div>
+        <div class="lanc-note" id="prj-c-aviso" style="display:none"></div>
+      </div>
+    </div>
+    <div class="modal-footer lanc-foot">
+      <span class="lanc-foot-info"></span>
+      <button class="btn btn-secondary" onclick="closeModal('modal-prj-cancelar')">Voltar</button>
+      <button class="btn btn-danger" onclick="prjConfirmarCancelamento()">Confirmar cancelamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL PROJETOS — FORMA DE PAGAMENTO ══ -->
+<div class="modal-overlay" id="modal-prj-pag" style="z-index:260;">
+  <div class="modal lanc-modal" style="width:640px">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">💳</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title">Forma de pagamento do projeto</div>
+        <div class="lanc-head-sub" id="prj-pg-sub">Gera o lançamento em Contas a Receber</div>
+      </div>
+      <button type="button" class="lanc-close" onclick="closeModal('modal-prj-pag')" title="Fechar">✕</button>
+    </div>
+    <div class="lanc-body">
+      <input type="hidden" id="prj-pg-id" />
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">1</span>Condição</div>
+        <div class="grid3 form-compacto">
+          <div class="form-group"><label>Valor total (R$) *</label><input id="prj-pg-total" type="number" step="any" oninput="prjPagGerar()" /></div>
+          <div class="form-group"><label>Entrada (R$)</label><input id="prj-pg-entrada" type="number" step="any" placeholder="0,00" oninput="prjPagGerar()" /></div>
+          <div class="form-group"><label>Data da entrada</label><input id="prj-pg-dtentrada" type="date" onchange="prjPagGerar()" /></div>
+          <div class="form-group"><label>Nº de parcelas *</label><input id="prj-pg-n" type="number" min="0" max="60" step="1" value="1" oninput="prjPagGerar()" /></div>
+          <div class="form-group"><label>1º vencimento *</label><input id="prj-pg-dt1" type="date" onchange="prjPagGerar()" /></div>
+          <div class="form-group"><label>Intervalo</label><select id="prj-pg-int" onchange="prjPagGerar()"><option value="m">Mensal</option><option value="15">15 dias</option><option value="7">Semanal</option><option value="30">30 dias</option></select></div>
+          <div class="form-group"><label>Forma de pagamento</label><select id="prj-pg-forma"></select></div>
+          <div class="form-group"><label>Categoria (DRE)</label><select id="prj-pg-cat"></select></div>
+          <div class="form-group"><label>Nº NF / Pedido</label><input id="prj-pg-nf" type="text" /></div>
+        </div>
+      </div>
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">2</span>Parcelas<span class="hint">datas e valores podem ser ajustados</span></div>
+        <div class="prj-parc-grid" id="prj-pg-grid"></div>
+        <div class="prj-dif" id="prj-pg-dif"></div>
+      </div>
+    </div>
+    <div class="modal-footer lanc-foot">
+      <span class="lanc-foot-info">Recebimento: pela ficha do projeto ou em Contas a Receber</span>
+      <button class="btn btn-secondary" onclick="closeModal('modal-prj-pag')">Cancelar</button>
+      <button class="btn btn-primary" onclick="prjPagSalvar()">Gerar no Contas a Receber</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL PLANO DE AÇÃO 5W2H ══ -->
+<div class="modal-overlay" id="modal-acao">
+  <div class="modal lanc-modal" style="width:820px;max-width:96vw">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">🎯</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title" id="acao-titulo">Novo Plano de Ação</div>
+        <div class="lanc-head-sub">5W2H · campos com * são obrigatórios</div>
+      </div>
+      <button type="button" class="lanc-close" onclick="closeModal('modal-acao')" title="Fechar">✕</button>
+    </div>
+    <div class="lanc-body">
+      <input type="hidden" id="acao-id" />
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">5W</span>O quê, por quê, onde, quando e quem</div>
+        <div class="grid2 form-compacto">
+          <div class="form-group" style="grid-column:span 2"><label><span class="acao-w">W</span>O quê? (What) *</label><input id="acao-oque" type="text" placeholder="Ação a ser executada" /></div>
+          <div class="form-group" style="grid-column:span 2"><label><span class="acao-w">W</span>Por quê? (Why)</label><textarea id="acao-porque" rows="2" placeholder="Justificativa / problema que resolve"></textarea></div>
+          <div class="form-group"><label><span class="acao-w">W</span>Onde? (Where)</label><input id="acao-onde" type="text" placeholder="Setor, local, processo" /></div>
+          <div class="form-group"><label><span class="acao-w">W</span>Quem? (Who) *</label><input id="acao-quem" type="text" list="acao-dl-quem" placeholder="Responsável" /><datalist id="acao-dl-quem"></datalist></div>
+          <div class="form-group"><label><span class="acao-w">W</span>Quando? Início</label><input id="acao-inicio" type="date" /></div>
+          <div class="form-group"><label><span class="acao-w">W</span>Quando? Prazo *</label><input id="acao-prazo" type="date" /></div>
+        </div>
+      </div>
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">2H</span>Como e quanto</div>
+        <div class="grid2 form-compacto">
+          <div class="form-group" style="grid-column:span 2"><label><span class="acao-w">H</span>Como? (How)</label><textarea id="acao-como" rows="3" placeholder="Passos / método"></textarea></div>
+          <div class="form-group"><label><span class="acao-w">H</span>Quanto? (How much) R$</label><input id="acao-quanto" type="number" step="any" placeholder="0,00" /></div>
+          <div class="form-group"><label>Projeto vinculado (opcional)</label><select id="acao-projeto"></select></div>
+        </div>
+      </div>
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">3</span>Acompanhamento</div>
+        <div class="grid3 form-compacto">
+          <div class="form-group"><label>Situação</label><select id="acao-status"><option value="pendente">Pendente</option><option value="andamento">Em andamento</option><option value="concluido">Concluído</option><option value="cancelado">Cancelado</option></select></div>
+          <div class="form-group"><label>Prioridade</label><select id="acao-pri"><option value="baixa">Baixa</option><option value="media" selected>Média</option><option value="alta">Alta</option></select></div>
+          <div class="form-group"><label>Progresso: <b id="acao-prog-v">0%</b></label><input id="acao-prog" type="range" min="0" max="100" step="5" value="0" oninput="document.getElementById('acao-prog-v').textContent=this.value+'%'" style="padding:0" /></div>
+          <div class="form-group" style="grid-column:span 3"><label>Observação</label><textarea id="acao-obs" rows="2"></textarea></div>
+        </div>
+        <div id="acao-coment-box" style="margin-top:6px"></div>
+      </div>
+    </div>
+    <div class="modal-footer lanc-foot">
+      <button class="btn btn-danger" id="acao-btn-excluir" onclick="acaoExcluir()">Excluir</button>
+      <span class="lanc-foot-info"></span>
+      <button class="btn btn-secondary" onclick="closeModal('modal-acao')">Cancelar</button>
+      <button class="btn btn-primary" onclick="acaoSalvar()">Salvar Plano</button>
+    </div>
+  </div>
+</div>
 <!-- ══ MODAL ESTOQUE — PRODUTO ══ -->
 <div class="modal-overlay" id="modal-est-produto">
   <div class="modal lanc-modal">
@@ -4747,7 +5082,11 @@ const PAGES_CONFIG = [
   { id:'proj-quadro',       label:'Projetos — Quadro de Fases', grupo:'projetos' },
   { id:'proj-lista',        label:'Projetos — Lista',        grupo:'projetos' },
   { id:'proj-painel',       label:'Projetos — Painel',       grupo:'projetos' },
+  { id:'proj-gantt',        label:'Projetos — Cronograma (Gantt)', grupo:'projetos' },
+  { id:'proj-cancelados',   label:'Projetos — Cancelados',   grupo:'projetos' },
   { id:'proj-etapas',       label:'Projetos — Etapas',       grupo:'projetos' },
+  { id:'acao-lista',        label:'5W2H — Planos de Ação',   grupo:'acao' },
+  { id:'acao-painel',       label:'5W2H — Painel',           grupo:'acao' },
 ];
 
 // ══════════════════════════════════════════
@@ -5429,7 +5768,8 @@ function showPage(p) {
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
   if (p === 'est-produtos' || p === 'est-tipos' || p === 'est-lancamentos' || p === 'est-variacao') estAbrirPagina(p);
-  if (p === 'proj-quadro' || p === 'proj-lista' || p === 'proj-painel' || p === 'proj-etapas') prjAbrirPagina(p);
+  if (p.startsWith('proj-')) prjAbrirPagina(p);
+  if (p.startsWith('acao-')) acaoAbrirPagina(p);
   if (p === 'backup')            bkRenderTela();
 }
 
@@ -5470,7 +5810,8 @@ function renderPaginaAtual() {
   if (p === 'dre-analise-subcat'){ popularCategoriasAnaliseSub(); renderAnaliseSubcategoria(); }
   if (p === 'metas-categoria')   { carregarMetasCategoria().then(abrirMetasCategoria); }
   if (p === 'est-produtos' || p === 'est-tipos' || p === 'est-lancamentos' || p === 'est-variacao') estAbrirPagina(p);
-  if (p === 'proj-quadro' || p === 'proj-lista' || p === 'proj-painel' || p === 'proj-etapas') prjAbrirPagina(p);
+  if (p.startsWith('proj-')) prjAbrirPagina(p);
+  if (p.startsWith('acao-')) acaoAbrirPagina(p);
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
   if (p === 'backup')            bkRenderTela();
@@ -8865,7 +9206,7 @@ const BACKUP_TABELAS = ['empresas','fornecedores','produtos','lancamentos','fatu
   'metas','clientes','prodvenda','lancreceber','dfc_categorias','dfc_subcategorias','dfc_lancamentos',
   'bancos','dre_grupos','transferencias','pedidos_cancelados','reposicoes','cartoes','cartao_despesas',
   'config','est_tipos','est_produtos','est_lancamentos',
-  'proj_etapas','proj_projetos','proj_historico'];
+  'proj_etapas','proj_projetos','proj_historico','proj_motivos','acao_planos','acao_comentarios'];
 
 // Busca, direto do banco, todas as tabelas de dados do sistema.
 async function buscarDadosCompletos() {
@@ -11004,7 +11345,7 @@ function applyNavPermissions() {
   // aqui, antes de decidir quais cabeçalhos de grupo continuam visíveis.
   aplicarOcultacoesMenu();
   // Ocultar cabeçalho do grupo se todos os itens estiverem ocultos
-  ['grp-pagar','grp-receber','grp-dfc','grp-dre','grp-estoque','grp-projetos'].forEach(grpId => {
+  ['grp-pagar','grp-receber','grp-dfc','grp-dre','grp-estoque','grp-projetos','grp-acao'].forEach(grpId => {
     const grp = document.getElementById(grpId);
     if(!grp) return;
     const visivel = grp.querySelectorAll('.nav-sub-item:not([style*="none"])').length > 0;
@@ -11034,6 +11375,7 @@ async function renderUsuariosAdmin() {
     const pagDre     = PAGES_CONFIG.filter(pg=>pg.grupo==='dre');
     const pagEstoque = PAGES_CONFIG.filter(pg=>pg.grupo==='estoque');
     const pagProjetos = PAGES_CONFIG.filter(pg=>pg.grupo==='projetos');
+    const pagAcao = PAGES_CONFIG.filter(pg=>pg.grupo==='acao');
     const buildPerms = (pgs) => pgs.map(pg => {
       const checked = (u.pages || []).includes(pg.id);
       const disabled = isAdmin ? ' disabled-perm' : '';
@@ -11059,7 +11401,9 @@ async function renderUsuariosAdmin() {
       <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🗃️ Controle de Estoque</div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${buildPerms(pagEstoque)}</div>
       <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🪚 Projetos</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px">${buildPerms(pagProjetos)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${buildPerms(pagProjetos)}</div>
+      <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🎯 Plano de Ação 5W2H</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">${buildPerms(pagAcao)}</div>
     </div>`;
 
     // Último login deste usuário
@@ -11847,6 +12191,7 @@ async function confirmarRecebido() {
     await sbFetch('lancreceber','PATCH',{recebido:'sim',dtrecebido,banco,tipo_pag:tipoPag},`?id=eq.${id}`);
   }
   closeModal('modal-recebido'); renderAReceber(); renderRecebido(); renderDashboard();
+  if (typeof prjAposFinanceiro === 'function') prjAposFinanceiro();
 }
 async function estornarRecebido(id, parcIdx) {
   if(!confirm('Desfazer o recebimento desta parcela?')) return;
@@ -11863,6 +12208,7 @@ async function estornarRecebido(id, parcIdx) {
     await sbFetch('lancreceber','PATCH',{recebido:'nao',dtrecebido:''},`?id=eq.${id}`);
   }
   renderRecebido(); renderAReceber(); renderDashboard();
+  if (typeof prjAposFinanceiro === 'function') prjAposFinanceiro();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -19366,7 +19712,7 @@ function estRenderVariacao() {
 //   • Checklist: itens definidos na etapa; marcações ficam no projeto.
 //   • Financeiro: só LEITURA dos lançamentos a receber do cliente.
 // ══════════════════════════════════════════════════════════════════
-let prjDb = { etapas: [], projetos: [], hist: [] };
+let prjDb = { etapas: [], projetos: [], hist: [], motivos: [] };
 let prjCarregado = false, prjErro = '';
 let _prjArrastando = null;
 
@@ -19409,7 +19755,7 @@ async function prjCarregar(forcar) {
   if (teste === null) {
     prjErro = '⚠️ Não foi possível acessar as tabelas do módulo de Projetos.' + sbErroDetalhe() +
       '\n\nRode o SQL de criação das tabelas (proj_etapas, proj_projetos, proj_historico) no SQL Editor do Supabase.';
-    prjDb = { etapas: [], projetos: [], hist: [] };
+    prjDb = { etapas: [], projetos: [], hist: [], motivos: [] };
     return;
   }
   const [e, p, h] = await Promise.all([
@@ -19419,6 +19765,15 @@ async function prjCarregar(forcar) {
   ]);
   prjDb.etapas = e || []; prjDb.projetos = p || []; prjDb.hist = h || [];
   if (!prjDb.etapas.length) await prjSemearEtapas();
+  // Motivos de cancelamento (tabela da versão 2 do módulo)
+  const tm = await sbFetch('proj_motivos', 'GET', null, '?limit=1');
+  if (tm === null) {
+    prjErro = '⚠️ Falta a tabela de motivos de cancelamento (proj_motivos).' + sbErroDetalhe() +
+      '\n\nRode o SQL "projetos_v2" no SQL Editor do Supabase.';
+  } else {
+    prjDb.motivos = (await fetchAll('proj_motivos', 'nome')) || [];
+    if (!prjDb.motivos.length) await prjSemearMotivos();
+  }
   prjCarregado = true;
 }
 
@@ -19432,6 +19787,14 @@ async function prjSemearEtapas() {
   if (ok) prjDb.etapas = recs;
 }
 
+const PRJ_MOTIVOS_PADRAO = ['Preço acima do esperado','Fechou com concorrente','Desistiu / adiou a obra','Prazo de entrega',
+  'Não aprovou o projeto','Problemas financeiros / crédito','Sem retorno do cliente','Outro'];
+async function prjSemearMotivos() {
+  const recs = PRJ_MOTIVOS_PADRAO.map((nome, i) => ({ id: uid() + i, nome }));
+  const ok = await sbFetch('proj_motivos', 'POST', recs);
+  if (ok) prjDb.motivos = recs;
+}
+
 function prjMostrarErro() {
   document.querySelectorAll('.prj-aviso').forEach(el => {
     el.textContent = prjErro; el.style.display = prjErro ? 'block' : 'none';
@@ -19440,11 +19803,14 @@ function prjMostrarErro() {
 
 async function prjAbrirPagina(p) {
   await prjCarregar();
+  if (typeof acaoCarregar === 'function') await acaoCarregar(false, true);
   prjMostrarErro();
   if (p === 'proj-quadro')  prjRenderQuadro();
   if (p === 'proj-lista')   prjRenderLista();
   if (p === 'proj-painel')  prjRenderPainel();
   if (p === 'proj-etapas')  prjRenderEtapas();
+  if (p === 'proj-gantt')   prjRenderGantt();
+  if (p === 'proj-cancelados') prjRenderCancelados();
 }
 function prjRedesenhar() {
   const p = _paginaAtual;
@@ -19452,6 +19818,8 @@ function prjRedesenhar() {
   if (p === 'proj-lista')   prjRenderLista();
   if (p === 'proj-painel')  prjRenderPainel();
   if (p === 'proj-etapas')  prjRenderEtapas();
+  if (p === 'proj-gantt')   prjRenderGantt();
+  if (p === 'proj-cancelados') prjRenderCancelados();
 }
 
 // ── Auxiliares ──
@@ -19636,14 +20004,15 @@ function prjAbrirProjeto(id) {
   document.getElementById('prj-f-dtvenda').value = p ? (p.dt_venda || '') : prjHoje();
   document.getElementById('prj-f-dtentrega').value = p ? (p.dt_entrega_prev || '') : '';
   document.getElementById('prj-f-pri').value = p ? (p.prioridade || 'normal') : 'normal';
-  document.getElementById('prj-f-status').value = p ? (p.status || 'ativo') : 'ativo';
+  document.getElementById('prj-f-status').value = p ? (p.status === 'cancelado' ? 'ativo' : (p.status || 'ativo')) : 'ativo';
   document.getElementById('prj-f-obs').value = p ? (p.obs || '') : '';
   // A etapa só é escolhida no cadastro; depois ela muda pelo quadro/ficha (fica no histórico).
   const selEt = document.getElementById('prj-f-etapa');
   selEt.innerHTML = prjEtapas().map(e => `<option value="${e.id}">${prjEsc(e.nome)}</option>`).join('');
   document.getElementById('prj-f-etapa-wrap').style.display = p ? 'none' : '';
   const stWrap = document.getElementById('prj-f-status').closest('.form-group');
-  if (stWrap) stWrap.style.display = p ? '' : 'none';
+  // Cancelamento só pela ficha (exige motivo); projeto cancelado é reativado por lá.
+  if (stWrap) stWrap.style.display = (p && p.status !== 'cancelado') ? '' : 'none';
   openModal('modal-prj-projeto');
   setTimeout(() => document.getElementById('prj-f-nome').focus(), 50);
 }
@@ -19671,10 +20040,12 @@ async function prjSalvarProjeto() {
   };
   if (id) {
     const p = prjProjeto(id);
-    const st = document.getElementById('prj-f-status').value;
-    rec.status = st;
-    if (st === 'concluido' && p.status !== 'concluido') rec.dt_conclusao = prjHoje();
-    if (st !== 'concluido') rec.dt_conclusao = null;
+    if (p.status !== 'cancelado') {
+      const st = document.getElementById('prj-f-status').value;
+      rec.status = st;
+      if (st === 'concluido' && p.status !== 'concluido') rec.dt_conclusao = prjHoje();
+      if (st !== 'concluido') rec.dt_conclusao = null;
+    }
     const ok = await sbFetch('proj_projetos', 'PATCH', rec, `?id=eq.${id}`);
     if (!ok) { alert('❌ Erro ao salvar o projeto.' + sbErroDetalhe()); return; }
     Object.assign(p, rec);
@@ -19698,6 +20069,11 @@ async function prjSalvarProjeto() {
 
 async function prjExcluirProjeto(id) {
   const p = prjProjeto(id); if (!p) return;
+  const lancs = prjLancsDoProjeto(id);
+  if (lancs.length) {
+    alert(`Este projeto tem ${lancs.length} lançamento(s) no Contas a Receber.\n\nExclua a cobrança na ficha do projeto (só é possível se nada foi recebido) ou use "Cancelar projeto".`);
+    return;
+  }
   if (!confirm(`Excluir o projeto "${p.codigo} — ${p.nome}"?\n\nO histórico de etapas dele também será apagado. Essa ação não pode ser desfeita.`)) return;
   const okH = await sbFetch('proj_historico', 'DELETE', null, `?projeto_id=eq.${id}`);
   if (!okH) { alert('❌ Erro ao excluir o histórico do projeto.' + sbErroDetalhe()); return; }
@@ -19711,13 +20087,17 @@ async function prjExcluirProjeto(id) {
 
 async function prjMudarStatus(id, status) {
   const p = prjProjeto(id); if (!p) return;
-  const nomes = { cancelado:'cancelar', ativo:'reativar', pausado:'pausar' };
-  if (status === 'cancelado' && !confirm(`Deseja ${nomes[status]} o projeto "${p.codigo} — ${p.nome}"?`)) return;
+  if (status === 'cancelado') { prjAbrirCancelar(id); return; }
+  const reativando = p.status === 'cancelado';
+  if (reativando && !confirm(`Reativar o projeto "${p.codigo} — ${p.nome}"?\n\nEle volta para a etapa em que estava e sai da lista de cancelados.`)) return;
   const rec = { status };
   if (status === 'ativo') { const et = prjEtapa(p.etapa_id); if (et && et.final) rec.status = 'concluido'; }
+  const agora = new Date().toISOString();
+  if (reativando) Object.assign(rec, { motivo_id: null, motivo_nome: null, cancel_obs: null, dt_cancelamento: null, cancel_etapa_id: null, dt_etapa: agora });
   const ok = await sbFetch('proj_projetos', 'PATCH', rec, `?id=eq.${id}`);
   if (!ok) { alert('❌ Erro ao alterar o status.' + sbErroDetalhe()); return; }
   Object.assign(p, rec);
+  if (reativando) { const et = prjEtapa(p.etapa_id); if (et) await prjRegistrarHist(id, et, agora); }
   prjRedesenhar();
   prjAbrirFicha(id);
 }
@@ -19746,6 +20126,7 @@ async function prjMarcarItem(id, etapaId, idx, valor) {
 // ══ FICHA DO PROJETO ══
 function prjAbrirFicha(id) {
   const p = prjProjeto(id); if (!p) return;
+  _prjFichaId = id;
   const etapas = prjEtapas();
   const iAtual = etapas.findIndex(e => e.id === p.etapa_id);
   const et = etapas[iAtual] || null;
@@ -19791,24 +20172,10 @@ function prjAbrirFicha(id) {
         <td style="text-align:center;${estourou ? 'color:#dc2626;font-weight:700' : ''}">${d}</td><td>${pz ? pz + 'd' : '—'}</td><td>${prjEsc(h.usuario || '—')}</td></tr>`;
     }).join('')}</tbody></table></div>` : '<div style="font-size:12.5px;color:#a8a29e">Sem movimentações.</div>';
 
-  // Financeiro (somente leitura — lançamentos a receber do cliente)
-  let finHtml = '<div style="font-size:12.5px;color:#a8a29e">Sem cliente vinculado.</div>';
-  if (p.cliente_id && typeof getParcelasReceber === 'function') {
-    const rec = getParcelasReceber(true).filter(x => x.cliente === p.cliente_id);
-    const abe = getParcelasReceber(false).filter(x => x.cliente === p.cliente_id);
-    const tRec = rec.reduce((s,x) => s + prjNum(x.valParc), 0);
-    const tAbe = abe.reduce((s,x) => s + prjNum(x.valParc), 0);
-    const tVenc = abe.filter(x => x.venc && x.venc < prjHoje()).reduce((s,x) => s + prjNum(x.valParc), 0);
-    const contrato = prjNum(p.valor);
-    finHtml = `<div class="prj-ficha-info">
-        <div><div class="k">Valor do contrato</div><div class="x">${contrato ? fmtBRL(contrato) : '—'}</div></div>
-        <div><div class="k">Recebido do cliente</div><div class="x" style="color:#166534">${fmtBRL(tRec)}</div></div>
-        <div><div class="k">A receber do cliente</div><div class="x">${fmtBRL(tAbe)}${tVenc ? ` <span class="badge badge-red" style="margin-left:4px">${fmtBRL(tVenc)} vencido</span>` : ''}</div></div>
-      </div>
-      <div class="lanc-note" style="margin-top:10px">Valores somados de todos os lançamentos a receber deste cliente (Contas a Receber / Recebidas). Nada é alterado no financeiro por esta tela.</div>`;
-  }
+  const finHtml = prjFinanceiroHtml(p);
+  const cancHtml = p.status === 'cancelado' ? `<div class="lanc-note" style="background:#fef2f2;border-color:#fecaca;color:#991b1b;margin-bottom:14px"><b>Cancelado em ${p.dt_cancelamento ? fmtDate(p.dt_cancelamento) : '—'}</b> na etapa <b>${prjEsc((prjEtapa(p.cancel_etapa_id)||{}).nome || '—')}</b> · Motivo: <b>${prjEsc(prjMotivoNome(p))}</b>${p.cancel_obs ? '<br>' + prjEsc(p.cancel_obs) : ''}</div>` : '';
 
-  document.getElementById('prj-fc-body').innerHTML = `
+  document.getElementById('prj-fc-body').innerHTML = cancHtml + `
     <div class="lanc-sec">
       <div class="lanc-sec-title"><span class="n">1</span>Etapa atual<span class="hint">${et ? prjEsc(et.nome) : '—'} · ${s.dias} dia(s)${s.prazo ? ' de ' + s.prazo + ' previstos' : ''}</span></div>
       <div class="prj-steps">${steps}</div>
@@ -19832,13 +20199,14 @@ function prjAbrirFicha(id) {
       </div>
     </div>
     <div class="lanc-sec">
-      <div class="lanc-sec-title"><span class="n">4</span>Financeiro do cliente</div>
+      <div class="lanc-sec-title"><span class="n">4</span>Pagamento do projeto<span class="hint">${p.status !== 'cancelado' ? `<button class="btn btn-primary btn-sm" onclick="prjPagAbrir('${id}')">+ Forma de pagamento</button>` : ''}</span></div>
       ${finHtml}
     </div>
     <div class="lanc-sec">
       <div class="lanc-sec-title"><span class="n">5</span>Histórico de etapas</div>
       ${histHtml}
-    </div>`;
+    </div>
+    ${typeof acaoHtmlProjeto === 'function' ? acaoHtmlProjeto(p) : ''}`;
 
   const btStatus = p.status === 'cancelado'
     ? `<button class="btn btn-secondary" onclick="prjMudarStatus('${id}','ativo')">Reativar</button>`
@@ -19880,11 +20248,11 @@ function prjRenderLista() {
       <td><b>${prjEsc(p.nome)}</b>${PRJ_PRI[p.prioridade] ? '<div style="font-size:11px">' + PRJ_PRI[p.prioridade] + '</div>' : ''}</td>
       <td>${prjEsc(prjClienteNome(p))}</td>
       <td>${prjEsc(p.responsavel || '—')}</td>
-      <td>${et ? `<span class="badge" style="white-space:nowrap;background:${prjEsc(et.cor)}1a;color:${prjEsc(et.cor)};border:1px solid ${prjEsc(et.cor)}55">${prjEsc(et.nome)}</span>` : '—'}</td>
+      <td>${et ? `<span class="badge" style="background:${prjEsc(et.cor)}1a;color:${prjEsc(et.cor)};border:1px solid ${prjEsc(et.cor)}55">${prjEsc(et.nome)}</span>` : '—'}</td>
       <td style="text-align:center"><span class="prj-tag ${s.cls}">${s.dias}d${s.prazo ? '/' + s.prazo + 'd' : ''}</span></td>
       <td>${p.dt_entrega_prev ? fmtDate(p.dt_entrega_prev) : '—'}${ent && ent.atrasado ? ' <span class="badge badge-red">' + ent.txt + '</span>' : ''}</td>
       <td class="num">${p.valor ? fmtBRL(prjNum(p.valor)) : '—'}</td>
-      <td><span style="white-space:nowrap" class="badge ${PRJ_STATUS_COR[p.status]||'badge-gray'}">${PRJ_STATUS[p.status]||p.status}</span></td>
+      <td><span class="badge ${PRJ_STATUS_COR[p.status]||'badge-gray'}">${PRJ_STATUS[p.status]||p.status}</span></td>
       <td class="actions" onclick="event.stopPropagation()">
         <button class="btn btn-secondary btn-sm" onclick="prjAbrirFicha('${p.id}')">Abrir</button>
         <button class="btn btn-secondary btn-sm" onclick="prjAbrirProjeto('${p.id}')">Editar</button>
@@ -19917,6 +20285,7 @@ function prjRenderPainel() {
     kpi(conclAno.length, 'Concluídos em ' + anoAtual, fmtBRL(soma(conclAno)), '#16a34a') +
     kpi(cicloMedio == null ? '—' : cicloMedio + 'd', 'Ciclo médio', 'Da venda à conclusão (' + anoAtual + ')', '#8b5cf6');
 
+  prjRenderFunil();
   const etapas = prjEtapas().filter(e => !e.final);
   const porEt = etapas.map(e => { const l = ativos.filter(p => p.etapa_id === e.id); return { e, n: l.length, v: soma(l) }; });
   const maxN = Math.max(1, ...porEt.map(x => x.n));
@@ -20037,6 +20406,863 @@ async function prjExcluirEtapa(id) {
   if (!ok) { alert('❌ Erro ao excluir a etapa.' + sbErroDetalhe()); return; }
   prjDb.etapas = prjDb.etapas.filter(x => x.id !== id);
   prjRenderEtapas();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// FUNIL DE CONVERSÃO — quantos projetos chegaram a cada etapa
+// "Chegou" = a etapa mais avançada que o projeto já atingiu (histórico).
+// ══════════════════════════════════════════════════════════════════
+function prjAlcance() {
+  const idx = {}; prjEtapas().forEach((e, i) => idx[e.id] = i);
+  const m = {};
+  prjDb.projetos.forEach(p => m[p.id] = idx[p.etapa_id] != null ? idx[p.etapa_id] : -1);
+  prjDb.hist.forEach(h => { if (m[h.projeto_id] != null && idx[h.etapa_id] != null) m[h.projeto_id] = Math.max(m[h.projeto_id], idx[h.etapa_id]); });
+  return m;
+}
+function prjRenderFunil() {
+  const box = document.getElementById('prj-funil'); if (!box) return;
+  const sel = document.getElementById('prj-funil-ano');
+  const anoDe = p => String(p.dt_venda || prjDataLocal(p.created_at) || '').slice(0,4);
+  const anos = [...new Set(prjDb.projetos.map(anoDe).filter(Boolean))].sort().reverse();
+  const v = sel.value;
+  sel.innerHTML = '<option value="">Todos os anos</option>' + anos.map(a => `<option value="${a}">${a}</option>`).join('');
+  sel.value = anos.includes(v) ? v : '';
+  const lista = prjDb.projetos.filter(p => !sel.value || anoDe(p) === sel.value);
+  const etapas = prjEtapas();
+  if (!lista.length || !etapas.length) { box.innerHTML = '<div class="prj-vazio">Sem projetos no período.</div>'; return; }
+  const alc = prjAlcance();
+  const total = lista.length;
+  const linhas = etapas.map((e, k) => {
+    const n = lista.filter(p => alc[p.id] >= k).length;
+    const canc = lista.filter(p => p.status === 'cancelado' && alc[p.id] === k).length;
+    return { e, n, canc };
+  });
+  let maiorQueda = null;
+  box.innerHTML = '<div class="prj-funil">' + linhas.map((x, k) => {
+    const pTot = x.n / total * 100;
+    const ant = k ? linhas[k - 1].n : x.n;
+    const pAnt = ant ? x.n / ant * 100 : 0;
+    if (k && ant && (!maiorQueda || (100 - pAnt) > maiorQueda.q)) maiorQueda = { q: 100 - pAnt, nome: x.e.nome };
+    return `<div class="prj-funil-row">
+      <div class="nm" title="${prjEsc(x.e.nome)}"><span class="prj-dot" style="background:${prjEsc(x.e.cor)}"></span>${prjEsc(x.e.nome)}</div>
+      <div class="prj-funil-track"><div class="prj-funil-bar" style="width:${Math.max(pTot, 4)}%;background:${prjEsc(x.e.cor)}" title="${x.n} projeto(s)">${x.n}</div></div>
+      <div class="pc"><b>${pTot.toFixed(0)}%</b> do total${k ? `<br><span class="${pAnt < 100 ? 'queda' : ''}">${pAnt.toFixed(0)}% da etapa anterior</span>` : ''}${x.canc ? `<br><span class="queda">✖ ${x.canc} cancelado(s) aqui</span>` : ''}</div>
+    </div>`;
+  }).join('') + '</div>';
+  const etCanc = [...linhas].filter(x => x.canc).sort((x,y) => y.canc - x.canc)[0];
+  const concl = lista.filter(p => p.status === 'concluido').length;
+  const canc = lista.filter(p => p.status === 'cancelado').length;
+  const andam = lista.filter(p => p.status === 'ativo' || p.status === 'pausado').length;
+  const valorConcl = lista.filter(p => p.status === 'concluido').reduce((s,p) => s + prjNum(p.valor), 0);
+  box.innerHTML += `<div class="prj-funil-resumo">
+    <div><b>${total}</b>projetos entraram</div>
+    <div><b>${(concl / total * 100).toFixed(1).replace('.', ',')}%</b>conversão total (${concl} concluídos · ${fmtBRL(valorConcl)})</div>
+    <div><b>${andam}</b>ainda em andamento</div>
+    <div><b style="color:#dc2626">${canc}</b>cancelados (${(canc / total * 100).toFixed(1).replace('.', ',')}%)</div>
+    ${etCanc ? `<div><b style="color:#dc2626">${etCanc.canc}</b>etapa com mais cancelamentos: ${prjEsc(etCanc.e.nome)}</div>` : ''}
+  </div>
+  <div class="lanc-note" style="margin-top:10px">Cada barra conta os projetos que chegaram pelo menos até aquela etapa. Projetos em andamento ainda podem avançar, então as etapas finais tendem a crescer com o tempo.</div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CANCELAMENTO COM MOTIVO
+// ══════════════════════════════════════════════════════════════════
+function prjMotivoNome(p) {
+  const m = prjDb.motivos.find(x => x.id === p.motivo_id);
+  return m ? m.nome : (p.motivo_nome || '—');
+}
+function prjPopularMotivos() {
+  const lista = [...prjDb.motivos].sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  const opts = lista.map(m => `<option value="${m.id}">${prjEsc(m.nome)}</option>`).join('');
+  [['prj-c-motivo','<option value="">Selecione...</option>'], ['pc-motivo','<option value="">Todos</option>']].forEach(([id, ini]) => {
+    const el = document.getElementById(id); if (!el) return;
+    const v = el.value; el.innerHTML = ini + opts; el.value = v;
+  });
+}
+function prjAbrirCancelar(id) {
+  const p = prjProjeto(id); if (!p) return;
+  if (prjErro) { alert(prjErro); return; }
+  document.getElementById('prj-c-id').value = id;
+  document.getElementById('prj-c-sub').textContent = `${p.codigo} — ${p.nome} · etapa ${(prjEtapa(p.etapa_id)||{}).nome || '—'}`;
+  prjPopularMotivos();
+  document.getElementById('prj-c-motivo').value = '';
+  document.getElementById('prj-c-obs').value = '';
+  document.getElementById('prj-c-novo-wrap').style.display = 'none';
+  const abertas = prjParcelasDoProjeto(id).filter(x => !x.isRecebido);
+  const av = document.getElementById('prj-c-aviso');
+  if (abertas.length) {
+    av.style.display = 'block';
+    av.innerHTML = `⚠️ Este projeto tem <b>${abertas.length} parcela(s) em aberto</b> (${fmtBRL(abertas.reduce((s,x) => s + prjNum(x.valParc), 0))}) no Contas a Receber. Elas <b>não</b> são apagadas: ajuste ou exclua a cobrança na ficha se não forem mais recebidas.`;
+  } else av.style.display = 'none';
+  openModal('modal-prj-cancelar');
+}
+async function prjConfirmarCancelamento() {
+  const id = document.getElementById('prj-c-id').value;
+  const p = prjProjeto(id); if (!p) return;
+  const motivo_id = document.getElementById('prj-c-motivo').value;
+  if (!motivo_id) { alert('Informe o motivo do cancelamento. Se não estiver na lista, cadastre pelo botão +.'); return; }
+  const m = prjDb.motivos.find(x => x.id === motivo_id);
+  const agora = new Date().toISOString();
+  const rec = { status: 'cancelado', motivo_id, motivo_nome: m ? m.nome : '', cancel_obs: document.getElementById('prj-c-obs').value.trim(),
+    dt_cancelamento: prjHoje(), cancel_etapa_id: p.etapa_id, dt_conclusao: null };
+  const ok = await sbFetch('proj_projetos', 'PATCH', rec, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao cancelar o projeto.' + sbErroDetalhe()); return; }
+  Object.assign(p, rec);
+  // Fecha a passagem na etapa atual (o tempo parado não conta como tempo da etapa)
+  const abertos = prjDb.hist.filter(h => h.projeto_id === id && !h.dt_saida);
+  if (abertos.length) {
+    await sbFetch('proj_historico', 'PATCH', { dt_saida: agora }, `?projeto_id=eq.${id}&dt_saida=is.null`);
+    abertos.forEach(h => h.dt_saida = agora);
+  }
+  closeModal('modal-prj-cancelar');
+  prjRedesenhar();
+  prjAbrirFicha(id);
+}
+async function prjAddMotivo(inputId, selectId) {
+  const inp = document.getElementById(inputId);
+  const nome = (inp.value || '').trim();
+  if (!nome) { alert('Digite o motivo.'); inp.focus(); return; }
+  const existe = prjDb.motivos.find(m => normText(m.nome) === normText(nome));
+  let rec = existe;
+  if (!existe) {
+    rec = { id: uid(), nome };
+    const ok = await sbFetch('proj_motivos', 'POST', rec);
+    if (!ok) { alert('❌ Erro ao salvar o motivo.' + sbErroDetalhe()); return; }
+    prjDb.motivos.push(rec);
+  }
+  inp.value = '';
+  prjPopularMotivos();
+  if (selectId) { document.getElementById(selectId).value = rec.id; document.getElementById('prj-c-novo-wrap').style.display = 'none'; }
+  if (_paginaAtual === 'proj-cancelados') prjRenderCancelados();
+}
+async function prjEditarMotivo(id) {
+  const m = prjDb.motivos.find(x => x.id === id); if (!m) return;
+  const nome = (prompt('Novo nome do motivo:', m.nome) || '').trim();
+  if (!nome || nome === m.nome) return;
+  const ok = await sbFetch('proj_motivos', 'PATCH', { nome }, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao salvar.' + sbErroDetalhe()); return; }
+  m.nome = nome;
+  const usados = prjDb.projetos.filter(p => p.motivo_id === id);
+  if (usados.length) { await sbFetch('proj_projetos', 'PATCH', { motivo_nome: nome }, `?motivo_id=eq.${id}`); usados.forEach(p => p.motivo_nome = nome); }
+  prjPopularMotivos(); prjRenderCancelados();
+}
+async function prjExcluirMotivo(id) {
+  const m = prjDb.motivos.find(x => x.id === id); if (!m) return;
+  const n = prjDb.projetos.filter(p => p.motivo_id === id).length;
+  if (!confirm(`Excluir o motivo "${m.nome}"?${n ? `\n\n${n} projeto(s) cancelado(s) por ele continuam mostrando o nome.` : ''}`)) return;
+  const ok = await sbFetch('proj_motivos', 'DELETE', null, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao excluir.' + sbErroDetalhe()); return; }
+  prjDb.motivos = prjDb.motivos.filter(x => x.id !== id);
+  prjPopularMotivos(); prjRenderCancelados();
+}
+
+function prjBarras(itens, cor) { // itens: [{nome, n, v, cor?}]
+  const max = Math.max(1, ...itens.map(i => i.n));
+  return itens.length ? itens.map(i => `<div class="prj-bar-row">
+      <div class="nm" title="${prjEsc(i.nome)}">${i.cor ? `<span class="prj-dot" style="background:${prjEsc(i.cor)}"></span>` : ''}${prjEsc(i.nome)}</div>
+      <div class="prj-bar"><span style="width:${i.n / max * 100}%;background:${prjEsc(i.cor || cor)}"></span></div>
+      <div class="vl">${i.n} · ${fmtBRLCompacto(i.v)}</div></div>`).join('') : '<div class="prj-vazio">Nenhum cancelamento no período.</div>';
+}
+function prjRenderCancelados() {
+  const tb = document.getElementById('pc-tb'); if (!tb) return;
+  prjPopularMotivos(); prjPopularResp('pc-resp');
+  const de = document.getElementById('pc-de').value, ate = document.getElementById('pc-ate').value;
+  const mot = document.getElementById('pc-motivo').value, resp = document.getElementById('pc-resp').value;
+  const lista = prjDb.projetos.filter(p => p.status === 'cancelado'
+      && (!de || (p.dt_cancelamento || '') >= de) && (!ate || (p.dt_cancelamento || '') <= ate)
+      && (!mot || p.motivo_id === mot) && (!resp || (p.responsavel || '') === resp))
+    .sort((a,b) => String(b.dt_cancelamento||'').localeCompare(String(a.dt_cancelamento||'')));
+  const soma = arr => arr.reduce((s,p) => s + prjNum(p.valor), 0);
+  // Base da taxa: projetos que entraram no mesmo período (data da venda/criação)
+  const dataEnt = p => p.dt_venda || prjDataLocal(p.created_at);
+  const base = prjDb.projetos.filter(p => (!de || dataEnt(p) >= de) && (!ate || dataEnt(p) <= ate) && (!resp || (p.responsavel || '') === resp));
+  const cancBase = base.filter(p => p.status === 'cancelado').length;
+  // Agrupamentos
+  const porMot = {}; lista.forEach(p => { const k = prjMotivoNome(p); (porMot[k] = porMot[k] || { nome:k, n:0, v:0 }); porMot[k].n++; porMot[k].v += prjNum(p.valor); });
+  const motArr = Object.values(porMot).sort((a,b) => b.n - a.n || b.v - a.v);
+  const etArr = prjEtapas().map(e => { const l = lista.filter(p => (p.cancel_etapa_id || p.etapa_id) === e.id); return { nome:e.nome, cor:e.cor, n:l.length, v:soma(l) }; }).filter(x => x.n);
+  const etTop = [...etArr].sort((a,b) => b.n - a.n)[0];
+  const kpi = (v, l, s, cor) => `<div class="prj-kpi" style="--k:${cor}"><div class="v">${v}</div><div class="l">${l}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`;
+  document.getElementById('pc-kpis').innerHTML =
+    kpi(lista.length, 'Projetos cancelados', '', '#dc2626') +
+    kpi(fmtBRLCompacto(soma(lista)), 'Valor perdido', fmtBRL(soma(lista)), '#f59e0b') +
+    kpi(base.length ? (cancBase / base.length * 100).toFixed(1).replace('.', ',') + '%' : '—', 'Taxa de cancelamento', `${cancBase} de ${base.length} projetos que entraram`, '#8b5cf6') +
+    kpi(motArr[0] ? motArr[0].n : '—', 'Principal motivo', motArr[0] ? prjEsc(motArr[0].nome) : '—', '#0d9488') +
+    kpi(etTop ? etTop.n : '—', 'Etapa com mais perdas', etTop ? prjEsc(etTop.nome) : '—', '#2563eb');
+  document.getElementById('pc-g-motivo').innerHTML = prjBarras(motArr, '#dc2626');
+  document.getElementById('pc-g-etapa').innerHTML = prjBarras(etArr, '#64748b');
+  tb.innerHTML = lista.length ? lista.map(p => {
+    const et = prjEtapa(p.cancel_etapa_id || p.etapa_id);
+    return `<tr style="cursor:pointer" onclick="prjAbrirFicha('${p.id}')">
+      <td>${p.dt_cancelamento ? fmtDate(p.dt_cancelamento) : '—'}</td>
+      <td style="font-family:DM Mono,monospace;font-size:12px"><b>${prjEsc(p.codigo||'')}</b></td>
+      <td><b>${prjEsc(p.nome)}</b></td><td>${prjEsc(prjClienteNome(p))}</td>
+      <td>${et ? `<span class="badge" style="white-space:nowrap;background:${prjEsc(et.cor)}1a;color:${prjEsc(et.cor)};border:1px solid ${prjEsc(et.cor)}55">${prjEsc(et.nome)}</span>` : '—'}</td>
+      <td><span class="badge badge-red" style="white-space:nowrap">${prjEsc(prjMotivoNome(p))}</span></td>
+      <td style="font-size:12px;color:#57534e;max-width:260px">${prjEsc(p.cancel_obs || '')}</td>
+      <td class="num">${p.valor ? fmtBRL(prjNum(p.valor)) : '—'}</td>
+      <td class="actions" onclick="event.stopPropagation()">
+        <button class="btn btn-secondary btn-sm" onclick="prjAbrirFicha('${p.id}')">Abrir</button>
+        <button class="btn btn-secondary btn-sm" onclick="prjMudarStatus('${p.id}','ativo')">Reativar</button>
+      </td></tr>`;
+  }).join('') + `<tr><td colspan="7" style="font-weight:700">${lista.length} cancelado(s)</td><td class="num" style="font-weight:700">${fmtBRL(soma(lista))}</td><td></td></tr>`
+    : '<tr><td colspan="9" class="empty-state">Nenhum projeto cancelado com esses filtros.</td></tr>';
+  const tm = document.getElementById('pc-tb-motivos');
+  tm.innerHTML = [...prjDb.motivos].sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR')).map(m => `<tr>
+      <td><b>${prjEsc(m.nome)}</b></td>
+      <td style="text-align:center">${prjDb.projetos.filter(p => p.motivo_id === m.id && p.status === 'cancelado').length}</td>
+      <td class="actions"><button class="btn btn-secondary btn-sm" onclick="prjEditarMotivo('${m.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="prjExcluirMotivo('${m.id}')">Excluir</button></td></tr>`).join('')
+    || '<tr><td colspan="3" class="empty-state">Nenhum motivo cadastrado.</td></tr>';
+}
+
+// ══════════════════════════════════════════════════════════════════
+// GANTT — cronograma dos projetos
+//   Sólido   = etapas já realizadas (histórico real)
+//   Hachurado = previsão das próximas etapas (prazo padrão de cada uma)
+//   ◆        = entrega prometida ao cliente
+//   Vermelho hachurado = quanto a previsão passa da entrega prometida
+// ══════════════════════════════════════════════════════════════════
+let _gtZoom = 'semana', _gtX0 = null, _gtPx = 9;
+const GT_PX = { dia: 32, semana: 10, mes: 3.4 };
+const GT_DIA = 86400000;
+function gtD(s) { if (!s) return null; const t = String(s); const d = new Date(t.length <= 10 ? t + 'T00:00:00' : t); d.setHours(0,0,0,0); return d; }
+function gtAdd(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+function gtFmt(d) { return d ? d.toLocaleDateString('pt-BR') : '—'; }
+function gtX(d) { return Math.round((d - _gtX0) / GT_DIA * _gtPx); }
+
+function prjGanttPlano(p) {
+  const etapas = prjEtapas();
+  const hoje = gtD(prjHoje());
+  const hs = prjDb.hist.filter(h => h.projeto_id === p.id).sort((a,b) => String(a.dt_entrada).localeCompare(String(b.dt_entrada)));
+  const segs = [];
+  hs.forEach((h, i) => {
+    const et = prjEtapa(h.etapa_id);
+    const ini = gtD(h.dt_entrada);
+    let fim = h.dt_saida ? gtD(h.dt_saida) : (p.status === 'concluido' ? ini : hoje);
+    if (fim < ini) fim = ini;
+    segs.push({ et, nome: h.etapa_nome || (et && et.nome) || '—', cor: (et && et.cor) || '#94a3b8', ini, fim, prev: false, atual: !h.dt_saida && p.status !== 'concluido' });
+  });
+  if (!segs.length) {
+    const ini = gtD(p.dt_venda) || gtD(p.created_at) || hoje;
+    const et = prjEtapa(p.etapa_id);
+    segs.push({ et, nome: et ? et.nome : '—', cor: (et && et.cor) || '#94a3b8', ini, fim: hoje, prev: false, atual: true });
+  }
+  // Previsão das próximas etapas
+  let fimPrev = segs[segs.length - 1].fim;
+  if (p.status === 'ativo' || p.status === 'pausado') {
+    const i = etapas.findIndex(e => e.id === p.etapa_id);
+    const atual = segs.filter(s => s.atual).pop();
+    if (atual && atual.et && prjNum(atual.et.prazo_dias)) {
+      const alvo = gtAdd(atual.ini, prjNum(atual.et.prazo_dias));
+      if (alvo > hoje) { segs.push({ et: atual.et, nome: atual.nome + ' (restante)', cor: atual.cor, ini: hoje, fim: alvo, prev: true }); fimPrev = alvo; }
+      else fimPrev = hoje;
+    } else fimPrev = hoje;
+    etapas.slice(i + 1).forEach(e => {
+      if (e.final || !prjNum(e.prazo_dias)) return;
+      const f = gtAdd(fimPrev, prjNum(e.prazo_dias));
+      segs.push({ et: e, nome: e.nome, cor: e.cor, ini: fimPrev, fim: f, prev: true });
+      fimPrev = f;
+    });
+  }
+  const entrega = gtD(p.dt_entrega_prev);
+  const fimReal = p.status === 'concluido' ? gtD(p.dt_conclusao) || segs[segs.length - 1].fim : null;
+  const fimFinal = fimReal || fimPrev;
+  const estouro = entrega && fimFinal > entrega ? Math.round((fimFinal - entrega) / GT_DIA) : 0;
+  const naoFinais = etapas.filter(e => !e.final);
+  const iAt = naoFinais.findIndex(e => e.id === p.etapa_id);
+  const prog = p.status === 'concluido' ? 100 : (naoFinais.length ? Math.round(Math.max(0, iAt) / naoFinais.length * 100) : 0);
+  return { segs, ini: segs[0].ini, fim: fimFinal, entrega, estouro, prog, atrasado: entrega && entrega < hoje && p.status !== 'concluido' };
+}
+
+function prjGanttZoom(z) {
+  _gtZoom = z;
+  document.querySelectorAll('#gt-zoom button').forEach(b => b.classList.toggle('on', b.dataset.z === z));
+  prjRenderGantt(); prjGanttHoje();
+}
+function prjGanttHoje() {
+  const sc = document.getElementById('gt-scroll'); if (!sc || !_gtX0) return;
+  sc.scrollLeft = Math.max(0, gtX(gtD(prjHoje())) - (sc.clientWidth - 320) * 0.3);
+}
+
+function prjRenderGantt() {
+  const grid = document.getElementById('gt-grid'); if (!grid) return;
+  { const t = document.getElementById('gt-tip'); if (t) { t.dataset.id = ''; t.style.display = 'none'; } }
+  prjPopularResp('gt-resp');
+  const termo = normText(document.getElementById('gt-busca').value || '');
+  const resp = document.getElementById('gt-resp').value;
+  const modo = document.getElementById('gt-status').value;
+  const ordem = document.getElementById('gt-ordem').value;
+  const lista = prjDb.projetos.filter(p => p.status !== 'cancelado' && (modo === 'todos' || p.status !== 'concluido')
+    && (!resp || (p.responsavel || '') === resp) && prjFiltroTexto(p, termo))
+    .map(p => ({ p, g: prjGanttPlano(p) }));
+  const ord = {
+    entrega: (a,b) => String(a.p.dt_entrega_prev || '9999').localeCompare(String(b.p.dt_entrega_prev || '9999')),
+    inicio:  (a,b) => a.g.ini - b.g.ini,
+    codigo:  (a,b) => String(a.p.codigo||'').localeCompare(String(b.p.codigo||''), 'pt-BR', { numeric:true }),
+    risco:   (a,b) => (b.g.estouro - a.g.estouro) || ord.entrega(a,b)
+  };
+  lista.sort(ord[ordem] || ord.entrega);
+  const hoje = gtD(prjHoje());
+  // KPIs
+  const ativos = lista.filter(x => x.p.status !== 'concluido');
+  const risco = ativos.filter(x => x.g.estouro > 0 && !x.g.atrasado);
+  const atras = ativos.filter(x => x.g.atrasado);
+  const semData = ativos.filter(x => !x.g.entrega);
+  const kpi = (v, l, s, cor) => `<div class="prj-kpi" style="--k:${cor}"><div class="v">${v}</div><div class="l">${l}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`;
+  document.getElementById('gt-kpis').innerHTML =
+    kpi(ativos.length, 'No cronograma', 'Em andamento e pausados', '#2563eb') +
+    kpi(ativos.length - risco.length - atras.length - semData.length, 'Previsão dentro do prazo', 'Previsão ≤ entrega prometida', '#16a34a') +
+    kpi(risco.length, 'Risco de atraso', 'Previsão passa da entrega', '#f59e0b') +
+    kpi(atras.length, 'Entrega já vencida', 'Data prometida passou', '#dc2626') +
+    kpi(semData.length, 'Sem data de entrega', 'Cadastre no projeto', '#94a3b8');
+  if (!lista.length) { grid.innerHTML = '<div class="prj-vazio" style="padding:40px">Nenhum projeto para mostrar.</div>'; document.getElementById('gt-legenda').innerHTML = ''; return; }
+  _gtPx = GT_PX[_gtZoom] || 10;
+  const pad = { dia: 4, semana: 10, mes: 25 }[_gtZoom];
+  let min = hoje, max = hoje;
+  lista.forEach(({ g }) => {
+    if (g.ini < min) min = g.ini;
+    [g.fim, g.entrega].forEach(d => { if (d && d > max) max = d; });
+  });
+  min = gtAdd(min, -pad); max = gtAdd(max, pad + 5);
+  if (_gtZoom === 'mes') { min = new Date(min.getFullYear(), min.getMonth(), 1); max = new Date(max.getFullYear(), max.getMonth() + 1, 1); }
+  if (_gtZoom === 'semana') { const dw = (min.getDay() + 6) % 7; min = gtAdd(min, -dw); }
+  _gtX0 = min;
+  const W = gtX(max);
+  // Cabeçalho
+  const r1 = [], r2 = [];
+  const mesNome = d => d.toLocaleDateString('pt-BR', { month: 'long' }) + ' ' + d.getFullYear();
+  const mesAbr = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  if (_gtZoom === 'mes') {
+    for (let y = min.getFullYear(); y <= max.getFullYear(); y++) {
+      const a = new Date(Math.max(min, new Date(y,0,1))), b = new Date(Math.min(max, new Date(y+1,0,1)));
+      r1.push(`<div style="left:${gtX(a)}px;width:${gtX(b) - gtX(a)}px">${y}</div>`);
+    }
+    for (let d = new Date(min); d < max; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) {
+      const n = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+      const hj = hoje >= d && hoje < n;
+      r2.push(`<div class="${hj ? 'hj' : ''}" style="left:${gtX(d)}px;width:${gtX(n) - gtX(d)}px">${mesAbr[d.getMonth()]}</div>`);
+    }
+  } else {
+    for (let d = new Date(min.getFullYear(), min.getMonth(), 1); d < max; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) {
+      const a = d < min ? min : d; const n = new Date(d.getFullYear(), d.getMonth() + 1, 1); const b = n > max ? max : n;
+      r1.push(`<div style="left:${gtX(a)}px;width:${gtX(b) - gtX(a)}px">${mesNome(d)}</div>`);
+    }
+    const passo = _gtZoom === 'dia' ? 1 : 7;
+    for (let d = new Date(min); d < max; d = gtAdd(d, passo)) {
+      const n = gtAdd(d, passo);
+      const hj = hoje >= d && hoje < n;
+      const txt = _gtZoom === 'dia' ? d.getDate() : String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+      r2.push(`<div class="${hj ? 'hj' : ''}" style="left:${gtX(d)}px;width:${gtX(n) - gtX(d)}px">${txt}</div>`);
+    }
+  }
+  // Fundo (fins de semana, viradas de mês, hoje)
+  const bg = [];
+  if (_gtZoom === 'dia') for (let d = new Date(min); d < max; d = gtAdd(d, 1)) { if (d.getDay() === 0 || d.getDay() === 6) bg.push(`<div class="gt-bg fds" style="left:${gtX(d)}px;width:${_gtPx}px"></div>`); }
+  for (let d = new Date(min.getFullYear(), min.getMonth() + 1, 1); d < max; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) bg.push(`<div class="gt-bg mes" style="left:${gtX(d)}px"></div>`);
+  bg.push(`<div class="gt-hoje" style="left:${gtX(hoje) + Math.round(_gtPx / 2)}px" title="Hoje"></div>`);
+  // Linhas
+  const esq = [], dir = [];
+  lista.forEach(({ p, g }) => {
+    const et = prjEtapa(p.etapa_id);
+    const risco = g.estouro > 0;
+    esq.push(`<div class="gt-left" onclick="prjAbrirFicha('${p.id}')" onmousemove="prjGanttTip(event,'${p.id}')" onmouseleave="prjGanttTip(null)">
+      <div class="t1"><span class="cd">${prjEsc(p.codigo || '')}</span>${prjEsc(p.nome)}</div>
+      <div class="t2"><span class="prj-dot" style="background:${prjEsc((et && et.cor) || '#94a3b8')}"></span>${prjEsc(et ? et.nome : '—')} · ${prjEsc(prjClienteNome(p))}
+        ${p.status === 'concluido' ? '<span class="prj-tag verde">✔</span>' : (g.atrasado ? `<span class="prj-tag vermelho">Vencida ${Math.round((hoje - g.entrega) / GT_DIA)}d</span>` : (risco ? `<span class="prj-tag amarelo">+${g.estouro}d</span>` : ''))}
+        ${p.status === 'pausado' ? '<span class="prj-tag amarelo">⏸</span>' : ''}</div>
+    </div>`);
+    const x0 = gtX(g.ini), x1 = Math.max(gtX(g.fim) + _gtPx, x0 + 4);
+    const segs = g.segs.map(s => {
+      const w = Math.max(gtX(s.fim) - gtX(s.ini), 0);
+      return `<div class="gt-seg ${s.prev ? 'prev' : ''}" style="width:${w || 3}px;background-color:${prjEsc(s.cor)}"></div>`;
+    }).join('');
+    let html = `<div class="gt-bar" style="left:${x0}px;width:${x1 - x0}px">${segs}</div>`;
+    if (risco && g.entrega) {
+      const xe = gtX(g.entrega) + Math.round(_gtPx / 2);
+      html += `<div class="gt-estouro" style="left:${xe}px;width:${Math.max(x1 - xe, 4)}px"></div>`;
+    }
+    if (g.entrega) html += `<div class="gt-entrega ${p.status === 'concluido' ? (g.estouro ? 'atr' : 'ok') : (g.atrasado ? 'atr' : '')}" style="left:${gtX(g.entrega) + Math.round(_gtPx / 2)}px"></div>`;
+    const xl = Math.max(x1, g.entrega ? gtX(g.entrega) + _gtPx : 0) + 12;
+    html += `<div class="gt-lbl" style="left:${xl}px">${g.prog}%${g.entrega ? ' · entrega ' + gtFmt(g.entrega).slice(0,5) : ''}${p.status !== 'concluido' ? ' · prev. ' + gtFmt(g.fim).slice(0,5) : ''}</div>`;
+    dir.push(`<div class="gt-row" style="width:${W}px" onclick="prjAbrirFicha('${p.id}')" onmousemove="prjGanttTip(event,'${p.id}')" onmouseleave="prjGanttTip(null)">${html}</div>`);
+  });
+  const n = lista.length;
+  let corpo = `<div class="gt-left-h">Projeto · etapa atual · cliente</div>
+    <div class="gt-head" style="width:${W}px"><div class="gt-head-r1">${r1.join('')}</div><div class="gt-head-r2">${r2.join('')}</div></div>
+    <div style="grid-column:2;grid-row:2 / span ${n};position:relative;pointer-events:none">${bg.join('')}</div>`;
+  lista.forEach((_, i) => { corpo += esq[i].replace('class="gt-left"', `class="gt-left" style="grid-column:1;grid-row:${i + 2}"`) + dir[i].replace('class="gt-row" style="', `class="gt-row" style="grid-column:2;grid-row:${i + 2};`); });
+  grid.innerHTML = `<div class="gt-grid" style="grid-template-columns:320px ${W}px">${corpo}</div>`;
+  const etLeg = prjEtapas().filter(e => !e.final).map(e => `<span><span class="sw" style="background:${prjEsc(e.cor)}"></span>${prjEsc(e.nome)}</span>`).join('');
+  document.getElementById('gt-legenda').innerHTML = etLeg +
+    `<span style="margin-left:auto"><span class="sw" style="background:#94a3b8"></span>Realizado</span>
+     <span><span class="sw" style="background:#94a3b8;opacity:.35;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.6) 0 3px,transparent 3px 6px)"></span>Previsto</span>
+     <span><span class="sw" style="width:10px;height:10px;transform:rotate(45deg);background:#1f2937"></span>Entrega prometida</span>
+     <span><span class="sw" style="background:repeating-linear-gradient(45deg,rgba(220,38,38,.35) 0 3px,rgba(220,38,38,.1) 3px 6px);border:1px dashed #dc2626"></span>Atraso previsto</span>
+     <span><span class="sw" style="width:2px;background:#2563eb"></span>Hoje</span>`;
+}
+
+function prjGanttTip(ev, id) {
+  const tip = document.getElementById('gt-tip'); if (!tip) return;
+  if (!ev) { tip.style.display = 'none'; return; }
+  const p = prjProjeto(id); if (!p) return;
+  if (tip.dataset.id !== id) {
+    const g = prjGanttPlano(p);
+    const et = prjEtapa(p.etapa_id);
+    const realiz = g.segs.filter(s => !s.prev).map(s => `${prjEsc(s.nome)}: ${Math.round((s.fim - s.ini) / GT_DIA)}d`).join('<br>');
+    tip.innerHTML = `<b>${prjEsc(p.codigo || '')} — ${prjEsc(p.nome)}</b><br><span class="mu">${prjEsc(prjClienteNome(p))}${p.valor ? ' · ' + fmtBRL(prjNum(p.valor)) : ''}</span><br><br>
+      Etapa atual: <b>${prjEsc(et ? et.nome : '—')}</b> (${prjDias(p.dt_etapa)}d)<br>
+      Início: ${gtFmt(g.ini)}<br>Entrega prometida: <b>${gtFmt(g.entrega)}</b><br>
+      ${p.status === 'concluido' ? 'Concluído em: <b>' + gtFmt(g.fim) + '</b>' : 'Previsão de término: <b>' + gtFmt(g.fim) + '</b>'}
+      ${g.estouro ? `<br><span style="color:#fca5a5">⚠ ${g.estouro} dia(s) além da entrega</span>` : ''}
+      <br><br><span class="mu">Tempo em cada etapa:</span><br>${realiz}`;
+    tip.dataset.id = id;
+  }
+  tip.style.display = 'block';
+  const x = Math.min(ev.clientX + 16, window.innerWidth - tip.offsetWidth - 10);
+  const y = Math.min(ev.clientY + 16, window.innerHeight - tip.offsetHeight - 10);
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+
+// ══════════════════════════════════════════════════════════════════
+// PAGAMENTO DO PROJETO → CONTAS A RECEBER
+// A forma de pagamento gera um lançamento normal em "lancreceber"
+// (mesmo formato do Lançamento a Receber, com projeto_id). Cada parcela
+// pode ser recebida aqui na ficha ou em Contas a Receber — ambos usam a
+// mesma tela/rotina de recebimento do financeiro.
+// ══════════════════════════════════════════════════════════════════
+let _prjFichaId = null;
+function prjLancsDoProjeto(id) { return (typeof db !== 'undefined' && db.lancreceber ? db.lancreceber : []).filter(l => l.projeto_id === id); }
+function prjParcelasDoProjeto(id) {
+  const ids = new Set(prjLancsDoProjeto(id).map(l => l.id));
+  if (!ids.size || typeof getParcelasReceber !== 'function') return [];
+  return [...getParcelasReceber(false), ...getParcelasReceber(true)].filter(x => ids.has(x.lancId));
+}
+function prjFinanceiroHtml(p) {
+  const lancs = prjLancsDoProjeto(p.id);
+  const parc = prjParcelasDoProjeto(p.id);
+  const hoje = prjHoje();
+  const contrato = prjNum(p.valor);
+  const lancado = lancs.reduce((s,l) => s + prjNum(l.valor), 0);
+  const rec = parc.filter(x => x.isRecebido).reduce((s,x) => s + prjNum(x.valParc), 0);
+  const abe = parc.filter(x => !x.isRecebido).reduce((s,x) => s + prjNum(x.valParc), 0);
+  const venc = parc.filter(x => !x.isRecebido && x.venc && x.venc < hoje).reduce((s,x) => s + prjNum(x.valParc), 0);
+  const falta = Math.round((contrato - lancado) * 100) / 100;
+  let html = `<div class="prj-ficha-info" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+      <div><div class="k">Valor do contrato</div><div class="x">${contrato ? fmtBRL(contrato) : '—'}</div></div>
+      <div><div class="k">Lançado no financeiro</div><div class="x">${fmtBRL(lancado)}${contrato && falta > 0.009 ? `<div style="font-size:11px;color:#b45309;font-weight:600">falta lançar ${fmtBRL(falta)}</div>` : ''}</div></div>
+      <div><div class="k">Recebido</div><div class="x" style="color:#166534">${fmtBRL(rec)}</div></div>
+      <div><div class="k">A receber</div><div class="x">${fmtBRL(abe)}${venc ? `<div><span class="badge badge-red">${fmtBRL(venc)} vencido</span></div>` : ''}</div></div>
+    </div>`;
+  if (!lancs.length) return html + '<div class="lanc-note" style="margin-top:12px">Nenhuma forma de pagamento lançada. Use "+ Forma de pagamento" para gerar as parcelas no Contas a Receber.</div>';
+  lancs.forEach((l, k) => {
+    const ps = parc.filter(x => x.lancId === l.id).sort((a,b) => a.parcIdx - b.parcIdx);
+    const algumaRec = ps.some(x => x.isRecebido);
+    html += `<div style="margin-top:14px;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#44403c">
+        Cobrança ${k + 1} · ${prjEsc(l.tipo_pag || 'forma não informada')} · ${fmtBRL(prjNum(l.valor))} em ${l.parcelas || 1}x${l.nf ? ' · NF ' + prjEsc(l.nf) : ''}
+        <span style="margin-left:auto"></span>
+        ${algumaRec ? '' : `<button class="btn btn-danger btn-sm" onclick="prjPagExcluir('${l.id}')">Excluir cobrança</button>`}
+      </div>
+      <div class="table-scroll" style="overflow:auto;margin-top:6px"><table><thead><tr><th>Parcela</th><th>Vencimento</th><th class="num">Valor</th><th>Situação</th><th>Ação</th></tr></thead><tbody>
+      ${ps.map(x => {
+        const sit = x.isRecebido ? `<span class="badge badge-green">Recebido ${x.dtrecebido ? fmtDate(x.dtrecebido) : ''}</span>`
+          : (x.venc && x.venc < hoje ? '<span class="badge badge-red">Vencida</span>' : '<span class="badge badge-yellow">A vencer</span>');
+        const acao = x.isRecebido ? `<button class="btn btn-secondary btn-sm" onclick="estornarRecebido('${x.lancId}', ${x.parcIdx})">Estornar</button>`
+          : `<button class="btn btn-primary btn-sm" onclick="marcarRecebido('${x.lancId}', ${x.parcIdx})">Receber</button>`;
+        return `<tr><td>${x.parcIdx}/${x.totalParc}</td><td>${x.venc ? fmtDate(x.venc) : '—'}</td><td class="num">${fmtBRL(prjNum(x.valParc))}</td><td>${sit}</td><td class="actions">${acao}</td></tr>`;
+      }).join('')}</tbody></table></div>`;
+  });
+  return html + '<div class="lanc-note" style="margin-top:10px">As parcelas também aparecem em Contas a Receber / Contas Recebidas (observação "Projeto ' + prjEsc(p.codigo || '') + '"). Receber por lá ou por aqui dá o mesmo resultado.</div>';
+}
+// Chamado pelo financeiro depois de receber/estornar — atualiza a ficha aberta.
+function prjAposFinanceiro() {
+  const m = document.getElementById('modal-prj-ficha');
+  if (_prjFichaId && m && m.classList.contains('open')) prjAbrirFicha(_prjFichaId);
+}
+
+function prjPagAbrir(id) {
+  const p = prjProjeto(id); if (!p) return;
+  if (!p.cliente_id) { alert('Vincule um cliente ao projeto antes de lançar o pagamento.'); return; }
+  document.getElementById('prj-pg-id').value = id;
+  document.getElementById('prj-pg-sub').textContent = `${p.codigo} — ${p.nome} · ${prjClienteNome(p)}`;
+  const lancado = prjLancsDoProjeto(id).reduce((s,l) => s + prjNum(l.valor), 0);
+  const resta = Math.round((prjNum(p.valor) - lancado) * 100) / 100;
+  document.getElementById('prj-pg-total').value = resta > 0 ? resta : (prjNum(p.valor) || '');
+  document.getElementById('prj-pg-entrada').value = '';
+  document.getElementById('prj-pg-dtentrada').value = prjHoje();
+  document.getElementById('prj-pg-n').value = 1;
+  document.getElementById('prj-pg-dt1').value = prjDataLocal(gtAdd(gtD(prjHoje()), 30).toISOString());
+  document.getElementById('prj-pg-int').value = 'm';
+  document.getElementById('prj-pg-nf').value = '';
+  const formas = typeof getFormasRecebimento === 'function' ? getFormasRecebimento() : [];
+  document.getElementById('prj-pg-forma').innerHTML = '<option value="">Não informado</option>' + formas.map(f => `<option value="${prjEsc(f)}">${prjEsc(f)}</option>`).join('');
+  const cats = (db.dfc_cats || []).filter(c => c.tipo === 'entrada' || (typeof getDfcGrupoTipo === 'function' && getDfcGrupoTipo(c.grupo) === 'entrada'));
+  document.getElementById('prj-pg-cat').innerHTML = '<option value="">Nenhuma</option>' + cats.map(c => `<option value="${c.id}">${prjEsc(c.nome)}${typeof getDreGrupoNome === 'function' ? ' (' + prjEsc(getDreGrupoNome(c.grupo)) + ')' : ''}</option>`).join('');
+  prjPagGerar();
+  openModal('modal-prj-pag');
+}
+function prjPagDatas(n) {
+  const dt1 = document.getElementById('prj-pg-dt1').value;
+  const intv = document.getElementById('prj-pg-int').value;
+  const out = [];
+  for (let i = 1; i <= n; i++) {
+    if (!dt1) { out.push(''); continue; }
+    if (intv === 'm') out.push(typeof parcelaVencimentoReceber === 'function' ? parcelaVencimentoReceber(dt1, i) : dt1);
+    else out.push(prjDataLocal(gtAdd(gtD(dt1), (i - 1) * parseInt(intv, 10)).toISOString()));
+  }
+  return out;
+}
+function prjPagGerar() {
+  const total = prjNum(document.getElementById('prj-pg-total').value);
+  const entrada = prjNum(document.getElementById('prj-pg-entrada').value);
+  const n = Math.max(0, Math.min(60, parseInt(document.getElementById('prj-pg-n').value, 10) || 0));
+  const rows = [];
+  if (entrada > 0) rows.push({ rot: 'Entrada', d: document.getElementById('prj-pg-dtentrada').value, v: entrada });
+  const resto = Math.round((total - entrada) * 100) / 100;
+  if (n > 0) {
+    const base = Math.floor(resto / n * 100) / 100;
+    const datas = prjPagDatas(n);
+    for (let i = 0; i < n; i++) {
+      const v = i === n - 1 ? Math.round((resto - base * (n - 1)) * 100) / 100 : base;
+      rows.push({ rot: `${i + 1}/${n}`, d: datas[i], v });
+    }
+  }
+  document.getElementById('prj-pg-grid').innerHTML = rows.length
+    ? '<div style="font-size:11px;color:#a8a29e;font-weight:700">#</div><div style="font-size:11px;color:#a8a29e;font-weight:700">VENCIMENTO</div><div style="font-size:11px;color:#a8a29e;font-weight:700">VALOR (R$)</div>' +
+      rows.map((r, i) => `<div><b>${r.rot}</b></div><input type="date" id="prj-pg-d${i}" value="${r.d || ''}" /><input type="number" step="any" id="prj-pg-v${i}" value="${r.v > 0 ? r.v : ''}" oninput="prjPagDif()" />`).join('')
+    : '<div style="grid-column:1/-1;font-size:12.5px;color:#a8a29e">Informe a entrada e/ou o número de parcelas.</div>';
+  document.getElementById('prj-pg-grid').dataset.n = rows.length;
+  document.getElementById('prj-pg-grid').dataset.rot = JSON.stringify(rows.map(r => r.rot));
+  prjPagDif();
+}
+function prjPagLinhas() {
+  const n = parseInt(document.getElementById('prj-pg-grid').dataset.n || '0', 10);
+  const out = [];
+  for (let i = 0; i < n; i++) out.push({ d: document.getElementById('prj-pg-d' + i).value, v: Math.round(prjNum(document.getElementById('prj-pg-v' + i).value) * 100) / 100 });
+  return out;
+}
+function prjPagDif() {
+  const total = prjNum(document.getElementById('prj-pg-total').value);
+  const soma = prjPagLinhas().reduce((s,r) => s + r.v, 0);
+  const dif = Math.round((total - soma) * 100) / 100;
+  const el = document.getElementById('prj-pg-dif');
+  el.style.color = Math.abs(dif) < 0.01 ? '#166534' : '#b45309';
+  el.textContent = Math.abs(dif) < 0.01 ? `✔ Soma das parcelas: ${fmtBRL(soma)}` : `Soma das parcelas: ${fmtBRL(soma)} · diferença de ${fmtBRL(dif)} para o total`;
+}
+async function prjPagSalvar() {
+  const id = document.getElementById('prj-pg-id').value;
+  const p = prjProjeto(id); if (!p) return;
+  const linhas = prjPagLinhas();
+  if (!linhas.length) { alert('Informe a entrada e/ou o número de parcelas.'); return; }
+  if (linhas.some(r => !r.d || !(r.v > 0))) { alert('Todas as parcelas precisam de vencimento e valor maior que zero.'); return; }
+  const total = prjNum(document.getElementById('prj-pg-total').value);
+  const soma = Math.round(linhas.reduce((s,r) => s + r.v, 0) * 100) / 100;
+  if (Math.abs(total - soma) >= 0.01 && !confirm(`A soma das parcelas (${fmtBRL(soma)}) é diferente do valor total (${fmtBRL(total)}).\n\nGerar mesmo assim com ${fmtBRL(soma)}?`)) return;
+  const N = linhas.length;
+  const empresa_id = (typeof empresaAtual === 'function' && empresaAtual()) || ((db.empresas || [])[0] || {}).id || null;
+  const lanc = {
+    id: uid(), empresa_id,
+    dtvenda: p.dt_venda || prjHoje(),
+    dtprev: linhas[0].d,
+    nf: document.getElementById('prj-pg-nf').value.trim(),
+    cliente: p.cliente_id, prod: '',
+    valor: soma, parcelas: N,
+    financeiro: 'nao', recebido: 'nao', dtrecebido: '',
+    tipo_pag: document.getElementById('prj-pg-forma').value,
+    banco: '',
+    cat_dre: document.getElementById('prj-pg-cat').value,
+    juros: null,
+    obs: `Projeto ${p.codigo || ''} — ${p.nome}`,
+    parcela_datas: N > 1 ? JSON.stringify({ datas: linhas.map(r => r.d), valores: linhas.map(r => r.v) }) : null,
+    projeto_id: p.id
+  };
+  const ok = await sbFetch('lancreceber', 'POST', lanc);
+  if (!ok) { alert('❌ Erro ao gerar o lançamento no Contas a Receber.' + sbErroDetalhe() + '\n\nConfira se o SQL "projetos_v2" foi rodado (coluna projeto_id em lancreceber).'); return; }
+  db.lancreceber.push(lanc);
+  prjAtualizarTelasFinanceiro();
+  closeModal('modal-prj-pag');
+  prjAbrirFicha(id);
+}
+async function prjPagExcluir(lancId) {
+  const l = (db.lancreceber || []).find(x => x.id === lancId); if (!l) return;
+  if (prjParcelasDoProjeto(l.projeto_id).some(x => x.lancId === lancId && x.isRecebido)) { alert('Há parcelas recebidas nesta cobrança. Estorne-as antes de excluir.'); return; }
+  if (!confirm(`Excluir esta cobrança de ${fmtBRL(prjNum(l.valor))} (${l.parcelas || 1} parcela(s)) do Contas a Receber?`)) return;
+  const ok = await sbFetch('lancreceber', 'DELETE', null, `?id=eq.${lancId}`);
+  if (!ok) { alert('❌ Erro ao excluir.' + sbErroDetalhe()); return; }
+  db.lancreceber = db.lancreceber.filter(x => x.id !== lancId);
+  prjAtualizarTelasFinanceiro();
+  prjAbrirFicha(l.projeto_id);
+}
+function prjAtualizarTelasFinanceiro() {
+  ['renderLancReceber','renderAReceber','renderRecebido','populateYearSelectsReceber','renderDashboard'].forEach(fn => {
+    try { if (typeof window[fn] === 'function') window[fn](); } catch(e) { console.warn('[projetos] ' + fn, e); }
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// PLANO DE AÇÃO 5W2H
+// Tabelas: acao_planos, acao_comentarios (SQL "projetos_v2").
+// O quê · Por quê · Onde · Quando · Quem · Como · Quanto + observação.
+// Situação "Atrasado" é calculada: prazo vencido e plano ainda aberto.
+// ══════════════════════════════════════════════════════════════════
+let acaoDb = { planos: [], coments: [] };
+let acaoCarregado = false, acaoErro = '', _acaoVisao = 'lista';
+const ACAO_ST = { pendente:'Pendente', andamento:'Em andamento', atrasado:'Atrasado', concluido:'Concluído', cancelado:'Cancelado' };
+const ACAO_ST_COR = { pendente:'#94a3b8', andamento:'#2563eb', atrasado:'#dc2626', concluido:'#16a34a', cancelado:'#a8a29e' };
+const ACAO_ST_BADGE = { pendente:'badge-gray', andamento:'badge-blue', atrasado:'badge-red', concluido:'badge-green', cancelado:'badge-gray' };
+const ACAO_PRI = { baixa:'Baixa', media:'Média', alta:'Alta' };
+
+async function acaoCarregar(forcar, silencioso) {
+  if (acaoCarregado && !forcar) return;
+  acaoErro = '';
+  const teste = await sbFetch('acao_planos', 'GET', null, '?limit=1');
+  if (teste === null) {
+    acaoErro = '⚠️ Não foi possível acessar as tabelas do Plano de Ação 5W2H.' + (silencioso ? '' : sbErroDetalhe()) +
+      '\n\nRode o SQL "projetos_v2" (acao_planos, acao_comentarios) no SQL Editor do Supabase.';
+    return;
+  }
+  const [p, c] = await Promise.all([fetchAll('acao_planos', 'numero'), fetchAll('acao_comentarios', 'dt')]);
+  acaoDb.planos = p || []; acaoDb.coments = c || [];
+  acaoCarregado = true;
+}
+async function acaoAbrirPagina(p) {
+  await acaoCarregar();
+  if (typeof prjCarregar === 'function') await prjCarregar();
+  document.querySelectorAll('.acao-aviso').forEach(el => { el.textContent = acaoErro; el.style.display = acaoErro ? 'block' : 'none'; });
+  if (p === 'acao-lista')  acaoRenderLista();
+  if (p === 'acao-painel') acaoRenderPainel();
+}
+function acaoRedesenhar() {
+  if (_paginaAtual === 'acao-lista') acaoRenderLista();
+  if (_paginaAtual === 'acao-painel') acaoRenderPainel();
+  if (typeof prjAposFinanceiro === 'function') prjAposFinanceiro();
+}
+function acaoSit(a) {
+  if ((a.status === 'pendente' || a.status === 'andamento') && a.prazo && a.prazo < prjHoje()) return 'atrasado';
+  return a.status || 'pendente';
+}
+function acaoQuemLista() { return [...new Set(acaoDb.planos.map(a => (a.quem || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'pt-BR')); }
+function acaoNum(a) { return '#' + String(a.numero || 0).padStart(3, '0'); }
+function acaoProg(a) { return a.status === 'concluido' ? 100 : Math.max(0, Math.min(100, prjNum(a.progresso))); }
+function acaoKpi(v, l, s, cor) { return `<div class="prj-kpi" style="--k:${cor}"><div class="v">${v}</div><div class="l">${l}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`; }
+function acaoKpisHtml() {
+  const L = acaoDb.planos;
+  const abertos = L.filter(a => a.status === 'pendente' || a.status === 'andamento');
+  const atras = L.filter(a => acaoSit(a) === 'atrasado');
+  const concl = L.filter(a => a.status === 'concluido');
+  const noPrazo = concl.filter(a => !a.prazo || (a.dt_conclusao || '') <= a.prazo).length;
+  const custo = abertos.reduce((s,a) => s + prjNum(a.quanto), 0);
+  return acaoKpi(abertos.length, 'Em aberto', `${L.filter(a => a.status === 'andamento').length} em andamento`, '#2563eb') +
+    acaoKpi(atras.length, 'Atrasados', 'Prazo vencido', '#dc2626') +
+    acaoKpi(concl.length, 'Concluídos', concl.length ? `${Math.round(noPrazo / concl.length * 100)}% dentro do prazo` : '—', '#16a34a') +
+    acaoKpi(fmtBRLCompacto(custo), 'Custo previsto (aberto)', fmtBRL(custo), '#f59e0b') +
+    acaoKpi(L.length ? Math.round(L.filter(a => a.status !== 'cancelado').reduce((s,a) => s + acaoProg(a), 0) / Math.max(1, L.filter(a => a.status !== 'cancelado').length)) + '%' : '—', 'Progresso médio', 'Todos os planos ativos', '#8b5cf6');
+}
+function acaoFiltrados() {
+  const termo = normText(document.getElementById('acao-busca').value || '');
+  const st = document.getElementById('acao-f-status').value;
+  const quem = document.getElementById('acao-f-quem').value;
+  const ate = document.getElementById('acao-f-ate').value;
+  return acaoDb.planos.filter(a => {
+    const sit = acaoSit(a);
+    if (st === 'abertos' && !(a.status === 'pendente' || a.status === 'andamento')) return false;
+    if (st && st !== 'abertos' && sit !== st) return false;
+    if (quem && (a.quem || '') !== quem) return false;
+    if (ate && (!a.prazo || a.prazo > ate)) return false;
+    if (termo && !normText([a.oque, a.porque, a.como, a.onde, a.quem, a.obs, acaoNum(a)].join(' ')).includes(termo)) return false;
+    return true;
+  }).sort((a,b) => String(a.prazo || '9999').localeCompare(String(b.prazo || '9999')) || (a.numero || 0) - (b.numero || 0));
+}
+function acaoVisao(v) {
+  _acaoVisao = v;
+  document.getElementById('acao-v-lista').classList.toggle('on', v === 'lista');
+  document.getElementById('acao-v-quadro').classList.toggle('on', v === 'quadro');
+  acaoRenderLista();
+}
+function acaoRenderLista() {
+  const tb = document.getElementById('acao-tb'); if (!tb) return;
+  document.getElementById('acao-kpis').innerHTML = acaoKpisHtml();
+  const sq = document.getElementById('acao-f-quem'); const vq = sq.value;
+  sq.innerHTML = '<option value="">Todos</option>' + acaoQuemLista().map(q => `<option value="${prjEsc(q)}">${prjEsc(q)}</option>`).join(''); sq.value = vq;
+  const lista = acaoFiltrados();
+  document.getElementById('acao-wrap-lista').style.display = _acaoVisao === 'lista' ? '' : 'none';
+  document.getElementById('acao-wrap-quadro').style.display = _acaoVisao === 'quadro' ? '' : 'none';
+  const corta = (t, n) => { t = String(t || ''); return t.length > n ? prjEsc(t.slice(0, n)) + '…' : prjEsc(t) || '<span style="color:#a8a29e">—</span>'; };
+  tb.innerHTML = lista.length ? lista.map(a => {
+    const sit = acaoSit(a); const pg = acaoProg(a);
+    return `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')">
+      <td style="font-family:DM Mono,monospace;font-size:12px"><b>${acaoNum(a)}</b></td>
+      <td class="w"><b>${prjEsc(a.oque)}</b>${a.prioridade === 'alta' ? ' <span class="badge badge-red">Alta</span>' : ''}${a.projeto_id && prjProjeto(a.projeto_id) ? `<div style="font-size:11px;color:#a8a29e">🪚 ${prjEsc(prjProjeto(a.projeto_id).codigo)}</div>` : ''}</td>
+      <td class="w">${corta(a.porque, 80)}</td>
+      <td style="white-space:nowrap">${prjEsc(a.quem || '—')}</td>
+      <td class="w">${corta(a.onde, 40)}</td>
+      <td style="white-space:nowrap">${a.prazo ? fmtDate(a.prazo) : '—'}${a.dt_inicio ? `<div style="font-size:11px;color:#a8a29e">início ${fmtDate(a.dt_inicio)}</div>` : ''}</td>
+      <td class="w">${corta(a.como, 80)}</td>
+      <td class="num">${a.quanto ? fmtBRL(prjNum(a.quanto)) : '—'}</td>
+      <td style="min-width:90px"><div style="font-size:11px;font-weight:700">${pg}%</div><div class="acao-prog"><span style="width:${pg}%;background:${ACAO_ST_COR[sit]}"></span></div></td>
+      <td><span class="badge ${ACAO_ST_BADGE[sit]}" style="white-space:nowrap">${ACAO_ST[sit]}</span></td>
+      <td class="actions" onclick="event.stopPropagation()"><button class="btn btn-secondary btn-sm" onclick="acaoAbrir('${a.id}')">Abrir</button></td></tr>`;
+  }).join('') + `<tr><td colspan="7" style="font-weight:700">${lista.length} plano(s)</td><td class="num" style="font-weight:700">${fmtBRL(lista.reduce((s,a) => s + prjNum(a.quanto), 0))}</td><td colspan="3"></td></tr>`
+    : `<tr><td colspan="11" class="empty-state">${acaoDb.planos.length ? 'Nenhum plano com esses filtros.' : 'Nenhum plano de ação cadastrado.'}</td></tr>`;
+  // Quadro
+  const cols = [['pendente','Pendentes'],['andamento','Em andamento'],['atrasado','Atrasados'],['concluido','Concluídos']];
+  document.getElementById('acao-kanban').innerHTML = cols.map(([k, nome]) => {
+    const l = lista.filter(a => acaoSit(a) === k);
+    return `<div class="acao-col" style="--c:${ACAO_ST_COR[k]}"><h4>${nome}<span class="prj-cnt" style="background:#fff;border:1px solid #e7e5e4;border-radius:10px;padding:1px 8px;font-size:11px">${l.length}</span></h4><div class="bd">${
+      l.map(a => `<div class="acao-card" style="--s:${ACAO_ST_COR[k]}" onclick="acaoAbrir('${a.id}')">
+        <div style="font-family:DM Mono,monospace;font-size:11px;color:#a8a29e">${acaoNum(a)}${a.prioridade === 'alta' ? ' · 🔴 Alta' : ''}</div>
+        <div class="t">${prjEsc(a.oque)}</div>
+        <div class="m">👤 ${prjEsc(a.quem || '—')} · 📅 ${a.prazo ? fmtDate(a.prazo) : '—'}${a.quanto ? ' · ' + fmtBRL(prjNum(a.quanto)) : ''}</div>
+        <div class="acao-prog"><span style="width:${acaoProg(a)}%;background:${ACAO_ST_COR[k]}"></span></div></div>`).join('') || '<div class="prj-vazio">—</div>'
+    }</div></div>`;
+  }).join('');
+}
+
+function acaoAbrir(id) {
+  if (acaoErro) { alert(acaoErro); return; }
+  const a = id ? acaoDb.planos.find(x => x.id === id) : null;
+  document.getElementById('acao-titulo').textContent = a ? `Plano de Ação ${acaoNum(a)}` : 'Novo Plano de Ação';
+  document.getElementById('acao-id').value = a ? a.id : '';
+  const set = (k, v) => document.getElementById(k).value = v == null ? '' : v;
+  set('acao-oque', a && a.oque); set('acao-porque', a && a.porque); set('acao-onde', a && a.onde); set('acao-quem', a && a.quem);
+  set('acao-inicio', a ? a.dt_inicio : prjHoje()); set('acao-prazo', a && a.prazo); set('acao-como', a && a.como);
+  set('acao-quanto', a && a.quanto); set('acao-status', a ? a.status : 'pendente'); set('acao-pri', a ? (a.prioridade || 'media') : 'media');
+  set('acao-obs', a && a.obs);
+  const pg = a ? acaoProg(a) : 0; set('acao-prog', pg); document.getElementById('acao-prog-v').textContent = pg + '%';
+  document.getElementById('acao-dl-quem').innerHTML = acaoQuemLista().map(q => `<option value="${prjEsc(q)}"></option>`).join('');
+  const sp = document.getElementById('acao-projeto');
+  sp.innerHTML = '<option value="">Nenhum</option>' + (typeof prjDb !== 'undefined' ? prjDb.projetos : [])
+    .filter(p => p.status !== 'cancelado' || (a && a.projeto_id === p.id))
+    .sort((x,y) => String(y.codigo||'').localeCompare(String(x.codigo||''), 'pt-BR', { numeric:true }))
+    .map(p => `<option value="${p.id}">${prjEsc(p.codigo || '')} — ${prjEsc(p.nome)}</option>`).join('');
+  sp.value = a ? (a.projeto_id || '') : (window._acaoProjetoPadrao || '');
+  window._acaoProjetoPadrao = '';
+  document.getElementById('acao-btn-excluir').style.display = a ? '' : 'none';
+  acaoRenderComentarios(a);
+  openModal('modal-acao');
+  setTimeout(() => document.getElementById('acao-oque').focus(), 50);
+}
+function acaoRenderComentarios(a) {
+  const box = document.getElementById('acao-coment-box');
+  if (!a) { box.innerHTML = '<div class="lanc-note">Depois de salvar, aqui ficam as atualizações do acompanhamento (com data e usuário).</div>'; return; }
+  const cs = acaoDb.coments.filter(c => c.plano_id === a.id).sort((x,y) => String(y.dt).localeCompare(String(x.dt)));
+  box.innerHTML = `<div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#57534e;margin:6px 0 8px">Atualizações (${cs.length})</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px"><input type="text" id="acao-novo-coment" placeholder="Registrar andamento, dificuldade, decisão..." onkeydown="if(event.key==='Enter')acaoComentar()" /><button class="btn btn-secondary" onclick="acaoComentar()">Registrar</button></div>
+    ${cs.map(c => `<div class="acao-coment"><div class="h">${fmtTs(c.dt)} · ${prjEsc(c.usuario || '—')}</div>${prjEsc(c.texto)}</div>`).join('') || '<div style="font-size:12.5px;color:#a8a29e">Nenhuma atualização ainda.</div>'}`;
+}
+async function acaoRegistrar(planoId, texto) {
+  const c = { id: uid(), plano_id: planoId, texto, usuario: (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.nome || currentUser.user || '') : '', dt: new Date().toISOString() };
+  const ok = await sbFetch('acao_comentarios', 'POST', c);
+  if (ok) acaoDb.coments.push(c);
+  return ok;
+}
+async function acaoComentar() {
+  const id = document.getElementById('acao-id').value; if (!id) return;
+  const inp = document.getElementById('acao-novo-coment');
+  const t = (inp.value || '').trim(); if (!t) return;
+  const ok = await acaoRegistrar(id, t);
+  if (!ok) { alert('❌ Erro ao registrar.' + sbErroDetalhe()); return; }
+  acaoRenderComentarios(acaoDb.planos.find(x => x.id === id));
+}
+async function acaoSalvar() {
+  const id = document.getElementById('acao-id').value;
+  const g = k => document.getElementById(k).value;
+  const oque = g('acao-oque').trim(), quem = g('acao-quem').trim(), prazo = g('acao-prazo');
+  if (!oque) { alert('Preencha "O quê?".'); return; }
+  if (!quem) { alert('Preencha "Quem?" (responsável).'); return; }
+  if (!prazo) { alert('Informe o prazo ("Quando?").'); return; }
+  if (g('acao-inicio') && g('acao-inicio') > prazo) { alert('A data de início é depois do prazo.'); return; }
+  const status = g('acao-status');
+  const rec = { oque, porque: g('acao-porque').trim(), onde: g('acao-onde').trim(), quem, dt_inicio: g('acao-inicio') || null, prazo,
+    como: g('acao-como').trim(), quanto: prjNum(g('acao-quanto')), projeto_id: g('acao-projeto') || null, status,
+    prioridade: g('acao-pri'), progresso: status === 'concluido' ? 100 : parseInt(g('acao-prog'), 10) || 0, obs: g('acao-obs').trim() };
+  const ant = id ? acaoDb.planos.find(x => x.id === id) : null;
+  if (status === 'concluido') rec.dt_conclusao = (ant && ant.status === 'concluido' && ant.dt_conclusao) ? ant.dt_conclusao : prjHoje();
+  else rec.dt_conclusao = null;
+  if (ant) {
+    const ok = await sbFetch('acao_planos', 'PATCH', rec, `?id=eq.${id}`);
+    if (!ok) { alert('❌ Erro ao salvar o plano.' + sbErroDetalhe()); return; }
+    const mud = [];
+    if (ant.status !== rec.status) mud.push(`Situação: ${ACAO_ST[ant.status] || ant.status} → ${ACAO_ST[rec.status]}`);
+    if ((ant.prazo || '') !== rec.prazo) mud.push(`Prazo: ${ant.prazo ? fmtDate(ant.prazo) : '—'} → ${fmtDate(rec.prazo)}`);
+    if (acaoProg(ant) !== rec.progresso && rec.status !== 'concluido') mud.push(`Progresso: ${acaoProg(ant)}% → ${rec.progresso}%`);
+    Object.assign(ant, rec);
+    if (mud.length) await acaoRegistrar(id, mud.join(' · '));
+  } else {
+    const numero = Math.max(0, ...acaoDb.planos.map(a => a.numero || 0)) + 1;
+    const novo = { id: uid(), numero, ...rec, created_at: new Date().toISOString(),
+      criado_por: (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.nome || '') : '' };
+    const ok = await sbFetch('acao_planos', 'POST', novo);
+    if (!ok) { alert('❌ Erro ao salvar o plano.' + sbErroDetalhe()); return; }
+    acaoDb.planos.push(novo);
+    await acaoRegistrar(novo.id, 'Plano criado');
+  }
+  closeModal('modal-acao');
+  acaoRedesenhar();
+}
+async function acaoExcluir() {
+  const id = document.getElementById('acao-id').value;
+  const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
+  if (!confirm(`Excluir o plano ${acaoNum(a)} — "${a.oque}"?\n\nAs atualizações registradas também serão apagadas.`)) return;
+  await sbFetch('acao_comentarios', 'DELETE', null, `?plano_id=eq.${id}`);
+  const ok = await sbFetch('acao_planos', 'DELETE', null, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao excluir.' + sbErroDetalhe()); return; }
+  acaoDb.planos = acaoDb.planos.filter(x => x.id !== id);
+  acaoDb.coments = acaoDb.coments.filter(c => c.plano_id !== id);
+  closeModal('modal-acao');
+  acaoRedesenhar();
+}
+
+function acaoRenderPainel() {
+  const box = document.getElementById('acao-p-kpis'); if (!box) return;
+  box.innerHTML = acaoKpisHtml();
+  const L = acaoDb.planos;
+  const sits = ['pendente','andamento','atrasado','concluido','cancelado'];
+  const cont = {}; sits.forEach(s => cont[s] = 0); L.forEach(a => cont[acaoSit(a)]++);
+  const maxS = Math.max(1, ...Object.values(cont));
+  document.getElementById('acao-p-status').innerHTML = sits.map(s => `<div class="prj-bar-row">
+      <div class="nm"><span class="prj-dot" style="background:${ACAO_ST_COR[s]}"></span>${ACAO_ST[s]}</div>
+      <div class="prj-bar"><span style="width:${cont[s] / maxS * 100}%;background:${ACAO_ST_COR[s]}"></span></div>
+      <div class="vl">${cont[s]}${L.length ? ' · ' + Math.round(cont[s] / L.length * 100) + '%' : ''}</div></div>`).join('');
+  const quem = acaoQuemLista().map(q => {
+    const l = L.filter(a => (a.quem || '') === q && a.status !== 'cancelado');
+    return { q, ab: l.filter(a => acaoSit(a) === 'pendente' || acaoSit(a) === 'andamento').length, at: l.filter(a => acaoSit(a) === 'atrasado').length, co: l.filter(a => a.status === 'concluido').length };
+  }).sort((a,b) => (b.at - a.at) || ((b.ab + b.at) - (a.ab + a.at)));
+  const maxQ = Math.max(1, ...quem.map(x => x.ab + x.at + x.co));
+  document.getElementById('acao-p-quem').innerHTML = quem.length ? quem.map(x => `<div class="prj-bar-row">
+      <div class="nm">👤 ${prjEsc(x.q)}</div>
+      <div class="prj-bar" style="display:flex">
+        <span style="width:${x.ab / maxQ * 100}%;background:#2563eb;border-radius:0"></span>
+        <span style="width:${x.at / maxQ * 100}%;background:#dc2626;border-radius:0"></span>
+        <span style="width:${x.co / maxQ * 100}%;background:#16a34a;border-radius:0"></span></div>
+      <div class="vl">${x.ab} · <span style="color:#dc2626">${x.at}</span> · <span style="color:#16a34a">${x.co}</span></div></div>`).join('')
+    + '<div class="lanc-note" style="margin-top:10px">Azul = em aberto no prazo · Vermelho = atrasados · Verde = concluídos</div>'
+    : '<div class="prj-vazio">Nenhum plano cadastrado.</div>';
+  const hoje = prjHoje();
+  const lim = prjDataLocal(new Date(Date.now() + 15 * 86400000).toISOString());
+  const pz = L.filter(a => (a.status === 'pendente' || a.status === 'andamento') && a.prazo && a.prazo <= lim).sort((a,b) => a.prazo.localeCompare(b.prazo));
+  document.getElementById('acao-p-prazos').innerHTML = pz.length ? pz.map(a => {
+    const sit = acaoSit(a);
+    const d = prjDias(a.prazo < hoje ? a.prazo : hoje, a.prazo < hoje ? hoje : a.prazo);
+    return `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')"><td><b>${fmtDate(a.prazo)}</b></td><td style="font-family:DM Mono,monospace;font-size:12px">${acaoNum(a)}</td>
+      <td>${prjEsc(a.oque)}</td><td>${prjEsc(a.quem || '—')}</td>
+      <td style="min-width:90px"><div style="font-size:11px;font-weight:700">${acaoProg(a)}%</div><div class="acao-prog"><span style="width:${acaoProg(a)}%;background:${ACAO_ST_COR[sit]}"></span></div></td>
+      <td>${sit === 'atrasado' ? `<span class="badge badge-red">Atrasado ${d}d</span>` : `<span class="badge badge-yellow">Faltam ${d}d</span>`}</td></tr>`;
+  }).join('') : '<tr><td colspan="6" class="empty-state">Nenhum plano atrasado ou vencendo nos próximos 15 dias.</td></tr>';
+}
+
+// Planos de ação vinculados a um projeto (seção da ficha do projeto)
+function acaoHtmlProjeto(p) {
+  if (!acaoCarregado) return '';
+  const l = acaoDb.planos.filter(a => a.projeto_id === p.id);
+  const pode = typeof currentUser === 'undefined' || !currentUser || currentUser.role === 'admin' || (currentUser.pages || []).includes('acao-lista');
+  return `<div class="lanc-sec">
+    <div class="lanc-sec-title"><span class="n">6</span>Planos de ação 5W2H<span class="hint">${pode ? `<button class="btn btn-secondary btn-sm" onclick="window._acaoProjetoPadrao='${p.id}';acaoAbrir()">+ Plano de ação</button>` : ''}</span></div>
+    ${l.length ? `<div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Nº</th><th>O quê</th><th>Quem</th><th>Quando</th><th>Progresso</th><th>Situação</th></tr></thead><tbody>${l.map(a => {
+      const sit = acaoSit(a);
+      return `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')"><td style="font-family:DM Mono,monospace;font-size:12px">${acaoNum(a)}</td><td>${prjEsc(a.oque)}</td><td>${prjEsc(a.quem || '—')}</td><td>${a.prazo ? fmtDate(a.prazo) : '—'}</td><td>${acaoProg(a)}%</td><td><span class="badge ${ACAO_ST_BADGE[sit]}">${ACAO_ST[sit]}</span></td></tr>`;
+    }).join('')}</tbody></table></div>` : '<div style="font-size:12.5px;color:#a8a29e">Nenhum plano de ação vinculado.</div>'}
+  </div>`;
 }
 </script>
 </body>
