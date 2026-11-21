@@ -1168,6 +1168,24 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .acao-coment { border-left:3px solid #e7e5e4; padding:6px 0 6px 12px; margin-bottom:8px; font-size:13px; }
 .acao-coment .h { font-size:11px; color:#a8a29e; margin-bottom:2px; }
 .acao-tab td.w { max-width:220px; white-space:normal; font-size:12.5px; }
+/* Cronômetro 5W2H */
+.acao-play { border:1px solid #e7e5e4; background:#fff; border-radius:8px; width:30px; height:28px; cursor:pointer; font-size:12px; display:inline-flex; align-items:center; justify-content:center; color:#16a34a; }
+.acao-play.on { background:#dc2626; border-color:#dc2626; color:#fff; animation:acaoPulse 1.6s infinite; }
+.acao-play:hover { box-shadow:0 2px 8px rgba(15,30,58,.15); }
+@keyframes acaoPulse { 0%{box-shadow:0 0 0 0 rgba(220,38,38,.45)} 70%{box-shadow:0 0 0 8px rgba(220,38,38,0)} 100%{box-shadow:0 0 0 0 rgba(220,38,38,0)} }
+.acao-cron { font-family:'DM Mono',monospace; font-size:12px; font-weight:700; color:#1f2937; }
+.acao-cron.rodando { color:#dc2626; }
+.acao-fora { font-size:10.5px; color:#b45309; font-weight:600; }
+.acao-ok-btn { border:1px solid #86efac; background:#f0fdf4; color:#166534; border-radius:8px; height:28px; padding:0 9px; cursor:pointer; font-size:12px; font-weight:700; }
+.acao-ok-btn:hover { background:#dcfce7; }
+#acao-flutuante { position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:400; background:#1f2937; color:#fff; border-radius:14px; padding:9px 10px 9px 14px; display:flex; align-items:center; gap:12px; box-shadow:0 10px 30px rgba(0,0,0,.3); font-size:12.5px; max-width:92vw; }
+#acao-flutuante .dot { width:9px; height:9px; border-radius:50%; background:#ef4444; animation:acaoPulse 1.6s infinite; flex:0 0 9px; }
+#acao-flutuante .tx { cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:380px; }
+#acao-flutuante .acao-cron { color:#fff; font-size:15px; }
+#acao-flutuante button { border:none; background:#dc2626; color:#fff; border-radius:9px; padding:7px 12px; cursor:pointer; font-weight:700; font-size:12px; }
+.acao-svg-leg { display:flex; flex-wrap:wrap; gap:14px; font-size:11.5px; color:#57534e; margin-top:6px; }
+.acao-svg-leg span.sw { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:5px; vertical-align:-2px; }
+.acao-h-tb input[type=time] { padding:6px 8px; width:110px; }
 </style>
 </head>
 <body>
@@ -1455,7 +1473,11 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
         </div>
         <div class="nav-sub-item" onclick="showPage('acao-painel')" id="nav-acao-painel">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
-          Painel 5W2H
+          Dashboard 5W2H
+        </div>
+        <div class="nav-sub-item" onclick="showPage('acao-horario')" id="nav-acao-horario">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Horário de Trabalho
         </div>
       </div>
 
@@ -1656,12 +1678,13 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <div class="form-group"><label>Situação</label><select id="acao-f-status" onchange="acaoRenderLista()"><option value="">Todas</option><option value="abertos" selected>Em aberto (pendentes + andamento)</option><option value="pendente">Pendente</option><option value="andamento">Em andamento</option><option value="atrasado">Atrasados</option><option value="concluido">Concluído</option><option value="cancelado">Cancelado</option></select></div>
           <div class="form-group"><label>Responsável (Quem)</label><select id="acao-f-quem" onchange="acaoRenderLista()"><option value="">Todos</option></select></div>
           <div class="form-group"><label>Prazo até</label><input type="date" id="acao-f-ate" onchange="acaoRenderLista()" /></div>
+          <div class="form-group"><label>Lead time a partir de</label><select id="acao-lt-base" onchange="acaoSetBase(this.value)"><option value="abertura">Data de abertura</option><option value="inicio">Data de início (Quando)</option></select></div>
           <div class="form-group" style="min-width:auto"><label>Visualizar</label>
             <div class="gt-zoom"><button id="acao-v-lista" class="on" onclick="acaoVisao('lista')">Lista</button><button id="acao-v-quadro" onclick="acaoVisao('quadro')">Quadro</button></div>
           </div>
         </div>
         <div id="acao-wrap-lista" class="table-scroll" style="overflow:auto"><table class="acao-tab"><thead><tr>
-          <th>Nº</th><th>O quê</th><th>Por quê</th><th>Quem</th><th>Onde</th><th>Quando</th><th>Como</th><th class="num">Quanto</th><th>Progresso</th><th>Situação</th><th>Ações</th>
+          <th>Nº</th><th>O quê</th><th>Por quê</th><th>Quem</th><th>Onde</th><th>Quando</th><th>Como</th><th class="num">Quanto</th><th style="text-align:center">Lead time</th><th style="text-align:center">Tempo trabalhado</th><th>Progresso</th><th>Situação</th><th>Ações</th>
         </tr></thead><tbody id="acao-tb"></tbody></table></div>
         <div id="acao-wrap-quadro" style="display:none"><div class="acao-kanban" id="acao-kanban"></div></div>
       </div>
@@ -1670,17 +1693,54 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
     <!-- ══ PLANO DE AÇÃO 5W2H — PAINEL ══ -->
     <div class="page" id="page-acao-painel">
       <div class="page-header">
-        <div><div class="page-title">Painel 5W2H</div><div class="page-sub" style="margin-bottom:0">Andamento dos planos de ação, responsáveis e prazos</div></div>
+        <div><div class="page-title">Painel 5W2H</div><div class="page-sub" style="margin-bottom:0">Lead time, tempo de resposta, volume por mês, responsáveis e horas trabalhadas</div></div>
       </div>
       <div class="est-aviso acao-aviso" style="display:none"></div>
-      <div class="prj-kpis" id="acao-p-kpis" style="margin-top:16px"></div>
+      <div class="prj-filtros" style="margin-top:12px">
+        <div class="form-group"><label>Ano</label><select id="ap-ano" onchange="acaoRenderPainel()"></select></div>
+        <div class="form-group"><label>Responsável (Quem)</label><select id="ap-quem" onchange="acaoRenderPainel()"><option value="">Todos</option></select></div>
+        <div class="form-group"><label>Projeto</label><select id="ap-proj" onchange="acaoRenderPainel()"><option value="">Todos</option></select></div>
+        <div class="form-group"><label>Lead time a partir de</label><select id="ap-base" onchange="acaoSetBase(this.value)"><option value="abertura">Data de abertura</option><option value="inicio">Data de início (Quando)</option></select></div>
+      </div>
+      <div class="prj-kpis" id="acao-p-kpis"></div>
+      <div class="card"><div class="card-title">Planos abertos × concluídos por mês</div><div id="ap-g-mes"></div></div>
+      <div class="prj-grid2">
+        <div class="card"><div class="card-title">Lead time e tempo de resposta médios por mês (dias)</div><div id="ap-g-lt"></div></div>
+        <div class="card"><div class="card-title">Distribuição do lead time (planos concluídos)</div><div id="ap-g-faixa"></div></div>
+      </div>
       <div class="prj-grid2">
         <div class="card"><div class="card-title">Planos por situação</div><div id="acao-p-status"></div></div>
-        <div class="card"><div class="card-title">Por responsável (em aberto × atrasados × concluídos)</div><div id="acao-p-quem"></div></div>
+        <div class="card"><div class="card-title">Horas trabalhadas (play) por projeto</div><div id="ap-g-horas-proj"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Por responsável</div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Responsável</th><th style="text-align:center">Abertos no ano</th><th style="text-align:center">Em aberto</th><th style="text-align:center">Atrasados</th><th style="text-align:center">Concluídos</th><th style="text-align:center">% no prazo</th><th style="text-align:center">Lead time médio</th><th style="text-align:center">Resposta média</th><th style="text-align:center">Horas trabalhadas</th></tr></thead><tbody id="ap-tb-quem"></tbody></table></div>
       </div>
       <div class="card">
         <div class="card-title">Atrasados e vencendo nos próximos 15 dias</div>
-        <div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Quando</th><th>Nº</th><th>O quê</th><th>Quem</th><th>Progresso</th><th>Situação</th></tr></thead><tbody id="acao-p-prazos"></tbody></table></div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Quando</th><th>Nº</th><th>O quê</th><th>Quem</th><th style="text-align:center">Lead time</th><th>Progresso</th><th>Situação</th></tr></thead><tbody id="acao-p-prazos"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ══ PLANO DE AÇÃO 5W2H — HORÁRIO DE TRABALHO ══ -->
+    <div class="page" id="page-acao-horario">
+      <div class="page-header">
+        <div><div class="page-title">Horário de Trabalho</div><div class="page-sub" style="margin-bottom:0">O cronômetro (▶ play) dos planos de ação só conta o tempo dentro destes horários</div></div>
+        <button class="btn-novo" onclick="acaoSalvarHorario()">💾 Salvar horário</button>
+      </div>
+      <div class="est-aviso acao-aviso" style="display:none"></div>
+      <div class="prj-grid2" style="margin-top:16px;grid-template-columns:minmax(0,1fr)">
+        <div class="card">
+          <div class="card-title">Dias e períodos</div>
+          <div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Dia</th><th style="text-align:center">Trabalha</th><th>Período 1</th><th>Período 2</th><th style="text-align:center">Horas</th></tr></thead><tbody id="ah-tb"></tbody></table></div>
+          <div class="lanc-note" style="margin-top:12px" id="ah-total"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Feriados e dias sem expediente</div>
+          <div style="display:flex;gap:8px;margin-bottom:12px"><input type="date" id="ah-fer-data" style="max-width:170px" /><input type="text" id="ah-fer-desc" placeholder="Descrição (opcional)" /><button class="btn btn-secondary" onclick="acaoAddFeriado()">+ Adicionar</button></div>
+          <div id="ah-feriados"></div>
+          <div class="lanc-note" style="margin-top:12px">Nos feriados o cronômetro não conta tempo. Alterações valem para as contagens feitas daqui em diante — os tempos já encerrados não são recalculados.</div>
+        </div>
       </div>
     </div>
     <!-- ══ CONTROLE DE ESTOQUE — PRODUTOS ══ -->
@@ -3873,6 +3933,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
     </div>
     <div class="lanc-body">
       <input type="hidden" id="acao-id" />
+      <div id="acao-resumo"></div>
       <div class="lanc-sec">
         <div class="lanc-sec-title"><span class="n">5W</span>O quê, por quê, onde, quando e quem</div>
         <div class="grid2 form-compacto">
@@ -3880,6 +3941,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <div class="form-group" style="grid-column:span 2"><label><span class="acao-w">W</span>Por quê? (Why)</label><textarea id="acao-porque" rows="2" placeholder="Justificativa / problema que resolve"></textarea></div>
           <div class="form-group"><label><span class="acao-w">W</span>Onde? (Where)</label><input id="acao-onde" type="text" placeholder="Setor, local, processo" /></div>
           <div class="form-group"><label><span class="acao-w">W</span>Quem? (Who) *</label><input id="acao-quem" type="text" list="acao-dl-quem" placeholder="Responsável" /><datalist id="acao-dl-quem"></datalist></div>
+          <div class="form-group"><label>Data de abertura *<span style="font-weight:400;color:#a8a29e"> (base do lead time)</span></label><input id="acao-abertura" type="date" /></div>
           <div class="form-group"><label><span class="acao-w">W</span>Quando? Início</label><input id="acao-inicio" type="date" /></div>
           <div class="form-group"><label><span class="acao-w">W</span>Quando? Prazo *</label><input id="acao-prazo" type="date" /></div>
         </div>
@@ -3900,6 +3962,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <div class="form-group"><label>Progresso: <b id="acao-prog-v">0%</b></label><input id="acao-prog" type="range" min="0" max="100" step="5" value="0" oninput="document.getElementById('acao-prog-v').textContent=this.value+'%'" style="padding:0" /></div>
           <div class="form-group" style="grid-column:span 3"><label>Observação</label><textarea id="acao-obs" rows="2"></textarea></div>
         </div>
+        <div id="acao-tempo-box" style="margin-top:6px"></div>
         <div id="acao-coment-box" style="margin-top:6px"></div>
       </div>
     </div>
@@ -3907,10 +3970,15 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
       <button class="btn btn-danger" id="acao-btn-excluir" onclick="acaoExcluir()">Excluir</button>
       <span class="lanc-foot-info"></span>
       <button class="btn btn-secondary" onclick="closeModal('modal-acao')">Cancelar</button>
+      <button class="btn btn-secondary" id="acao-btn-play" style="display:none"></button>
+      <button class="btn btn-secondary" id="acao-btn-concluir" style="color:#166534;border-color:#86efac" onclick="acaoConcluir(document.getElementById('acao-id').value)">✔ Concluir</button>
       <button class="btn btn-primary" onclick="acaoSalvar()">Salvar Plano</button>
     </div>
   </div>
 </div>
+
+<!-- ══ CRONÔMETRO FLUTUANTE (5W2H) ══ -->
+<div id="acao-flutuante" style="display:none"></div>
 <!-- ══ MODAL ESTOQUE — PRODUTO ══ -->
 <div class="modal-overlay" id="modal-est-produto">
   <div class="modal lanc-modal">
@@ -5086,7 +5154,8 @@ const PAGES_CONFIG = [
   { id:'proj-cancelados',   label:'Projetos — Cancelados',   grupo:'projetos' },
   { id:'proj-etapas',       label:'Projetos — Etapas',       grupo:'projetos' },
   { id:'acao-lista',        label:'5W2H — Planos de Ação',   grupo:'acao' },
-  { id:'acao-painel',       label:'5W2H — Painel',           grupo:'acao' },
+  { id:'acao-painel',       label:'5W2H — Dashboard',        grupo:'acao' },
+  { id:'acao-horario',      label:'5W2H — Horário de Trabalho', grupo:'acao' },
 ];
 
 // ══════════════════════════════════════════
@@ -9206,7 +9275,7 @@ const BACKUP_TABELAS = ['empresas','fornecedores','produtos','lancamentos','fatu
   'metas','clientes','prodvenda','lancreceber','dfc_categorias','dfc_subcategorias','dfc_lancamentos',
   'bancos','dre_grupos','transferencias','pedidos_cancelados','reposicoes','cartoes','cartao_despesas',
   'config','est_tipos','est_produtos','est_lancamentos',
-  'proj_etapas','proj_projetos','proj_historico','proj_motivos','acao_planos','acao_comentarios'];
+  'proj_etapas','proj_projetos','proj_historico','proj_motivos','acao_planos','acao_comentarios','acao_tempos'];
 
 // Busca, direto do banco, todas as tabelas de dados do sistema.
 async function buscarDadosCompletos() {
@@ -11417,6 +11486,10 @@ async function renderUsuariosAdmin() {
       <div class="user-avatar ${isAdmin ? 'admin-av' : ''}">${initial}</div>
       <div class="user-info">
         <div class="user-info-name">${u.nome} ${isAdmin ? '<span class="admin-only-badge">Admin</span>' : ''}</div>
+        <div style="display:flex;gap:6px;margin:4px 0 2px">
+          <button class="btn btn-secondary btn-sm" onclick="usrEditarNome('${u.user}')">✏️ Editar nome</button>
+          ${(!isAdmin && !(currentUser && currentUser.user === u.user)) ? `<button class="btn btn-danger btn-sm" onclick="usrExcluir('${u.user}')">🗑 Excluir</button>` : ''}
+        </div>
         <div class="user-info-user">@${u.user}</div>
         <div class="user-info-login">${lastLoginStr}</div>
         <div class="user-info-login" id="last-activity-${u.user}" style="color:#a8a29e">🕓 Última atividade no sistema: carregando...</div>
@@ -21001,62 +21074,380 @@ function prjAtualizarTelasFinanceiro() {
 
 // ══════════════════════════════════════════════════════════════════
 // PLANO DE AÇÃO 5W2H
-// Tabelas: acao_planos, acao_comentarios (SQL "projetos_v2").
+// Tabelas: acao_planos, acao_comentarios, acao_tempos (SQL v2/v3).
 // O quê · Por quê · Onde · Quando · Quem · Como · Quanto + observação.
-// Situação "Atrasado" é calculada: prazo vencido e plano ainda aberto.
+// • "Atrasado" é calculado: prazo vencido e plano ainda aberto.
+// • Lead time = da data de abertura (ou do início) até a conclusão — ou
+//   até hoje, se o plano ainda está aberto.
+// • Tempo de resposta = da abertura até a 1ª ação (play, mudança para
+//   "em andamento", atualização registrada ou conclusão).
+// • Play: o início fica gravado no banco, então o cronômetro continua
+//   contando mesmo se a pessoa fechar a tela/navegador, até apertar parar.
+//   Só conta tempo dentro do Horário de Trabalho configurado.
 // ══════════════════════════════════════════════════════════════════
-let acaoDb = { planos: [], coments: [] };
+let acaoDb = { planos: [], coments: [], tempos: [] };
 let acaoCarregado = false, acaoErro = '', _acaoVisao = 'lista';
+let acaoHorario = null, _acaoHorEdit = null;
+let acaoLtBase = (function(){ try { return localStorage.getItem('acao_lt_base') || 'abertura'; } catch(e) { return 'abertura'; } })();
 const ACAO_ST = { pendente:'Pendente', andamento:'Em andamento', atrasado:'Atrasado', concluido:'Concluído', cancelado:'Cancelado' };
 const ACAO_ST_COR = { pendente:'#94a3b8', andamento:'#2563eb', atrasado:'#dc2626', concluido:'#16a34a', cancelado:'#a8a29e' };
 const ACAO_ST_BADGE = { pendente:'badge-gray', andamento:'badge-blue', atrasado:'badge-red', concluido:'badge-green', cancelado:'badge-gray' };
-const ACAO_PRI = { baixa:'Baixa', media:'Média', alta:'Alta' };
+const ACAO_DIAS = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+const ACAO_MESES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 
+// ── Carga ──
 async function acaoCarregar(forcar, silencioso) {
   if (acaoCarregado && !forcar) return;
   acaoErro = '';
   const teste = await sbFetch('acao_planos', 'GET', null, '?limit=1');
   if (teste === null) {
     acaoErro = '⚠️ Não foi possível acessar as tabelas do Plano de Ação 5W2H.' + (silencioso ? '' : sbErroDetalhe()) +
-      '\n\nRode o SQL "projetos_v2" (acao_planos, acao_comentarios) no SQL Editor do Supabase.';
+      '\n\nRode os SQL "projetos_v2" e "projetos_v3" no SQL Editor do Supabase.';
     return;
   }
-  const [p, c] = await Promise.all([fetchAll('acao_planos', 'numero'), fetchAll('acao_comentarios', 'dt')]);
-  acaoDb.planos = p || []; acaoDb.coments = c || [];
+  const [p, c, t] = await Promise.all([fetchAll('acao_planos', 'numero'), fetchAll('acao_comentarios', 'dt'), fetchAll('acao_tempos', 'inicio')]);
+  acaoDb.planos = p || []; acaoDb.coments = c || []; acaoDb.tempos = t || [];
+  const tt = await sbFetch('acao_tempos', 'GET', null, '?limit=1');
+  if (tt === null) acaoErro = '⚠️ Falta a tabela acao_tempos (cronômetro). Rode o SQL "projetos_v3" no Supabase.';
+  if (!acaoHorario) await acaoCarregarHorario();
   acaoCarregado = true;
 }
 async function acaoAbrirPagina(p) {
-  await acaoCarregar();
+  await acaoCarregar(true);
   if (typeof prjCarregar === 'function') await prjCarregar();
   document.querySelectorAll('.acao-aviso').forEach(el => { el.textContent = acaoErro; el.style.display = acaoErro ? 'block' : 'none'; });
-  if (p === 'acao-lista')  acaoRenderLista();
-  if (p === 'acao-painel') acaoRenderPainel();
+  acaoSincBase();
+  if (p === 'acao-lista')   acaoRenderLista();
+  if (p === 'acao-painel')  acaoRenderPainel();
+  if (p === 'acao-horario') acaoRenderHorario();
+  acaoAtualizarFlutuante();
 }
 function acaoRedesenhar() {
   if (_paginaAtual === 'acao-lista') acaoRenderLista();
   if (_paginaAtual === 'acao-painel') acaoRenderPainel();
   if (typeof prjAposFinanceiro === 'function') prjAposFinanceiro();
+  acaoAtualizarFlutuante();
 }
+
+// ── Utilidades ──
 function acaoSit(a) {
   if ((a.status === 'pendente' || a.status === 'andamento') && a.prazo && a.prazo < prjHoje()) return 'atrasado';
   return a.status || 'pendente';
 }
+function acaoAberto(a) { return a.status === 'pendente' || a.status === 'andamento'; }
 function acaoQuemLista() { return [...new Set(acaoDb.planos.map(a => (a.quem || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'pt-BR')); }
 function acaoNum(a) { return '#' + String(a.numero || 0).padStart(3, '0'); }
 function acaoProg(a) { return a.status === 'concluido' ? 100 : Math.max(0, Math.min(100, prjNum(a.progresso))); }
 function acaoKpi(v, l, s, cor) { return `<div class="prj-kpi" style="--k:${cor}"><div class="v">${v}</div><div class="l">${l}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`; }
-function acaoKpisHtml() {
+function acaoMeuUser() { return (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.user || currentUser.email || currentUser.nome || '') : ''; }
+function acaoMeuNome() { return (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.nome || currentUser.user || '') : ''; }
+function acaoDtAbertura(a) { return a.dt_abertura || prjDataLocal(a.created_at) || prjHoje(); }
+function acaoDtBase(a) { return acaoLtBase === 'inicio' ? (a.dt_inicio || acaoDtAbertura(a)) : acaoDtAbertura(a); }
+function acaoLead(a) {          // dias corridos
+  if (a.status === 'cancelado') return null;
+  const fim = a.status === 'concluido' ? (a.dt_conclusao || prjHoje()) : prjHoje();
+  const ini = acaoDtBase(a);
+  return fim >= ini ? prjDias(ini, fim) : 0;
+}
+function acaoResposta(a) {      // dias (com fração) da abertura até a 1ª ação
+  if (!a.dt_primeira_acao) return null;
+  const d = (new Date(a.dt_primeira_acao) - gtD(acaoDtAbertura(a))) / 86400000;
+  return Math.max(0, d);
+}
+function acaoFmtDias(d) {
+  if (d == null || isNaN(d)) return '—';
+  if (d < 1) return Math.round(d * 24) + 'h';
+  return (Math.round(d * 10) / 10).toString().replace('.', ',') + 'd';
+}
+function acaoFmtCron(seg) {
+  seg = Math.max(0, Math.floor(seg || 0));
+  const h = Math.floor(seg / 3600), m = Math.floor(seg % 3600 / 60), s = seg % 60;
+  return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+function acaoFmtHoras(seg) {
+  seg = Math.max(0, Math.floor(seg || 0));
+  const h = Math.floor(seg / 3600), m = Math.round(seg % 3600 / 60);
+  return h ? `${h}h ${String(m).padStart(2,'0')}min` : `${m}min`;
+}
+function acaoSetBase(v) {
+  acaoLtBase = v === 'inicio' ? 'inicio' : 'abertura';
+  try { localStorage.setItem('acao_lt_base', acaoLtBase); } catch(e) {}
+  acaoSincBase();
+  acaoRedesenhar();
+}
+function acaoSincBase() { ['acao-lt-base','ap-base'].forEach(id => { const el = document.getElementById(id); if (el) el.value = acaoLtBase; }); }
+
+// ══ HORÁRIO DE TRABALHO ══
+function acaoHorarioPadrao() {
+  return { dias: ACAO_DIAS.map((_, i) => (i >= 1 && i <= 5)
+      ? { ativo: true, p1i: '08:00', p1f: '12:00', p2i: '13:30', p2f: '18:00' }
+      : { ativo: false, p1i: '', p1f: '', p2i: '', p2f: '' }), feriados: [] };
+}
+async function acaoCarregarHorario() {
+  const r = await sbFetch('config', 'GET', null, '?key=eq.acao_horario_trabalho&limit=1');
+  try { acaoHorario = (r && r[0] && r[0].value) ? JSON.parse(r[0].value) : acaoHorarioPadrao(); }
+  catch(e) { acaoHorario = acaoHorarioPadrao(); }
+  if (!acaoHorario.dias || acaoHorario.dias.length !== 7) acaoHorario = acaoHorarioPadrao();
+  acaoHorario.feriados = acaoHorario.feriados || [];
+}
+function acaoMin(hhmm) { if (!hhmm) return null; const [h, m] = String(hhmm).split(':').map(Number); return isNaN(h) ? null : h * 60 + (m || 0); }
+// Segundos dentro do horário de trabalho entre dois instantes.
+function acaoSegUteis(ini, fim, H) {
+  const a = new Date(ini), b = new Date(fim);
+  if (!(b > a)) return 0;
+  H = H || acaoHorario || acaoHorarioPadrao();
+  const fer = new Set((H.feriados || []).map(f => f.data));
+  let tot = 0, guard = 0;
+  const d = new Date(a); d.setHours(0, 0, 0, 0);
+  while (d < b && guard++ < 5000) {
+    const cfg = H.dias[d.getDay()];
+    if (cfg && cfg.ativo && !fer.has(prjDataLocal(d.toISOString()))) {
+      [[cfg.p1i, cfg.p1f], [cfg.p2i, cfg.p2f]].forEach(([i, f]) => {
+        const mi = acaoMin(i), mf = acaoMin(f);
+        if (mi == null || mf == null || mf <= mi) return;
+        const s = new Date(d); s.setHours(0, mi, 0, 0);
+        const e = new Date(d); e.setHours(0, mf, 0, 0);
+        const x0 = Math.max(s, a), x1 = Math.min(e, b);
+        if (x1 > x0) tot += (x1 - x0) / 1000;
+      });
+    }
+    d.setDate(d.getDate() + 1);
+  }
+  return Math.floor(tot);
+}
+function acaoNoExpediente(t) { t = t || new Date(); return acaoSegUteis(new Date(t - 60000), t) > 0; }
+function acaoHorasDia(c) {
+  if (!c || !c.ativo) return 0;
+  let m = 0; [[c.p1i, c.p1f], [c.p2i, c.p2f]].forEach(([i, f]) => { const a = acaoMin(i), b = acaoMin(f); if (a != null && b != null && b > a) m += b - a; });
+  return m / 60;
+}
+async function acaoRenderHorario() {
+  if (!acaoHorario) await acaoCarregarHorario();
+  _acaoHorEdit = JSON.parse(JSON.stringify(acaoHorario));
+  const tb = document.getElementById('ah-tb'); if (!tb) return;
+  const ordem = [1,2,3,4,5,6,0];
+  tb.innerHTML = ordem.map(i => {
+    const c = _acaoHorEdit.dias[i];
+    const t = (k) => `<input type="time" id="ah-${k}-${i}" value="${c[k] || ''}" onchange="acaoHorarioCalc()" style="padding:5px 6px;width:118px" />`;
+    return `<tr><td><b>${ACAO_DIAS[i]}</b></td>
+      <td style="text-align:center"><input type="checkbox" id="ah-at-${i}" ${c.ativo ? 'checked' : ''} onchange="acaoHorarioCalc()" style="width:16px;height:16px" /></td>
+      <td style="white-space:nowrap">${t('p1i')} às ${t('p1f')}</td>
+      <td style="white-space:nowrap">${t('p2i')} às ${t('p2f')}</td>
+      <td style="text-align:center;font-family:DM Mono,monospace" id="ah-h-${i}"></td></tr>`;
+  }).join('');
+  acaoHorarioCalc();
+  acaoRenderFeriados();
+}
+function acaoHorarioLerTela() {
+  for (let i = 0; i < 7; i++) {
+    const g = k => (document.getElementById(`ah-${k}-${i}`) || {}).value || '';
+    _acaoHorEdit.dias[i] = { ativo: !!(document.getElementById('ah-at-' + i) || {}).checked, p1i: g('p1i'), p1f: g('p1f'), p2i: g('p2i'), p2f: g('p2f') };
+  }
+}
+function acaoHorarioCalc() {
+  acaoHorarioLerTela();
+  let tot = 0;
+  for (let i = 0; i < 7; i++) {
+    const h = acaoHorasDia(_acaoHorEdit.dias[i]); tot += h;
+    const el = document.getElementById('ah-h-' + i);
+    if (el) el.textContent = h ? h.toFixed(2).replace('.', ',').replace(',00', '') + 'h' : '—';
+  }
+  const t = document.getElementById('ah-total');
+  if (t) t.innerHTML = `Carga semanal: <b>${tot.toFixed(2).replace('.', ',').replace(',00', '')} horas</b>. Agora ${acaoNoExpediente() ? '<b style="color:#166534">está</b>' : '<b style="color:#b45309">não está</b>'} dentro do horário salvo.`;
+}
+function acaoRenderFeriados() {
+  const box = document.getElementById('ah-feriados'); if (!box) return;
+  const l = [...(_acaoHorEdit.feriados || [])].sort((a,b) => a.data.localeCompare(b.data));
+  box.innerHTML = l.length ? `<table><tbody>${l.map(f => `<tr><td style="white-space:nowrap"><b>${fmtDate(f.data)}</b></td><td>${prjEsc(f.desc || '')}</td>
+      <td class="actions"><button class="btn btn-danger btn-sm" onclick="acaoRemFeriado('${f.data}')">Remover</button></td></tr>`).join('')}</tbody></table>`
+    : '<div style="font-size:12.5px;color:#a8a29e">Nenhum feriado cadastrado.</div>';
+}
+async function acaoAddFeriado() {
+  const data = document.getElementById('ah-fer-data').value;
+  if (!data) { alert('Informe a data.'); return; }
+  acaoHorarioLerTela();
+  _acaoHorEdit.feriados = (_acaoHorEdit.feriados || []).filter(f => f.data !== data);
+  _acaoHorEdit.feriados.push({ data, desc: document.getElementById('ah-fer-desc').value.trim() });
+  document.getElementById('ah-fer-data').value = ''; document.getElementById('ah-fer-desc').value = '';
+  await acaoSalvarHorario(true);
+}
+async function acaoRemFeriado(data) {
+  acaoHorarioLerTela();
+  _acaoHorEdit.feriados = (_acaoHorEdit.feriados || []).filter(f => f.data !== data);
+  await acaoSalvarHorario(true);
+}
+async function acaoSalvarHorario(silencioso) {
+  if (!_acaoHorEdit) return;
+  if (!silencioso) acaoHorarioLerTela();
+  for (let i = 0; i < 7; i++) {
+    const c = _acaoHorEdit.dias[i];
+    for (const [a, b] of [[c.p1i, c.p1f], [c.p2i, c.p2f]]) {
+      if ((a && !b) || (!a && b)) { alert(`${ACAO_DIAS[i]}: preencha início e fim do período (ou deixe os dois em branco).`); return; }
+      if (a && b && acaoMin(b) <= acaoMin(a)) { alert(`${ACAO_DIAS[i]}: o fim do período precisa ser depois do início.`); return; }
+    }
+    if (c.p1f && c.p2i && acaoMin(c.p2i) < acaoMin(c.p1f)) { alert(`${ACAO_DIAS[i]}: o período 2 começa antes do fim do período 1.`); return; }
+    if (c.ativo && !acaoHorasDia(c)) { alert(`${ACAO_DIAS[i]} está marcado como dia de trabalho, mas sem horário.`); return; }
+  }
+  const value = JSON.stringify(_acaoHorEdit);
+  const filtro = '?key=eq.acao_horario_trabalho';
+  const ex = await sbFetch('config', 'GET', null, filtro + '&select=id');
+  if (ex === null) { alert('❌ Erro ao acessar a configuração.' + sbErroDetalhe()); return; }
+  const ok = ex.length ? await sbFetch('config', 'PATCH', { value }, filtro)
+                       : await sbFetch('config', 'POST', { id: uid(), key: 'acao_horario_trabalho', value });
+  if (!ok) { alert('❌ Erro ao salvar o horário.' + sbErroDetalhe()); return; }
+  acaoHorario = JSON.parse(value);
+  acaoRenderHorario();
+  if (!silencioso) alert('✅ Horário de trabalho salvo.');
+}
+
+// ══ CRONÔMETRO (PLAY) ══
+function acaoRodando(planoId) { return acaoDb.tempos.find(t => t.plano_id === planoId && !t.fim) || null; }
+function acaoMeuRodando() { const u = acaoMeuUser(); return acaoDb.tempos.find(t => !t.fim && t.usuario === u) || null; }
+function acaoSegTempo(t) { return t.fim ? prjNum(t.segundos) : acaoSegUteis(t.inicio, new Date()); }
+function acaoSegPlano(planoId) { return acaoDb.tempos.filter(t => t.plano_id === planoId).reduce((s,t) => s + acaoSegTempo(t), 0); }
+function acaoPlayHtml(a) {
+  const r = acaoRodando(a.id);
+  const aberto = acaoAberto(a);
+  const outro = r && r.usuario !== acaoMeuUser();
+  return `<div style="display:flex;align-items:center;gap:7px;white-space:nowrap">
+      ${aberto || r ? `<button class="acao-play ${r ? 'on' : ''}" title="${r ? 'Parar' : 'Iniciar'} cronômetro" onclick="event.stopPropagation();acaoPlay('${a.id}')">${r ? '⏸' : '▶'}</button>` : ''}
+      <span class="acao-cron ${r ? 'rodando' : ''}" data-plano="${a.id}">${acaoFmtCron(acaoSegPlano(a.id))}</span></div>
+    ${r ? `<div class="acao-fora" data-fora="${a.id}">${outro ? '👤 ' + prjEsc(r.usuario_nome || r.usuario) + ' · ' : ''}${acaoNoExpediente() ? '' : 'fora do expediente'}</div>` : ''}`;
+}
+async function acaoPlay(id) {
+  if (acaoErro) { alert(acaoErro); return; }
+  const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
+  if (acaoRodando(id)) return acaoStop(id);
+  if (!acaoAberto(a)) { alert('Este plano está ' + ACAO_ST[a.status].toLowerCase() + '. Reabra-o para usar o cronômetro.'); return; }
+  const meu = acaoMeuRodando();
+  if (meu) {
+    const pm = acaoDb.planos.find(x => x.id === meu.plano_id);
+    if (!confirm(`Você está com o play ligado no plano ${pm ? acaoNum(pm) + ' — ' + pm.oque : ''}.\n\nParar aquele e iniciar este?`)) return;
+    if (!await acaoStop(meu.plano_id, true)) return;
+  }
+  const agora = new Date().toISOString();
+  const t = { id: uid(), plano_id: id, projeto_id: a.projeto_id || null, usuario: acaoMeuUser(), usuario_nome: acaoMeuNome(), inicio: agora, fim: null, segundos: 0 };
+  const ok = await sbFetch('acao_tempos', 'POST', t);
+  if (!ok) { alert('❌ Erro ao iniciar o cronômetro.' + sbErroDetalhe()); return; }
+  acaoDb.tempos.push(t);
+  const rec = {};
+  if (a.status === 'pendente') rec.status = 'andamento';
+  if (!a.dt_primeira_acao) rec.dt_primeira_acao = agora;
+  if (Object.keys(rec).length && await sbFetch('acao_planos', 'PATCH', rec, `?id=eq.${id}`)) Object.assign(a, rec);
+  await acaoRegistrar(id, '▶ Play iniciado' + (acaoNoExpediente() ? '' : ' (fora do expediente — começa a contar no próximo horário de trabalho)'));
+  acaoPosCron(id);
+}
+async function acaoStop(id, silencioso) {
+  const r = acaoRodando(id); if (!r) return true;
+  if (!silencioso && r.usuario !== acaoMeuUser() && !confirm(`O play deste plano foi ligado por ${r.usuario_nome || r.usuario}. Parar mesmo assim?`)) return false;
+  const agora = new Date().toISOString();
+  const seg = acaoSegUteis(r.inicio, agora);
+  const ok = await sbFetch('acao_tempos', 'PATCH', { fim: agora, segundos: seg }, `?id=eq.${r.id}`);
+  if (!ok) { alert('❌ Erro ao parar o cronômetro.' + sbErroDetalhe()); return false; }
+  r.fim = agora; r.segundos = seg;
+  await acaoRegistrar(id, `⏸ Play parado — ${acaoFmtHoras(seg)} de tempo útil (${r.usuario_nome || r.usuario || '—'})`);
+  acaoPosCron(id);
+  return true;
+}
+function acaoPosCron(id) {
+  acaoRedesenhar();
+  const m = document.getElementById('modal-acao');
+  if (m && m.classList.contains('open') && document.getElementById('acao-id').value === id) acaoRenderModalExtras(acaoDb.planos.find(x => x.id === id));
+}
+async function acaoConcluir(id) {
+  const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
+  if (a.status === 'concluido') return;
+  if (!confirm(`Concluir o plano ${acaoNum(a)} — "${a.oque}"?`)) return;
+  if (acaoRodando(id) && !await acaoStop(id, true)) return;
+  const agora = new Date().toISOString();
+  const rec = { status: 'concluido', progresso: 100, dt_conclusao: prjHoje() };
+  if (!a.dt_primeira_acao) rec.dt_primeira_acao = agora;
+  const ok = await sbFetch('acao_planos', 'PATCH', rec, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao concluir.' + sbErroDetalhe()); return; }
+  const antes = a.status;
+  Object.assign(a, rec);
+  await acaoRegistrar(id, `✔ Concluído (${ACAO_ST[antes] || antes} → Concluído) · lead time ${acaoFmtDias(acaoLead(a))}`);
+  closeModal('modal-acao');
+  acaoRedesenhar();
+}
+async function acaoExcluirTempo(tid) {
+  const t = acaoDb.tempos.find(x => x.id === tid); if (!t) return;
+  if (!t.fim) { alert('Pare o cronômetro antes de excluir este registro.'); return; }
+  if (!confirm(`Excluir este registro de ${acaoFmtHoras(t.segundos)}?`)) return;
+  const ok = await sbFetch('acao_tempos', 'DELETE', null, `?id=eq.${tid}`);
+  if (!ok) { alert('❌ Erro ao excluir.' + sbErroDetalhe()); return; }
+  acaoDb.tempos = acaoDb.tempos.filter(x => x.id !== tid);
+  await acaoRegistrar(t.plano_id, `Registro de tempo excluído (${acaoFmtHoras(t.segundos)})`);
+  acaoPosCron(t.plano_id);
+}
+async function acaoLancarTempo(id) {
+  const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
+  const ini = document.getElementById('acao-tm-ini').value, fim = document.getElementById('acao-tm-fim').value;
+  if (!ini || !fim) { alert('Informe início e fim.'); return; }
+  const di = new Date(ini), df = new Date(fim);
+  if (!(df > di)) { alert('O fim precisa ser depois do início.'); return; }
+  if (df > new Date()) { alert('O fim não pode ser no futuro.'); return; }
+  const seg = acaoSegUteis(di, df);
+  const t = { id: uid(), plano_id: id, projeto_id: a.projeto_id || null, usuario: acaoMeuUser(), usuario_nome: acaoMeuNome(),
+    inicio: di.toISOString(), fim: df.toISOString(), segundos: seg, manual: true };
+  const ok = await sbFetch('acao_tempos', 'POST', t);
+  if (!ok) { alert('❌ Erro ao lançar.' + sbErroDetalhe()); return; }
+  acaoDb.tempos.push(t);
+  if (!a.dt_primeira_acao || new Date(a.dt_primeira_acao) > di) {
+    if (await sbFetch('acao_planos', 'PATCH', { dt_primeira_acao: di.toISOString() }, `?id=eq.${id}`)) a.dt_primeira_acao = di.toISOString();
+  }
+  await acaoRegistrar(id, `Tempo lançado manualmente: ${acaoFmtHoras(seg)} úteis`);
+  acaoPosCron(id);
+}
+// Cronômetro flutuante (aparece em qualquer tela enquanto o play do usuário estiver ligado)
+function acaoAtualizarFlutuante() {
+  const box = document.getElementById('acao-flutuante'); if (!box) return;
+  const r = (typeof currentUser !== 'undefined' && currentUser) ? acaoMeuRodando() : null;
+  if (!r) { box.style.display = 'none'; box.dataset.id = ''; return; }
+  const a = acaoDb.planos.find(x => x.id === r.plano_id);
+  if (box.dataset.id !== r.id) {
+    box.innerHTML = `<span class="dot"></span><span class="tx" onclick="acaoAbrir('${r.plano_id}')" title="Abrir plano">${a ? acaoNum(a) + ' · ' + prjEsc(a.oque) : 'Plano de ação'}</span>
+      <span class="acao-cron" data-plano="${r.plano_id}">${acaoFmtCron(acaoSegPlano(r.plano_id))}</span>
+      <span class="acao-fora" data-fora-flut="1" style="color:#fcd34d"></span>
+      <button onclick="acaoStop('${r.plano_id}')">⏸ Parar</button>`;
+    box.dataset.id = r.id;
+  }
+  box.style.display = 'flex';
+}
+// Atualiza os relógios na tela a cada segundo
+setInterval(() => {
+  if (!acaoDb.tempos.some(t => !t.fim)) return;
+  const exp = acaoNoExpediente();
+  document.querySelectorAll('.acao-cron[data-plano]').forEach(el => {
+    const id = el.dataset.plano;
+    if (acaoRodando(id)) el.textContent = acaoFmtCron(acaoSegPlano(id));
+  });
+  document.querySelectorAll('[data-fora-flut]').forEach(el => el.textContent = exp ? '' : 'fora do expediente');
+}, 1000);
+// Depois do login: carrega os planos e retoma o cronômetro que ficou ligado
+let _acaoBoot = false;
+setInterval(async () => {
+  const logado = typeof currentUser !== 'undefined' && currentUser;
+  if (!logado) { if (_acaoBoot) { _acaoBoot = false; const b = document.getElementById('acao-flutuante'); if (b) b.style.display = 'none'; } return; }
+  if (_acaoBoot) return;
+  _acaoBoot = true;
+  try { await acaoCarregar(false, true); acaoAtualizarFlutuante(); } catch(e) { console.warn('[5W2H] boot', e); }
+}, 3000);
+
+// ══ LISTA / QUADRO ══
+function acaoKpisLista() {
   const L = acaoDb.planos;
-  const abertos = L.filter(a => a.status === 'pendente' || a.status === 'andamento');
+  const abertos = L.filter(acaoAberto);
   const atras = L.filter(a => acaoSit(a) === 'atrasado');
   const concl = L.filter(a => a.status === 'concluido');
   const noPrazo = concl.filter(a => !a.prazo || (a.dt_conclusao || '') <= a.prazo).length;
-  const custo = abertos.reduce((s,a) => s + prjNum(a.quanto), 0);
-  return acaoKpi(abertos.length, 'Em aberto', `${L.filter(a => a.status === 'andamento').length} em andamento`, '#2563eb') +
+  const lts = concl.map(acaoLead).filter(x => x != null);
+  const rod = acaoDb.tempos.filter(t => !t.fim).length;
+  return acaoKpi(abertos.length, 'Em aberto', `${L.filter(a => a.status === 'andamento').length} em andamento${rod ? ` · ▶ ${rod} com play ligado` : ''}`, '#2563eb') +
     acaoKpi(atras.length, 'Atrasados', 'Prazo vencido', '#dc2626') +
     acaoKpi(concl.length, 'Concluídos', concl.length ? `${Math.round(noPrazo / concl.length * 100)}% dentro do prazo` : '—', '#16a34a') +
-    acaoKpi(fmtBRLCompacto(custo), 'Custo previsto (aberto)', fmtBRL(custo), '#f59e0b') +
-    acaoKpi(L.length ? Math.round(L.filter(a => a.status !== 'cancelado').reduce((s,a) => s + acaoProg(a), 0) / Math.max(1, L.filter(a => a.status !== 'cancelado').length)) + '%' : '—', 'Progresso médio', 'Todos os planos ativos', '#8b5cf6');
+    acaoKpi(lts.length ? acaoFmtDias(lts.reduce((a,b) => a + b, 0) / lts.length) : '—', 'Lead time médio', 'Planos concluídos', '#8b5cf6') +
+    acaoKpi(acaoFmtHoras(acaoDb.tempos.reduce((s,t) => s + acaoSegTempo(t), 0)), 'Horas trabalhadas', 'Total do cronômetro', '#0d9488');
 }
 function acaoFiltrados() {
   const termo = normText(document.getElementById('acao-busca').value || '');
@@ -21065,7 +21456,7 @@ function acaoFiltrados() {
   const ate = document.getElementById('acao-f-ate').value;
   return acaoDb.planos.filter(a => {
     const sit = acaoSit(a);
-    if (st === 'abertos' && !(a.status === 'pendente' || a.status === 'andamento')) return false;
+    if (st === 'abertos' && !acaoAberto(a)) return false;
     if (st && st !== 'abertos' && sit !== st) return false;
     if (quem && (a.quem || '') !== quem) return false;
     if (ate && (!a.prazo || a.prazo > ate)) return false;
@@ -21079,9 +21470,15 @@ function acaoVisao(v) {
   document.getElementById('acao-v-quadro').classList.toggle('on', v === 'quadro');
   acaoRenderLista();
 }
+function acaoLeadHtml(a) {
+  const lt = acaoLead(a);
+  if (lt == null) return '<span style="color:#a8a29e">—</span>';
+  const tit = a.status === 'concluido' ? 'concluído em' : 'aberto há';
+  return `<div style="font-family:DM Mono,monospace;font-weight:700;font-size:12.5px">${lt}d</div><div style="font-size:10.5px;color:#a8a29e">${tit}</div>`;
+}
 function acaoRenderLista() {
   const tb = document.getElementById('acao-tb'); if (!tb) return;
-  document.getElementById('acao-kpis').innerHTML = acaoKpisHtml();
+  document.getElementById('acao-kpis').innerHTML = acaoKpisLista();
   const sq = document.getElementById('acao-f-quem'); const vq = sq.value;
   sq.innerHTML = '<option value="">Todos</option>' + acaoQuemLista().map(q => `<option value="${prjEsc(q)}">${prjEsc(q)}</option>`).join(''); sq.value = vq;
   const lista = acaoFiltrados();
@@ -21093,38 +21490,45 @@ function acaoRenderLista() {
     return `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')">
       <td style="font-family:DM Mono,monospace;font-size:12px"><b>${acaoNum(a)}</b></td>
       <td class="w"><b>${prjEsc(a.oque)}</b>${a.prioridade === 'alta' ? ' <span class="badge badge-red">Alta</span>' : ''}${a.projeto_id && prjProjeto(a.projeto_id) ? `<div style="font-size:11px;color:#a8a29e">🪚 ${prjEsc(prjProjeto(a.projeto_id).codigo)}</div>` : ''}</td>
-      <td class="w">${corta(a.porque, 80)}</td>
+      <td class="w">${corta(a.porque, 70)}</td>
       <td style="white-space:nowrap">${prjEsc(a.quem || '—')}</td>
-      <td class="w">${corta(a.onde, 40)}</td>
-      <td style="white-space:nowrap">${a.prazo ? fmtDate(a.prazo) : '—'}${a.dt_inicio ? `<div style="font-size:11px;color:#a8a29e">início ${fmtDate(a.dt_inicio)}</div>` : ''}</td>
-      <td class="w">${corta(a.como, 80)}</td>
+      <td class="w">${corta(a.onde, 30)}</td>
+      <td style="white-space:nowrap">${a.prazo ? fmtDate(a.prazo) : '—'}<div style="font-size:11px;color:#a8a29e">aberto ${fmtDate(acaoDtAbertura(a))}</div></td>
+      <td class="w">${corta(a.como, 70)}</td>
       <td class="num">${a.quanto ? fmtBRL(prjNum(a.quanto)) : '—'}</td>
-      <td style="min-width:90px"><div style="font-size:11px;font-weight:700">${pg}%</div><div class="acao-prog"><span style="width:${pg}%;background:${ACAO_ST_COR[sit]}"></span></div></td>
+      <td style="text-align:center">${acaoLeadHtml(a)}</td>
+      <td onclick="event.stopPropagation()">${acaoPlayHtml(a)}</td>
+      <td style="min-width:80px"><div style="font-size:11px;font-weight:700">${pg}%</div><div class="acao-prog"><span style="width:${pg}%;background:${ACAO_ST_COR[sit]}"></span></div></td>
       <td><span class="badge ${ACAO_ST_BADGE[sit]}" style="white-space:nowrap">${ACAO_ST[sit]}</span></td>
-      <td class="actions" onclick="event.stopPropagation()"><button class="btn btn-secondary btn-sm" onclick="acaoAbrir('${a.id}')">Abrir</button></td></tr>`;
-  }).join('') + `<tr><td colspan="7" style="font-weight:700">${lista.length} plano(s)</td><td class="num" style="font-weight:700">${fmtBRL(lista.reduce((s,a) => s + prjNum(a.quanto), 0))}</td><td colspan="3"></td></tr>`
-    : `<tr><td colspan="11" class="empty-state">${acaoDb.planos.length ? 'Nenhum plano com esses filtros.' : 'Nenhum plano de ação cadastrado.'}</td></tr>`;
-  // Quadro
+      <td class="actions" onclick="event.stopPropagation()" style="white-space:nowrap">
+        ${acaoAberto(a) ? `<button class="acao-ok-btn" title="Dar como concluído" onclick="acaoConcluir('${a.id}')">✔ Concluir</button>` : ''}
+        <button class="btn btn-secondary btn-sm" onclick="acaoAbrir('${a.id}')">Abrir</button></td></tr>`;
+  }).join('') + `<tr><td colspan="7" style="font-weight:700">${lista.length} plano(s)</td><td class="num" style="font-weight:700">${fmtBRL(lista.reduce((s,a) => s + prjNum(a.quanto), 0))}</td><td></td><td style="font-weight:700;font-family:DM Mono,monospace;font-size:12px">${acaoFmtHoras(lista.reduce((s,a) => s + acaoSegPlano(a.id), 0))}</td><td colspan="3"></td></tr>`
+    : `<tr><td colspan="13" class="empty-state">${acaoDb.planos.length ? 'Nenhum plano com esses filtros.' : 'Nenhum plano de ação cadastrado.'}</td></tr>`;
   const cols = [['pendente','Pendentes'],['andamento','Em andamento'],['atrasado','Atrasados'],['concluido','Concluídos']];
   document.getElementById('acao-kanban').innerHTML = cols.map(([k, nome]) => {
     const l = lista.filter(a => acaoSit(a) === k);
-    return `<div class="acao-col" style="--c:${ACAO_ST_COR[k]}"><h4>${nome}<span class="prj-cnt" style="background:#fff;border:1px solid #e7e5e4;border-radius:10px;padding:1px 8px;font-size:11px">${l.length}</span></h4><div class="bd">${
+    return `<div class="acao-col" style="--c:${ACAO_ST_COR[k]}"><h4>${nome}<span style="background:#fff;border:1px solid #e7e5e4;border-radius:10px;padding:1px 8px;font-size:11px">${l.length}</span></h4><div class="bd">${
       l.map(a => `<div class="acao-card" style="--s:${ACAO_ST_COR[k]}" onclick="acaoAbrir('${a.id}')">
-        <div style="font-family:DM Mono,monospace;font-size:11px;color:#a8a29e">${acaoNum(a)}${a.prioridade === 'alta' ? ' · 🔴 Alta' : ''}</div>
+        <div style="font-family:DM Mono,monospace;font-size:11px;color:#a8a29e">${acaoNum(a)}${a.prioridade === 'alta' ? ' · 🔴 Alta' : ''} · LT ${acaoLead(a) ?? '—'}d</div>
         <div class="t">${prjEsc(a.oque)}</div>
         <div class="m">👤 ${prjEsc(a.quem || '—')} · 📅 ${a.prazo ? fmtDate(a.prazo) : '—'}${a.quanto ? ' · ' + fmtBRL(prjNum(a.quanto)) : ''}</div>
-        <div class="acao-prog"><span style="width:${acaoProg(a)}%;background:${ACAO_ST_COR[k]}"></span></div></div>`).join('') || '<div class="prj-vazio">—</div>'
+        <div class="acao-prog"><span style="width:${acaoProg(a)}%;background:${ACAO_ST_COR[k]}"></span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px" onclick="event.stopPropagation()">${acaoPlayHtml(a)}
+          ${acaoAberto(a) ? `<button class="acao-ok-btn" onclick="acaoConcluir('${a.id}')">✔</button>` : ''}</div></div>`).join('') || '<div class="prj-vazio">—</div>'
     }</div></div>`;
   }).join('');
 }
 
+// ══ MODAL ══
 function acaoAbrir(id) {
-  if (acaoErro) { alert(acaoErro); return; }
+  if (acaoErro && !acaoCarregado) { alert(acaoErro); return; }
   const a = id ? acaoDb.planos.find(x => x.id === id) : null;
   document.getElementById('acao-titulo').textContent = a ? `Plano de Ação ${acaoNum(a)}` : 'Novo Plano de Ação';
   document.getElementById('acao-id').value = a ? a.id : '';
-  const set = (k, v) => document.getElementById(k).value = v == null ? '' : v;
+  const set = (k, v) => { const el = document.getElementById(k); if (el) el.value = v == null ? '' : v; };
   set('acao-oque', a && a.oque); set('acao-porque', a && a.porque); set('acao-onde', a && a.onde); set('acao-quem', a && a.quem);
+  set('acao-abertura', a ? acaoDtAbertura(a) : prjHoje());
   set('acao-inicio', a ? a.dt_inicio : prjHoje()); set('acao-prazo', a && a.prazo); set('acao-como', a && a.como);
   set('acao-quanto', a && a.quanto); set('acao-status', a ? a.status : 'pendente'); set('acao-pri', a ? (a.prioridade || 'media') : 'media');
   set('acao-obs', a && a.obs);
@@ -21138,20 +21542,67 @@ function acaoAbrir(id) {
   sp.value = a ? (a.projeto_id || '') : (window._acaoProjetoPadrao || '');
   window._acaoProjetoPadrao = '';
   document.getElementById('acao-btn-excluir').style.display = a ? '' : 'none';
-  acaoRenderComentarios(a);
+  acaoRenderModalExtras(a);
   openModal('modal-acao');
-  setTimeout(() => document.getElementById('acao-oque').focus(), 50);
+  if (!a) setTimeout(() => document.getElementById('acao-oque').focus(), 50);
+}
+function acaoRenderModalExtras(a) {
+  const bc = document.getElementById('acao-btn-concluir');
+  const bp = document.getElementById('acao-btn-play');
+  const res = document.getElementById('acao-resumo');
+  if (bc) bc.style.display = a && acaoAberto(a) ? '' : 'none';
+  if (bp) {
+    const r = a ? acaoRodando(a.id) : null;
+    bp.style.display = a && (acaoAberto(a) || r) ? '' : 'none';
+    bp.innerHTML = r ? '⏸ Parar' : '▶ Iniciar';
+    bp.style.cssText += r ? ';background:#dc2626;color:#fff;border-color:#dc2626' : ';background:#fff;color:#166534;border-color:#86efac';
+    bp.onclick = () => a && acaoPlay(a.id);
+  }
+  if (res) {
+    if (!a) { res.innerHTML = ''; }
+    else {
+      const sit = acaoSit(a); const r = acaoRodando(a.id);
+      res.innerHTML = `<div class="prj-kpis" style="margin-bottom:14px">
+        ${acaoKpi(`<span class="badge ${ACAO_ST_BADGE[sit]}" style="font-size:13px">${ACAO_ST[sit]}</span>`, 'Situação', a.dt_conclusao ? 'Concluído em ' + fmtDate(a.dt_conclusao) : (a.prazo ? 'Prazo ' + fmtDate(a.prazo) : ''), ACAO_ST_COR[sit])}
+        ${acaoKpi((acaoLead(a) ?? '—') + 'd', 'Lead time', `desde ${fmtDate(acaoDtBase(a))} (${acaoLtBase === 'inicio' ? 'início' : 'abertura'})`, '#8b5cf6')}
+        ${acaoKpi(acaoFmtDias(acaoResposta(a)), 'Tempo de resposta', a.dt_primeira_acao ? '1ª ação ' + fmtTs(a.dt_primeira_acao) : 'sem ação ainda', '#0d9488')}
+        ${acaoKpi(`<span class="acao-cron ${r ? 'rodando' : ''}" data-plano="${a.id}" style="font-size:22px">${acaoFmtCron(acaoSegPlano(a.id))}</span>`, 'Tempo trabalhado', r ? '▶ rodando · ' + prjEsc(r.usuario_nome || '') : 'horas úteis', '#dc2626')}
+      </div>`;
+    }
+  }
+  const tbox = document.getElementById('acao-tempo-box');
+  if (tbox) {
+    if (!a) tbox.innerHTML = '';
+    else {
+      const ts = acaoDb.tempos.filter(t => t.plano_id === a.id).sort((x,y) => String(y.inicio).localeCompare(String(x.inicio)));
+      const agoraLocal = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0,16);
+      tbox.innerHTML = `<div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#57534e;margin:6px 0 8px">Registros de tempo (${ts.length}) · total ${acaoFmtHoras(acaoSegPlano(a.id))}</div>
+        ${ts.length ? `<div class="table-scroll" style="overflow:auto;margin-bottom:10px"><table><thead><tr><th>Início</th><th>Fim</th><th>Quem</th><th class="num">Tempo útil</th><th></th></tr></thead><tbody>
+          ${ts.map(t => `<tr><td>${fmtTs(t.inicio)}</td><td>${t.fim ? fmtTs(t.fim) : '<span class="badge badge-red">rodando</span>'}</td><td>${prjEsc(t.usuario_nome || t.usuario || '—')}${t.manual ? ' <span class="badge badge-gray">manual</span>' : ''}</td>
+            <td class="num" style="font-family:DM Mono,monospace">${t.fim ? acaoFmtHoras(t.segundos) : `<span class="acao-cron rodando" data-plano="${a.id}">${acaoFmtCron(acaoSegPlano(a.id))}</span>`}</td>
+            <td class="actions">${t.fim ? `<button class="btn btn-danger btn-sm" onclick="acaoExcluirTempo('${t.id}')">Excluir</button>` : ''}</td></tr>`).join('')}
+        </tbody></table></div>` : ''}
+        <details style="margin-bottom:10px"><summary style="cursor:pointer;font-size:12.5px;color:#57534e">+ Lançar tempo manualmente (esqueceu de dar play)</summary>
+          <div style="display:flex;gap:8px;align-items:flex-end;margin-top:8px;flex-wrap:wrap">
+            <div class="form-group" style="margin:0"><label>Início</label><input type="datetime-local" id="acao-tm-ini" max="${agoraLocal}" /></div>
+            <div class="form-group" style="margin:0"><label>Fim</label><input type="datetime-local" id="acao-tm-fim" max="${agoraLocal}" /></div>
+            <button class="btn btn-secondary" onclick="acaoLancarTempo('${a.id}')">Lançar</button>
+          </div>
+          <div style="font-size:11.5px;color:#a8a29e;margin-top:6px">Conta só o tempo dentro do horário de trabalho.</div></details>`;
+    }
+  }
+  acaoRenderComentarios(a);
 }
 function acaoRenderComentarios(a) {
   const box = document.getElementById('acao-coment-box');
-  if (!a) { box.innerHTML = '<div class="lanc-note">Depois de salvar, aqui ficam as atualizações do acompanhamento (com data e usuário).</div>'; return; }
+  if (!a) { box.innerHTML = '<div class="lanc-note">Depois de salvar, aqui ficam o cronômetro e as atualizações do acompanhamento (com data e usuário).</div>'; return; }
   const cs = acaoDb.coments.filter(c => c.plano_id === a.id).sort((x,y) => String(y.dt).localeCompare(String(x.dt)));
   box.innerHTML = `<div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#57534e;margin:6px 0 8px">Atualizações (${cs.length})</div>
     <div style="display:flex;gap:8px;margin-bottom:12px"><input type="text" id="acao-novo-coment" placeholder="Registrar andamento, dificuldade, decisão..." onkeydown="if(event.key==='Enter')acaoComentar()" /><button class="btn btn-secondary" onclick="acaoComentar()">Registrar</button></div>
     ${cs.map(c => `<div class="acao-coment"><div class="h">${fmtTs(c.dt)} · ${prjEsc(c.usuario || '—')}</div>${prjEsc(c.texto)}</div>`).join('') || '<div style="font-size:12.5px;color:#a8a29e">Nenhuma atualização ainda.</div>'}`;
 }
 async function acaoRegistrar(planoId, texto) {
-  const c = { id: uid(), plano_id: planoId, texto, usuario: (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.nome || currentUser.user || '') : '', dt: new Date().toISOString() };
+  const c = { id: uid(), plano_id: planoId, texto, usuario: acaoMeuNome(), dt: new Date().toISOString() };
   const ok = await sbFetch('acao_comentarios', 'POST', c);
   if (ok) acaoDb.coments.push(c);
   return ok;
@@ -21162,23 +21613,32 @@ async function acaoComentar() {
   const t = (inp.value || '').trim(); if (!t) return;
   const ok = await acaoRegistrar(id, t);
   if (!ok) { alert('❌ Erro ao registrar.' + sbErroDetalhe()); return; }
-  acaoRenderComentarios(acaoDb.planos.find(x => x.id === id));
+  const a = acaoDb.planos.find(x => x.id === id);
+  if (a && !a.dt_primeira_acao) {
+    const agora = new Date().toISOString();
+    if (await sbFetch('acao_planos', 'PATCH', { dt_primeira_acao: agora }, `?id=eq.${id}`)) a.dt_primeira_acao = agora;
+  }
+  acaoRenderModalExtras(a);
 }
 async function acaoSalvar() {
   const id = document.getElementById('acao-id').value;
   const g = k => document.getElementById(k).value;
-  const oque = g('acao-oque').trim(), quem = g('acao-quem').trim(), prazo = g('acao-prazo');
+  const oque = g('acao-oque').trim(), quem = g('acao-quem').trim(), prazo = g('acao-prazo'), abertura = g('acao-abertura');
   if (!oque) { alert('Preencha "O quê?".'); return; }
   if (!quem) { alert('Preencha "Quem?" (responsável).'); return; }
+  if (!abertura) { alert('Informe a data de abertura.'); return; }
   if (!prazo) { alert('Informe o prazo ("Quando?").'); return; }
+  if (abertura > prjHoje()) { alert('A data de abertura não pode ser no futuro.'); return; }
   if (g('acao-inicio') && g('acao-inicio') > prazo) { alert('A data de início é depois do prazo.'); return; }
   const status = g('acao-status');
-  const rec = { oque, porque: g('acao-porque').trim(), onde: g('acao-onde').trim(), quem, dt_inicio: g('acao-inicio') || null, prazo,
+  const ant = id ? acaoDb.planos.find(x => x.id === id) : null;
+  if (ant && status !== 'pendente' && status !== 'andamento' && acaoRodando(id)) { if (!await acaoStop(id, true)) return; }
+  const rec = { oque, porque: g('acao-porque').trim(), onde: g('acao-onde').trim(), quem, dt_abertura: abertura, dt_inicio: g('acao-inicio') || null, prazo,
     como: g('acao-como').trim(), quanto: prjNum(g('acao-quanto')), projeto_id: g('acao-projeto') || null, status,
     prioridade: g('acao-pri'), progresso: status === 'concluido' ? 100 : parseInt(g('acao-prog'), 10) || 0, obs: g('acao-obs').trim() };
-  const ant = id ? acaoDb.planos.find(x => x.id === id) : null;
   if (status === 'concluido') rec.dt_conclusao = (ant && ant.status === 'concluido' && ant.dt_conclusao) ? ant.dt_conclusao : prjHoje();
   else rec.dt_conclusao = null;
+  if (status !== 'pendente' && !(ant && ant.dt_primeira_acao)) rec.dt_primeira_acao = new Date().toISOString();
   if (ant) {
     const ok = await sbFetch('acao_planos', 'PATCH', rec, `?id=eq.${id}`);
     if (!ok) { alert('❌ Erro ao salvar o plano.' + sbErroDetalhe()); return; }
@@ -21186,14 +21646,18 @@ async function acaoSalvar() {
     if (ant.status !== rec.status) mud.push(`Situação: ${ACAO_ST[ant.status] || ant.status} → ${ACAO_ST[rec.status]}`);
     if ((ant.prazo || '') !== rec.prazo) mud.push(`Prazo: ${ant.prazo ? fmtDate(ant.prazo) : '—'} → ${fmtDate(rec.prazo)}`);
     if (acaoProg(ant) !== rec.progresso && rec.status !== 'concluido') mud.push(`Progresso: ${acaoProg(ant)}% → ${rec.progresso}%`);
+    if ((ant.projeto_id || null) !== rec.projeto_id) {
+      // Horas já registradas acompanham o plano para o novo projeto
+      await sbFetch('acao_tempos', 'PATCH', { projeto_id: rec.projeto_id }, `?plano_id=eq.${id}`);
+      acaoDb.tempos.forEach(t => { if (t.plano_id === id) t.projeto_id = rec.projeto_id; });
+    }
     Object.assign(ant, rec);
     if (mud.length) await acaoRegistrar(id, mud.join(' · '));
   } else {
     const numero = Math.max(0, ...acaoDb.planos.map(a => a.numero || 0)) + 1;
-    const novo = { id: uid(), numero, ...rec, created_at: new Date().toISOString(),
-      criado_por: (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.nome || '') : '' };
+    const novo = { id: uid(), numero, ...rec, created_at: new Date().toISOString(), criado_por: acaoMeuNome() };
     const ok = await sbFetch('acao_planos', 'POST', novo);
-    if (!ok) { alert('❌ Erro ao salvar o plano.' + sbErroDetalhe()); return; }
+    if (!ok) { alert('❌ Erro ao salvar o plano.' + sbErroDetalhe() + '\n\nSe o erro citar dt_abertura/dt_primeira_acao, rode o SQL "projetos_v3".'); return; }
     acaoDb.planos.push(novo);
     await acaoRegistrar(novo.id, 'Plano criado');
   }
@@ -21203,66 +21667,206 @@ async function acaoSalvar() {
 async function acaoExcluir() {
   const id = document.getElementById('acao-id').value;
   const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
-  if (!confirm(`Excluir o plano ${acaoNum(a)} — "${a.oque}"?\n\nAs atualizações registradas também serão apagadas.`)) return;
+  const nt = acaoDb.tempos.filter(t => t.plano_id === id).length;
+  if (!confirm(`Excluir o plano ${acaoNum(a)} — "${a.oque}"?\n\nAs atualizações${nt ? ` e os ${nt} registro(s) de tempo` : ''} também serão apagados.`)) return;
   await sbFetch('acao_comentarios', 'DELETE', null, `?plano_id=eq.${id}`);
+  await sbFetch('acao_tempos', 'DELETE', null, `?plano_id=eq.${id}`);
   const ok = await sbFetch('acao_planos', 'DELETE', null, `?id=eq.${id}`);
   if (!ok) { alert('❌ Erro ao excluir.' + sbErroDetalhe()); return; }
   acaoDb.planos = acaoDb.planos.filter(x => x.id !== id);
   acaoDb.coments = acaoDb.coments.filter(c => c.plano_id !== id);
+  acaoDb.tempos = acaoDb.tempos.filter(t => t.plano_id !== id);
   closeModal('modal-acao');
   acaoRedesenhar();
 }
 
+// ══ DASHBOARD 5W2H ══
+function acaoNice(m) { if (m <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(m))); const f = m / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p; }
+// Gráfico de colunas agrupadas em SVG (séries: [{nome, cor, v:[]}])
+function acaoSvgCol(labels, series, fmt, opt) {
+  opt = opt || {};
+  fmt = fmt || (v => String(Math.round(v * 10) / 10).replace('.', ','));
+  const W = opt.W || 720, H = opt.H || 230, pl = 40, pr = 8, pt = 18, pb = 24;
+  const n = labels.length, k = series.length;
+  let max = acaoNice(Math.max(0, ...series.flatMap(s => s.v)));
+  if (opt.inteiro) max = Math.max(4, Math.ceil(max / 4) * 4);
+  const gw = (W - pl - pr) / n, bw = Math.min(24, gw * 0.74 / k);
+  let g = '';
+  for (let i = 0; i <= 4; i++) {
+    const y = pt + (H - pt - pb) * (1 - i / 4);
+    g += `<line x1="${pl}" x2="${W - pr}" y1="${y}" y2="${y}" stroke="${i ? '#f1efed' : '#d6d3d1'}"/><text x="${pl - 6}" y="${y + 3}" text-anchor="end" font-size="10" fill="#a8a29e">${fmt(max * i / 4)}</text>`;
+  }
+  labels.forEach((lb, i) => {
+    const cx = pl + gw * i + gw / 2;
+    series.forEach((s, j) => {
+      const v = s.v[i] || 0; const h = (H - pt - pb) * v / max;
+      const x = cx - (k * bw) / 2 + j * bw, y = H - pb - h;
+      g += `<rect x="${x + 1}" y="${y}" width="${Math.max(bw - 2, 1)}" height="${Math.max(h, 0)}" rx="3" fill="${s.cor}"><title>${s.nome} · ${lb}: ${fmt(v)}</title></rect>`;
+      if (v > 0) g += `<text x="${x + bw / 2}" y="${y - 4}" text-anchor="middle" font-size="9.5" font-weight="600" fill="#57534e">${fmt(v)}</text>`;
+    });
+    g += `<text x="${cx}" y="${H - 7}" text-anchor="middle" font-size="10.5" fill="#78716c">${lb}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" font-family="Plus Jakarta Sans, sans-serif">${g}</svg>
+    <div class="acao-svg-leg">${series.map(s => `<span><span class="sw" style="background:${s.cor}"></span>${s.nome}</span>`).join('')}</div>`;
+}
+function acaoBarrasSimples(itens, fmt) {
+  const max = Math.max(1, ...itens.map(i => i.n));
+  return itens.length ? itens.map(i => `<div class="prj-bar-row">
+      <div class="nm" title="${prjEsc(i.nome)}">${i.cor ? `<span class="prj-dot" style="background:${prjEsc(i.cor)}"></span>` : ''}${prjEsc(i.nome)}</div>
+      <div class="prj-bar"><span style="width:${i.n / max * 100}%;background:${prjEsc(i.cor || '#2563eb')}"></span></div>
+      <div class="vl">${fmt ? fmt(i) : i.n}</div></div>`).join('') : '<div class="prj-vazio">Sem dados no período.</div>';
+}
 function acaoRenderPainel() {
   const box = document.getElementById('acao-p-kpis'); if (!box) return;
-  box.innerHTML = acaoKpisHtml();
-  const L = acaoDb.planos;
+  const hoje = prjHoje(), anoAtual = hoje.slice(0, 4);
+  // Filtros
+  const sAno = document.getElementById('ap-ano');
+  const anos = new Set([anoAtual]);
+  acaoDb.planos.forEach(a => { anos.add(acaoDtAbertura(a).slice(0,4)); if (a.dt_conclusao) anos.add(a.dt_conclusao.slice(0,4)); });
+  acaoDb.tempos.forEach(t => anos.add(prjDataLocal(t.inicio).slice(0,4)));
+  const lAnos = [...anos].filter(Boolean).sort().reverse();
+  const vAno = sAno.value || anoAtual;
+  sAno.innerHTML = lAnos.map(a => `<option value="${a}">${a}</option>`).join(''); sAno.value = lAnos.includes(vAno) ? vAno : anoAtual;
+  const ano = sAno.value;
+  const sQ = document.getElementById('ap-quem'); const vQ = sQ.value;
+  sQ.innerHTML = '<option value="">Todos</option>' + acaoQuemLista().map(q => `<option value="${prjEsc(q)}">${prjEsc(q)}</option>`).join(''); sQ.value = vQ;
+  const sP = document.getElementById('ap-proj'); const vP = sP.value;
+  const projIds = [...new Set(acaoDb.planos.map(a => a.projeto_id).filter(Boolean))];
+  sP.innerHTML = '<option value="">Todos</option><option value="__sem__">Sem projeto</option>' + projIds.map(id => { const p = typeof prjProjeto === 'function' ? prjProjeto(id) : null; return `<option value="${id}">${p ? prjEsc(p.codigo + ' — ' + p.nome) : '(projeto removido)'}</option>`; }).join('');
+  sP.value = vP;
+  const quem = sQ.value, proj = sP.value;
+  const L = acaoDb.planos.filter(a => (!quem || (a.quem || '') === quem) && (!proj || (proj === '__sem__' ? !a.projeto_id : a.projeto_id === proj)));
+  const idsL = new Set(L.map(a => a.id));
+  const T = acaoDb.tempos.filter(t => idsL.has(t.plano_id));
+  const abertosAno = L.filter(a => acaoDtAbertura(a).slice(0,4) === ano);
+  const conclAno = L.filter(a => a.status === 'concluido' && (a.dt_conclusao || '').slice(0,4) === ano);
+  const backlog = L.filter(acaoAberto);
+  const atras = L.filter(a => acaoSit(a) === 'atrasado');
+  const media = arr => arr.length ? arr.reduce((x,y) => x + y, 0) / arr.length : null;
+  const ltConcl = media(conclAno.map(acaoLead).filter(x => x != null));
+  const resp = media(abertosAno.map(acaoResposta).filter(x => x != null));
+  const idade = media(backlog.map(acaoLead).filter(x => x != null));
+  const noPrazo = conclAno.filter(a => !a.prazo || (a.dt_conclusao || '') <= a.prazo).length;
+  const segAno = T.filter(t => prjDataLocal(t.inicio).slice(0,4) === ano).reduce((s,t) => s + acaoSegTempo(t), 0);
+  box.innerHTML =
+    acaoKpi(abertosAno.length, 'Abertos em ' + ano, `${(abertosAno.length / (ano === anoAtual ? (new Date().getMonth() + 1) : 12)).toFixed(1).replace('.', ',')} por mês`, '#2563eb') +
+    acaoKpi(conclAno.length, 'Concluídos em ' + ano, conclAno.length ? `${Math.round(noPrazo / conclAno.length * 100)}% dentro do prazo` : '—', '#16a34a') +
+    acaoKpi(acaoFmtDias(ltConcl), 'Lead time médio', `concluídos em ${ano} · base: ${acaoLtBase === 'inicio' ? 'início' : 'abertura'}`, '#8b5cf6') +
+    acaoKpi(acaoFmtDias(resp), 'Tempo de resposta', 'abertura → 1ª ação', '#0d9488') +
+    acaoKpi(backlog.length, 'Em aberto hoje', idade != null ? `idade média ${acaoFmtDias(idade)}` : '—', '#f59e0b') +
+    acaoKpi(atras.length, 'Atrasados hoje', backlog.length ? `${Math.round(atras.length / backlog.length * 100)}% do que está aberto` : '—', '#dc2626') +
+    acaoKpi(acaoFmtHoras(segAno), 'Horas trabalhadas', 'cronômetro em ' + ano, '#1f2937');
+  // Por mês
+  const mesesV = Array.from({ length: 12 }, (_, i) => ano + '-' + String(i + 1).padStart(2, '0'));
+  const ab = mesesV.map(m => L.filter(a => acaoDtAbertura(a).slice(0,7) === m).length);
+  const co = mesesV.map(m => L.filter(a => a.status === 'concluido' && (a.dt_conclusao || '').slice(0,7) === m).length);
+  const ca = mesesV.map(m => L.filter(a => a.status === 'cancelado' && acaoDtAbertura(a).slice(0,7) === m).length);
+  document.getElementById('ap-g-mes').innerHTML = acaoSvgCol(ACAO_MESES, [
+    { nome: 'Abertos', cor: '#2563eb', v: ab }, { nome: 'Concluídos', cor: '#16a34a', v: co }, { nome: 'Cancelados (por mês de abertura)', cor: '#d6d3d1', v: ca }], v => String(Math.round(v)), { W: 1100, H: 260, inteiro: true });
+  const ltM = mesesV.map(m => media(L.filter(a => a.status === 'concluido' && (a.dt_conclusao || '').slice(0,7) === m).map(acaoLead).filter(x => x != null)) || 0);
+  const rpM = mesesV.map(m => media(L.filter(a => acaoDtAbertura(a).slice(0,7) === m).map(acaoResposta).filter(x => x != null)) || 0);
+  const hM = mesesV.map(m => T.filter(t => prjDataLocal(t.inicio).slice(0,7) === m).reduce((s,t) => s + acaoSegTempo(t), 0) / 3600);
+  document.getElementById('ap-g-lt').innerHTML = acaoSvgCol(ACAO_MESES, [
+    { nome: 'Lead time médio (mês de conclusão)', cor: '#8b5cf6', v: ltM }, { nome: 'Tempo de resposta médio (mês de abertura)', cor: '#0d9488', v: rpM }]) +
+    `<div style="margin-top:14px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#a8a29e">Horas trabalhadas por mês</div>` +
+    acaoSvgCol(ACAO_MESES, [{ nome: 'Horas (play)', cor: '#1f2937', v: hM }], v => (Math.round(v * 10) / 10).toString().replace('.', ','));
+  // Faixas de lead time
+  const faixas = [['até 7 dias', 0, 7, '#16a34a'], ['8 a 15 dias', 8, 15, '#84cc16'], ['16 a 30 dias', 16, 30, '#f59e0b'], ['31 a 60 dias', 31, 60, '#ea580c'], ['mais de 60 dias', 61, 1e9, '#dc2626']];
+  const lts = conclAno.map(acaoLead).filter(x => x != null);
+  document.getElementById('ap-g-faixa').innerHTML = acaoBarrasSimples(faixas.map(([nome, a, b, cor]) => ({ nome, cor, n: lts.filter(x => x >= a && x <= b).length })),
+    i => `${i.n}${lts.length ? ' · ' + Math.round(i.n / lts.length * 100) + '%' : ''}`);
+  // Situação
   const sits = ['pendente','andamento','atrasado','concluido','cancelado'];
-  const cont = {}; sits.forEach(s => cont[s] = 0); L.forEach(a => cont[acaoSit(a)]++);
-  const maxS = Math.max(1, ...Object.values(cont));
-  document.getElementById('acao-p-status').innerHTML = sits.map(s => `<div class="prj-bar-row">
-      <div class="nm"><span class="prj-dot" style="background:${ACAO_ST_COR[s]}"></span>${ACAO_ST[s]}</div>
-      <div class="prj-bar"><span style="width:${cont[s] / maxS * 100}%;background:${ACAO_ST_COR[s]}"></span></div>
-      <div class="vl">${cont[s]}${L.length ? ' · ' + Math.round(cont[s] / L.length * 100) + '%' : ''}</div></div>`).join('');
-  const quem = acaoQuemLista().map(q => {
-    const l = L.filter(a => (a.quem || '') === q && a.status !== 'cancelado');
-    return { q, ab: l.filter(a => acaoSit(a) === 'pendente' || acaoSit(a) === 'andamento').length, at: l.filter(a => acaoSit(a) === 'atrasado').length, co: l.filter(a => a.status === 'concluido').length };
-  }).sort((a,b) => (b.at - a.at) || ((b.ab + b.at) - (a.ab + a.at)));
-  const maxQ = Math.max(1, ...quem.map(x => x.ab + x.at + x.co));
-  document.getElementById('acao-p-quem').innerHTML = quem.length ? quem.map(x => `<div class="prj-bar-row">
-      <div class="nm">👤 ${prjEsc(x.q)}</div>
-      <div class="prj-bar" style="display:flex">
-        <span style="width:${x.ab / maxQ * 100}%;background:#2563eb;border-radius:0"></span>
-        <span style="width:${x.at / maxQ * 100}%;background:#dc2626;border-radius:0"></span>
-        <span style="width:${x.co / maxQ * 100}%;background:#16a34a;border-radius:0"></span></div>
-      <div class="vl">${x.ab} · <span style="color:#dc2626">${x.at}</span> · <span style="color:#16a34a">${x.co}</span></div></div>`).join('')
-    + '<div class="lanc-note" style="margin-top:10px">Azul = em aberto no prazo · Vermelho = atrasados · Verde = concluídos</div>'
-    : '<div class="prj-vazio">Nenhum plano cadastrado.</div>';
-  const hoje = prjHoje();
+  document.getElementById('acao-p-status').innerHTML = acaoBarrasSimples(sits.map(s => ({ nome: ACAO_ST[s], cor: ACAO_ST_COR[s], n: L.filter(a => acaoSit(a) === s).length })),
+    i => `${i.n}${L.length ? ' · ' + Math.round(i.n / L.length * 100) + '%' : ''}`);
+  // Horas por projeto (no ano)
+  const porProj = {};
+  T.filter(t => prjDataLocal(t.inicio).slice(0,4) === ano).forEach(t => {
+    const pl = acaoDb.planos.find(a => a.id === t.plano_id);
+    const pid = (pl && pl.projeto_id) || '__sem__';
+    porProj[pid] = (porProj[pid] || 0) + acaoSegTempo(t);
+  });
+  document.getElementById('ap-g-horas-proj').innerHTML = acaoBarrasSimples(Object.entries(porProj).sort((a,b) => b[1] - a[1]).map(([pid, s]) => {
+    const p = pid !== '__sem__' && typeof prjProjeto === 'function' ? prjProjeto(pid) : null;
+    return { nome: pid === '__sem__' ? 'Sem projeto' : (p ? p.codigo + ' — ' + p.nome : '(projeto removido)'), n: s, cor: pid === '__sem__' ? '#a8a29e' : '#ea580c' };
+  }), i => acaoFmtHoras(i.n));
+  // Por responsável
+  const quemL = [...new Set(L.map(a => (a.quem || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'pt-BR'));
+  document.getElementById('ap-tb-quem').innerHTML = quemL.length ? quemL.map(q => {
+    const l = L.filter(a => (a.quem || '').trim() === q);
+    const ab = l.filter(a => acaoDtAbertura(a).slice(0,4) === ano);
+    const co = l.filter(a => a.status === 'concluido' && (a.dt_conclusao || '').slice(0,4) === ano);
+    const np = co.filter(a => !a.prazo || (a.dt_conclusao || '') <= a.prazo).length;
+    const ids = new Set(l.map(a => a.id));
+    const h = T.filter(t => ids.has(t.plano_id) && prjDataLocal(t.inicio).slice(0,4) === ano).reduce((s,t) => s + acaoSegTempo(t), 0);
+    const at = l.filter(a => acaoSit(a) === 'atrasado').length;
+    return `<tr><td><b>👤 ${prjEsc(q)}</b></td><td style="text-align:center">${ab.length}</td><td style="text-align:center">${l.filter(acaoAberto).length}</td>
+      <td style="text-align:center;${at ? 'color:#dc2626;font-weight:700' : ''}">${at}</td><td style="text-align:center">${co.length}</td>
+      <td style="text-align:center">${co.length ? Math.round(np / co.length * 100) + '%' : '—'}</td>
+      <td style="text-align:center">${acaoFmtDias(media(co.map(acaoLead).filter(x => x != null)))}</td>
+      <td style="text-align:center">${acaoFmtDias(media(ab.map(acaoResposta).filter(x => x != null)))}</td>
+      <td style="text-align:center;font-family:DM Mono,monospace">${acaoFmtHoras(h)}</td></tr>`;
+  }).join('') : '<tr><td colspan="9" class="empty-state">Nenhum plano.</td></tr>';
+  // Prazos
   const lim = prjDataLocal(new Date(Date.now() + 15 * 86400000).toISOString());
-  const pz = L.filter(a => (a.status === 'pendente' || a.status === 'andamento') && a.prazo && a.prazo <= lim).sort((a,b) => a.prazo.localeCompare(b.prazo));
+  const pz = L.filter(a => acaoAberto(a) && a.prazo && a.prazo <= lim).sort((a,b) => a.prazo.localeCompare(b.prazo));
   document.getElementById('acao-p-prazos').innerHTML = pz.length ? pz.map(a => {
     const sit = acaoSit(a);
-    const d = prjDias(a.prazo < hoje ? a.prazo : hoje, a.prazo < hoje ? hoje : a.prazo);
+    const d = a.prazo < hoje ? prjDias(a.prazo, hoje) : prjDias(hoje, a.prazo);
     return `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')"><td><b>${fmtDate(a.prazo)}</b></td><td style="font-family:DM Mono,monospace;font-size:12px">${acaoNum(a)}</td>
-      <td>${prjEsc(a.oque)}</td><td>${prjEsc(a.quem || '—')}</td>
+      <td>${prjEsc(a.oque)}</td><td>${prjEsc(a.quem || '—')}</td><td style="text-align:center">${acaoLead(a)}d</td>
       <td style="min-width:90px"><div style="font-size:11px;font-weight:700">${acaoProg(a)}%</div><div class="acao-prog"><span style="width:${acaoProg(a)}%;background:${ACAO_ST_COR[sit]}"></span></div></td>
       <td>${sit === 'atrasado' ? `<span class="badge badge-red">Atrasado ${d}d</span>` : `<span class="badge badge-yellow">Faltam ${d}d</span>`}</td></tr>`;
-  }).join('') : '<tr><td colspan="6" class="empty-state">Nenhum plano atrasado ou vencendo nos próximos 15 dias.</td></tr>';
+  }).join('') : '<tr><td colspan="7" class="empty-state">Nenhum plano atrasado ou vencendo nos próximos 15 dias.</td></tr>';
 }
 
-// Planos de ação vinculados a um projeto (seção da ficha do projeto)
+// Planos de ação vinculados a um projeto (seção da ficha do projeto) + tempo utilizado
 function acaoHtmlProjeto(p) {
   if (!acaoCarregado) return '';
   const l = acaoDb.planos.filter(a => a.projeto_id === p.id);
+  const ids = new Set(l.map(a => a.id));
+  const seg = acaoDb.tempos.filter(t => ids.has(t.plano_id)).reduce((s,t) => s + acaoSegTempo(t), 0);
   const pode = typeof currentUser === 'undefined' || !currentUser || currentUser.role === 'admin' || (currentUser.pages || []).includes('acao-lista');
   return `<div class="lanc-sec">
-    <div class="lanc-sec-title"><span class="n">6</span>Planos de ação 5W2H<span class="hint">${pode ? `<button class="btn btn-secondary btn-sm" onclick="window._acaoProjetoPadrao='${p.id}';acaoAbrir()">+ Plano de ação</button>` : ''}</span></div>
-    ${l.length ? `<div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Nº</th><th>O quê</th><th>Quem</th><th>Quando</th><th>Progresso</th><th>Situação</th></tr></thead><tbody>${l.map(a => {
+    <div class="lanc-sec-title"><span class="n">6</span>Planos de ação 5W2H · ⏱ ${acaoFmtHoras(seg)} trabalhadas no projeto<span class="hint">${pode ? `<button class="btn btn-secondary btn-sm" onclick="window._acaoProjetoPadrao='${p.id}';acaoAbrir()">+ Plano de ação</button>` : ''}</span></div>
+    ${l.length ? `<div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Nº</th><th>O quê</th><th>Quem</th><th>Quando</th><th style="text-align:center">Lead time</th><th>Tempo</th><th>Situação</th></tr></thead><tbody>${l.map(a => {
       const sit = acaoSit(a);
-      return `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')"><td style="font-family:DM Mono,monospace;font-size:12px">${acaoNum(a)}</td><td>${prjEsc(a.oque)}</td><td>${prjEsc(a.quem || '—')}</td><td>${a.prazo ? fmtDate(a.prazo) : '—'}</td><td>${acaoProg(a)}%</td><td><span class="badge ${ACAO_ST_BADGE[sit]}">${ACAO_ST[sit]}</span></td></tr>`;
+      return `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')"><td style="font-family:DM Mono,monospace;font-size:12px">${acaoNum(a)}</td><td>${prjEsc(a.oque)}</td><td>${prjEsc(a.quem || '—')}</td><td>${a.prazo ? fmtDate(a.prazo) : '—'}</td>
+        <td style="text-align:center">${acaoLead(a) ?? '—'}d</td><td onclick="event.stopPropagation()">${acaoPlayHtml(a)}</td><td><span class="badge ${ACAO_ST_BADGE[sit]}">${ACAO_ST[sit]}</span></td></tr>`;
     }).join('')}</tbody></table></div>` : '<div style="font-size:12.5px;color:#a8a29e">Nenhum plano de ação vinculado.</div>'}
   </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// GESTÃO DE USUÁRIOS — editar nome e excluir (exceto administradores)
+// A exclusão remove o perfil (nome/permissões): sem perfil o login é
+// recusado pelo sistema. A conta de e-mail/senha continua no Supabase
+// Auth e pode ser apagada pelo painel (Authentication → Users).
+// ══════════════════════════════════════════════════════════════════
+async function usrEditarNome(email) {
+  const u = (USERS || []).find(x => x.user === email); if (!u) return;
+  const nome = (prompt(`Nome do usuário ${email}:`, u.nome) || '').trim();
+  if (!nome || nome === u.nome) return;
+  const ok = await sbFetch('perfis', 'PATCH', { nome }, `?email=eq.${encodeURIComponent(email)}`);
+  if (!ok) { alert('❌ Erro ao salvar o nome.' + sbErroDetalhe()); return; }
+  u.nome = nome;
+  if (currentUser && currentUser.user === email) {
+    currentUser.nome = nome;
+    const sb = document.getElementById('sidebar-user'); if (sb) sb.textContent = nome;
+    const av = document.getElementById('sidebar-avatar'); if (av) av.textContent = nome.charAt(0).toUpperCase();
+  }
+  renderUsuariosAdmin();
+}
+async function usrExcluir(email) {
+  const u = (USERS || []).find(x => x.user === email); if (!u) return;
+  if (u.role === 'admin') { alert('Usuários administradores não podem ser excluídos.'); return; }
+  if (currentUser && currentUser.user === email) { alert('Você não pode excluir o seu próprio usuário.'); return; }
+  if (!confirm(`Excluir o usuário "${u.nome}" (${email})?\n\nEle perde o acesso ao sistema na hora. Os lançamentos que ele fez continuam salvos.`)) return;
+  const ok = await sbFetch('perfis', 'DELETE', null, `?email=eq.${encodeURIComponent(email)}`);
+  const resta = ok ? await sbFetch('perfis', 'GET', null, `?email=eq.${encodeURIComponent(email)}&select=id`) : null;
+  if (!ok || (resta && resta.length)) { alert('❌ O usuário não foi excluído.' + sbErroDetalhe() + '\n\nProvável falta de permissão de exclusão na tabela perfis — rode o trecho "perfis" do SQL projetos_v3.'); return; }
+  renderUsuariosAdmin();
+  alert(`✅ Usuário excluído.\n\nA conta de login (${email}) ainda existe no Supabase Auth — se quiser apagar de vez, remova em Authentication → Users.`);
 }
 </script>
 </body>
