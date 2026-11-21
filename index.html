@@ -1205,6 +1205,17 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .acao-ci-op input { width:17px; height:17px; margin-top:1px; flex:0 0 17px; }
 .acao-compacta th, .acao-compacta td { padding-left:8px !important; padding-right:8px !important; }
 .acao-compacta th { white-space:nowrap; }
+/* Equipes */
+.prj-eq-box { margin-top:14px; background:#faf9f7; border:1px solid #efedeb; border-radius:10px; padding:10px 12px; }
+.prj-eq-row { display:grid; grid-template-columns:12px 1fr 220px; gap:8px; align-items:center; padding:4px 0; font-size:13px; }
+.prj-eq-row select { padding:6px 9px; }
+.gt-seg { overflow:hidden; display:flex; align-items:center; }
+.gt-seg-eq { font-size:10px; font-weight:800; color:#fff; padding:0 5px; white-space:nowrap; text-shadow:0 1px 2px rgba(0,0,0,.35); }
+/* 5W2H quadro: arrastar */
+.acao-card[draggable=true] { cursor:grab; }
+.acao-card.arrastando { opacity:.45; }
+.acao-col.acao-drop { background:#eff6ff; border-color:#93c5fd; }
+.acao-col.acao-nodrop { opacity:.55; }
 </style>
 </head>
 <body>
@@ -1611,9 +1622,20 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
         <div class="card-title">Etapas cadastradas</div>
         <div class="table-scroll" style="overflow:auto"><table><thead><tr>
           <th style="width:90px">Ordem</th><th>Etapa</th><th style="text-align:center">Prazo padrão</th><th style="text-align:center">Itens de checklist</th>
-          <th style="text-align:center">Projetos nela</th><th style="text-align:center">Encerra o projeto</th><th>Ações</th>
+          <th style="text-align:center">Projetos nela</th><th style="text-align:center">Tem equipe</th><th style="text-align:center">Encerra o projeto</th><th>Ações</th>
         </tr></thead><tbody id="prj-tb-etapas"></tbody></table></div>
         <div class="lanc-note" style="margin-top:12px">O prazo padrão é usado no semáforo dos cartões: verde até 70% do prazo, amarelo até 100%, vermelho quando passa. Ao entrar numa etapa que "encerra o projeto", ele é marcado como concluído.</div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+          <div class="card-title" style="margin:0">👥 Equipes</div>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <input type="text" id="prj-eq-novo" placeholder="Nova equipe (ex.: Equipe 04)" style="width:260px" onkeydown="if(event.key==='Enter')prjAddEquipe('prj-eq-novo')" />
+            <button class="btn btn-primary" onclick="prjAddEquipe('prj-eq-novo')">+ Adicionar</button>
+          </div>
+        </div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Equipe</th><th style="text-align:center">Projetos em aberto</th><th>Ações</th></tr></thead><tbody id="prj-eq-cad"></tbody></table></div>
+        <div class="lanc-note" style="margin-top:12px">A equipe é escolhida na ficha do projeto, nas etapas marcadas como "tem equipe" (ex.: Produção).</div>
       </div>
     </div>
 
@@ -1630,6 +1652,9 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
       <div class="prj-filtros" style="margin-top:12px">
         <div class="form-group"><label>Buscar</label><input type="text" id="gt-busca" placeholder="🔍 Código, projeto ou cliente" oninput="prjRenderGantt()" /></div>
         <div class="form-group"><label>Responsável</label><select id="gt-resp" onchange="prjRenderGantt()"><option value="">Todos</option></select></div>
+        <div class="form-group"><label>Etapa</label><select id="gt-etapa" onchange="prjRenderGantt()"><option value="">Todas as etapas</option></select></div>
+        <div class="form-group" id="gt-etapa-modo-wrap" style="display:none"><label>Projetos</label><select id="gt-etapa-modo" onchange="prjRenderGantt()"><option value="afazer">Que ainda têm esta etapa a fazer</option><option value="agora">Só os que estão nela agora</option></select></div>
+        <div class="form-group"><label>Equipe</label><select id="gt-equipe" onchange="prjRenderGantt()"><option value="">Todas</option></select></div>
         <div class="form-group"><label>Mostrar</label><select id="gt-status" onchange="prjRenderGantt()"><option value="ativos">Em andamento e pausados</option><option value="todos">Inclui concluídos</option></select></div>
         <div class="form-group"><label>Ordenar por</label><select id="gt-ordem" onchange="prjRenderGantt()"><option value="entrega">Entrega prometida</option><option value="inicio">Início</option><option value="codigo">Código</option><option value="risco">Risco de atraso</option></select></div>
         <div class="form-group" style="min-width:auto"><label>Escala</label>
@@ -3856,6 +3881,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <div class="form-group"><label>Prazo padrão (dias)</label><input id="prj-e-prazo" type="number" min="0" step="1" placeholder="0 = sem prazo" /></div>
           <div class="form-group"><label>Cor</label><input id="prj-e-cor" type="color" value="#2563eb" style="height:38px;padding:3px" /></div>
           <div class="form-group" style="grid-column:span 2"><label class="prj-chk" style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="prj-e-final" style="width:auto" /> Esta etapa encerra o projeto (marca como concluído)</label></div>
+          <div class="form-group" style="grid-column:span 2"><label class="prj-chk" style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="prj-e-equipe" style="width:auto" /> Esta etapa tem equipe responsável (ex.: Equipe 01, 02, 03)</label></div>
           <div class="form-group" style="grid-column:span 2"><label>Checklist da etapa (um item por linha)</label><textarea id="prj-e-check" rows="5" placeholder="Ex.:&#10;Plano de corte conferido&#10;Ferragens separadas"></textarea></div>
         </div>
       </div>
@@ -19875,6 +19901,7 @@ async function prjCarregar(forcar) {
   ]);
   prjDb.etapas = e || []; prjDb.projetos = p || []; prjDb.hist = h || [];
   if (!prjDb.etapas.length) await prjSemearEtapas();
+  await prjCarregarEquipes();
   // Motivos de cancelamento (tabela da versão 2 do módulo)
   const tm = await sbFetch('proj_motivos', 'GET', null, '?limit=1');
   if (tm === null) {
@@ -20292,8 +20319,9 @@ function prjAbrirFicha(id) {
       ${acoesEtapa}
     </div>
     <div class="lanc-sec">
-      <div class="lanc-sec-title"><span class="n">2</span>Checklist — ${et ? prjEsc(et.nome) : ''}</div>
+      <div class="lanc-sec-title"><span class="n">2</span>Checklist — ${et ? prjEsc(et.nome) : ''}${et && prjUsaEquipe(et) && (p.equipes || {})[et.id] ? `<span class="hint">👥 ${prjEsc(p.equipes[et.id])}</span>` : ''}</div>
       ${checkHtml}
+      ${prjEquipesFichaHtml(p)}
     </div>
     <div class="lanc-sec">
       <div class="lanc-sec-title"><span class="n">3</span>Dados do projeto</div>
@@ -20437,7 +20465,8 @@ function prjRenderPainel() {
 function prjRenderEtapas() {
   const tb = document.getElementById('prj-tb-etapas'); if (!tb) return;
   const etapas = prjEtapas();
-  if (!etapas.length) { tb.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhuma etapa cadastrada.</td></tr>'; return; }
+  if (!etapas.length) { tb.innerHTML = '<tr><td colspan="8" class="empty-state">Nenhuma etapa cadastrada.</td></tr>'; prjRenderEquipesCad(); return; }
+  prjRenderEquipesCad();
   tb.innerHTML = etapas.map((e, i) => {
     const n = prjDb.projetos.filter(p => p.etapa_id === e.id && p.status !== 'cancelado').length;
     return `<tr>
@@ -20447,6 +20476,7 @@ function prjRenderEtapas() {
       <td style="text-align:center">${e.prazo_dias ? e.prazo_dias + ' dias' : '—'}</td>
       <td style="text-align:center">${(e.checklist || []).length || '—'}</td>
       <td style="text-align:center">${n}</td>
+      <td style="text-align:center">${prjUsaEquipe(e) ? '<span class="badge badge-blue">👥 Sim</span>' : '—'}</td>
       <td style="text-align:center">${e.final ? '<span class="badge badge-green">Sim</span>' : '—'}</td>
       <td class="actions">
         <button class="btn btn-secondary btn-sm" onclick="prjAbrirEtapa('${e.id}')">Editar</button>
@@ -20463,6 +20493,7 @@ function prjAbrirEtapa(id) {
   document.getElementById('prj-e-prazo').value = e ? (e.prazo_dias || '') : '';
   document.getElementById('prj-e-cor').value = e ? (e.cor || '#2563eb') : '#2563eb';
   document.getElementById('prj-e-final').checked = e ? !!e.final : false;
+  document.getElementById('prj-e-equipe').checked = e ? prjUsaEquipe(e) : false;
   document.getElementById('prj-e-check').value = e ? (e.checklist || []).join('\n') : '';
   openModal('modal-prj-etapa');
   setTimeout(() => document.getElementById('prj-e-nome').focus(), 50);
@@ -20475,7 +20506,7 @@ async function prjSalvarEtapa() {
   if (!nome) { alert('Informe o nome da etapa.'); return; }
   const checklist = [...new Set(document.getElementById('prj-e-check').value.split('\n').map(s => s.trim()).filter(Boolean))];
   const rec = { nome, prazo_dias: Math.max(0, parseInt(document.getElementById('prj-e-prazo').value, 10) || 0),
-    cor: document.getElementById('prj-e-cor').value, final: document.getElementById('prj-e-final').checked, checklist };
+    cor: document.getElementById('prj-e-cor').value, final: document.getElementById('prj-e-final').checked, usa_equipe: document.getElementById('prj-e-equipe').checked, checklist };
   if (id) {
     const ok = await sbFetch('proj_etapas', 'PATCH', rec, `?id=eq.${id}`);
     if (!ok) { alert('❌ Erro ao salvar a etapa.' + sbErroDetalhe()); return; }
@@ -20803,16 +20834,42 @@ function prjRenderGantt() {
   const resp = document.getElementById('gt-resp').value;
   const modo = document.getElementById('gt-status').value;
   const ordem = document.getElementById('gt-ordem').value;
+  // Filtro por etapa (ex.: Produção) e por equipe
+  const selEt = document.getElementById('gt-etapa');
+  if (selEt) { const v = selEt.value; selEt.innerHTML = '<option value="">Todas as etapas</option>' + prjEtapas().filter(e => !e.final).map(e => `<option value="${e.id}">${prjEsc(e.nome)}</option>`).join(''); selEt.value = v; }
+  const etF = selEt ? selEt.value : '';
+  const etFIdx = etF ? prjEtapas().findIndex(e => e.id === etF) : -1;
+  const etFModo = (document.getElementById('gt-etapa-modo') || {}).value || 'afazer';
+  const wrapModo = document.getElementById('gt-etapa-modo-wrap'); if (wrapModo) wrapModo.style.display = etF ? '' : 'none';
+  const selEq = document.getElementById('gt-equipe');
+  if (selEq) { const v = selEq.value; selEq.innerHTML = '<option value="">Todas</option><option value="__sem__">Sem equipe</option>' + prjEquipesLista().map(q => `<option value="${prjEsc(q)}">${prjEsc(q)}</option>`).join(''); selEq.value = v; }
+  const eqF = selEq ? selEq.value : '';
+  const idxDe = p => prjEtapas().findIndex(e => e.id === p.etapa_id);
   const lista = prjDb.projetos.filter(p => p.status !== 'cancelado' && (modo === 'todos' || p.status !== 'concluido')
-    && (!resp || (p.responsavel || '') === resp) && prjFiltroTexto(p, termo))
+    && (!resp || (p.responsavel || '') === resp) && prjFiltroTexto(p, termo)
+    && (!etF || (p.status !== 'concluido' && (etFModo === 'agora' ? p.etapa_id === etF : idxDe(p) <= etFIdx)))
+    && (!eqF || (() => {
+      const eqs = p.equipes || {};
+      if (etF) return eqF === '__sem__' ? !eqs[etF] : eqs[etF] === eqF;
+      const vals = Object.values(eqs).filter(Boolean);
+      return eqF === '__sem__' ? !vals.length : vals.includes(eqF);
+    })()))
     .map(p => ({ p, g: prjGanttPlano(p) }));
+  // Período da etapa filtrada em cada projeto
+  lista.forEach(x => {
+    if (!etF) return;
+    const ss = x.g.segs.filter(sg => sg.et && sg.et.id === etF);
+    x.etIni = ss.length ? new Date(Math.min(...ss.map(sg => sg.ini))) : null;
+    x.etFim = ss.length ? new Date(Math.max(...ss.map(sg => sg.fim))) : null;
+  });
   const ord = {
     entrega: (a,b) => String(a.p.dt_entrega_prev || '9999').localeCompare(String(b.p.dt_entrega_prev || '9999')),
     inicio:  (a,b) => a.g.ini - b.g.ini,
     codigo:  (a,b) => String(a.p.codigo||'').localeCompare(String(b.p.codigo||''), 'pt-BR', { numeric:true }),
-    risco:   (a,b) => (b.g.estouro - a.g.estouro) || ord.entrega(a,b)
+    risco:   (a,b) => (b.g.estouro - a.g.estouro) || ord.entrega(a,b),
+    etapa:   (a,b) => ((a.etIni || 8.64e15) - (b.etIni || 8.64e15)) || ord.entrega(a,b)
   };
-  lista.sort(ord[ordem] || ord.entrega);
+  lista.sort(ord[etF && ordem === 'entrega' ? 'etapa' : ordem] || ord.entrega);
   const hoje = gtD(prjHoje());
   // KPIs
   const ativos = lista.filter(x => x.p.status !== 'concluido');
@@ -20821,7 +20878,7 @@ function prjRenderGantt() {
   const semData = ativos.filter(x => !x.g.entrega);
   const kpi = (v, l, s, cor) => `<div class="prj-kpi" style="--k:${cor}"><div class="v">${v}</div><div class="l">${l}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`;
   document.getElementById('gt-kpis').innerHTML =
-    kpi(ativos.length, 'No cronograma', 'Em andamento e pausados', '#2563eb') +
+    kpi(ativos.length, etF ? 'Com ' + prjEsc((prjEtapa(etF) || {}).nome || '') + (etFModo === 'agora' ? ' agora' : ' a fazer') : 'No cronograma', etF ? `${lista.filter(x => x.p.etapa_id === etF).length} nesta etapa agora` : 'Em andamento e pausados', '#2563eb') +
     kpi(ativos.length - risco.length - atras.length - semData.length, 'Previsão dentro do prazo', 'Previsão ≤ entrega prometida', '#16a34a') +
     kpi(risco.length, 'Risco de atraso', 'Previsão passa da entrega', '#f59e0b') +
     kpi(atras.length, 'Entrega já vencida', 'Data prometida passou', '#dc2626') +
@@ -20880,21 +20937,28 @@ function prjRenderGantt() {
       <div class="t1"><span class="cd">${prjEsc(p.codigo || '')}</span>${prjEsc(p.nome)}</div>
       <div class="t2"><span class="prj-dot" style="background:${prjEsc((et && et.cor) || '#94a3b8')}"></span>${prjEsc(et ? et.nome : '—')} · ${prjEsc(prjClienteNome(p))}
         ${p.status === 'concluido' ? '<span class="prj-tag verde">✔</span>' : (g.atrasado ? `<span class="prj-tag vermelho">Vencida ${Math.round((hoje - g.entrega) / GT_DIA)}d</span>` : (risco ? `<span class="prj-tag amarelo">+${g.estouro}d</span>` : ''))}
-        ${p.status === 'pausado' ? '<span class="prj-tag amarelo">⏸</span>' : ''}</div>
+        ${p.status === 'pausado' ? '<span class="prj-tag amarelo">⏸</span>' : ''}${(() => {
+          const eqs = p.equipes || {};
+          const ids = etF ? [etF] : prjEtapas().filter(e => eqs[e.id]).map(e => e.id);
+          return ids.filter(i => eqs[i]).map(i => `<span class="prj-tag" style="background:${prjCorEquipe(eqs[i])}22;color:${prjCorEquipe(eqs[i])}" title="${prjEsc((prjEtapa(i)||{}).nome || '')}">👥 ${prjEsc(eqs[i])}</span>`).join('');
+        })()}</div>
     </div>`);
     const x0 = gtX(g.ini), x1 = Math.max(gtX(g.fim) + _gtPx, x0 + 4);
     const segs = g.segs.map(s => {
       const w = Math.max(gtX(s.fim) - gtX(s.ini), 0);
-      return `<div class="gt-seg ${s.prev ? 'prev' : ''}" style="width:${w || 3}px;background-color:${prjEsc(s.cor)}"></div>`;
+      const eq = s.et ? (p.equipes || {})[s.et.id] : '';
+      const apagado = etF && !(s.et && s.et.id === etF);
+      return `<div class="gt-seg ${s.prev ? 'prev' : ''}" title="${prjEsc(s.nome)}${eq ? ' · ' + prjEsc(eq) : ''}" style="width:${w || 3}px;background-color:${prjEsc(s.cor)}${apagado ? ';opacity:.13' : (etF ? ';opacity:' + (s.prev ? '.8' : '1') + ';box-shadow:inset 0 0 0 2px rgba(0,0,0,.18)' : '')}">${eq && w > 46 && !apagado ? `<span class="gt-seg-eq">${prjEsc(eq)}</span>` : (eq && w > 46 && etF === '' ? '' : '')}</div>`;
     }).join('');
     let html = `<div class="gt-bar" style="left:${x0}px;width:${x1 - x0}px">${segs}</div>`;
-    if (risco && g.entrega) {
+    if (risco && g.entrega && !etF) {
       const xe = gtX(g.entrega) + Math.round(_gtPx / 2);
       html += `<div class="gt-estouro" style="left:${xe}px;width:${Math.max(x1 - xe, 4)}px"></div>`;
     }
     if (g.entrega) html += `<div class="gt-entrega ${p.status === 'concluido' ? (g.estouro ? 'atr' : 'ok') : (g.atrasado ? 'atr' : '')}" style="left:${gtX(g.entrega) + Math.round(_gtPx / 2)}px"></div>`;
     const xl = Math.max(x1, g.entrega ? gtX(g.entrega) + _gtPx : 0) + 12;
-    html += `<div class="gt-lbl" style="left:${xl}px">${g.prog}%${g.entrega ? ' · entrega ' + gtFmt(g.entrega).slice(0,5) : ''}${p.status !== 'concluido' ? ' · prev. ' + gtFmt(g.fim).slice(0,5) : ''}</div>`;
+    const _x = lista.find(y => y.p === p) || {};
+    html += `<div class="gt-lbl" style="left:${xl}px">${etF && _x.etIni ? `<b>${prjEsc((prjEtapa(etF) || {}).nome || '')}: ${gtFmt(_x.etIni).slice(0,5)} → ${gtFmt(_x.etFim).slice(0,5)}</b>${(p.equipes || {})[etF] ? ' · 👥 ' + prjEsc(p.equipes[etF]) : ' · <span style="color:#b45309">sem equipe</span>'} · ` : ''}${g.prog}%${g.entrega ? ' · entrega ' + gtFmt(g.entrega).slice(0,5) : ''}${p.status !== 'concluido' ? ' · prev. ' + gtFmt(g.fim).slice(0,5) : ''}</div>`;
     dir.push(`<div class="gt-row" style="width:${W}px" onclick="prjAbrirFicha('${p.id}')" onmousemove="prjGanttTip(event,'${p.id}')" onmouseleave="prjGanttTip(null)">${html}</div>`);
   });
   const n = lista.length;
@@ -21107,6 +21171,105 @@ function prjAtualizarTelasFinanceiro() {
   ['renderLancReceber','renderAReceber','renderRecebido','populateYearSelectsReceber','renderDashboard'].forEach(fn => {
     try { if (typeof window[fn] === 'function') window[fn](); } catch(e) { console.warn('[projetos] ' + fn, e); }
   });
+}
+
+
+// ══════════════════════════════════════════════════════════════════
+// EQUIPES (ex.: Equipe 01 / 02 / 03) — por etapa do projeto
+// • A etapa marcada "tem equipe" (padrão: Produção) pede a equipe.
+// • A equipe pode ser definida antes do projeto chegar na etapa
+//   (planejamento) e aparece no Gantt, com filtro por equipe.
+// Lista de equipes: tabela config (key "proj_equipes").
+// ══════════════════════════════════════════════════════════════════
+let prjEquipes = null;
+const PRJ_EQ_CORES = ['#2563eb','#ea580c','#16a34a','#9333ea','#0891b2','#db2777','#ca8a04','#475569'];
+function prjEquipesLista() { return prjEquipes || ['Equipe 01','Equipe 02','Equipe 03']; }
+function prjCorEquipe(nome) { const i = prjEquipesLista().indexOf(nome); return PRJ_EQ_CORES[(i < 0 ? 7 : i) % PRJ_EQ_CORES.length]; }
+function prjUsaEquipe(e) { return e.usa_equipe === true || (e.usa_equipe == null && /produ/i.test(e.nome || '')); }
+async function prjCarregarEquipes() {
+  const r = await sbFetch('config', 'GET', null, '?key=eq.proj_equipes&limit=1');
+  try { prjEquipes = (r && r[0] && r[0].value) ? JSON.parse(r[0].value) : ['Equipe 01','Equipe 02','Equipe 03']; }
+  catch(e) { prjEquipes = ['Equipe 01','Equipe 02','Equipe 03']; }
+}
+async function prjSalvarEquipesCad(lista) {
+  const value = JSON.stringify(lista);
+  const filtro = '?key=eq.proj_equipes';
+  const ex = await sbFetch('config', 'GET', null, filtro + '&select=id');
+  if (ex === null) { alert('❌ Erro ao acessar a configuração.' + sbErroDetalhe()); return false; }
+  const ok = ex.length ? await sbFetch('config', 'PATCH', { value }, filtro) : await sbFetch('config', 'POST', { id: uid(), key: 'proj_equipes', value });
+  if (!ok) { alert('❌ Erro ao salvar as equipes.' + sbErroDetalhe()); return false; }
+  prjEquipes = lista; return true;
+}
+async function prjAddEquipe(inputId, depois) {
+  const inp = document.getElementById(inputId);
+  const nome = (inp && inp.value || '').trim();
+  if (!nome) { alert('Digite o nome da equipe.'); return; }
+  if (prjEquipesLista().some(q => normText(q) === normText(nome))) { alert('Essa equipe já existe.'); return; }
+  if (!await prjSalvarEquipesCad([...prjEquipesLista(), nome])) return;
+  inp.value = '';
+  if (depois) depois(nome);
+  prjRenderEquipesCad();
+}
+async function prjRenomearEquipe(nome) {
+  const novo = (prompt('Novo nome da equipe:', nome) || '').trim();
+  if (!novo || novo === nome) return;
+  if (prjEquipesLista().some(q => q !== nome && normText(q) === normText(novo))) { alert('Já existe uma equipe com esse nome.'); return; }
+  if (!await prjSalvarEquipesCad(prjEquipesLista().map(q => q === nome ? novo : q))) return;
+  // Atualiza os projetos que usam a equipe
+  for (const p of prjDb.projetos) {
+    const eqs = p.equipes || {};
+    if (Object.values(eqs).includes(nome)) {
+      const n = {}; Object.keys(eqs).forEach(k => n[k] = eqs[k] === nome ? novo : eqs[k]);
+      if (await sbFetch('proj_projetos', 'PATCH', { equipes: n }, `?id=eq.${p.id}`)) p.equipes = n;
+    }
+  }
+  prjRenderEquipesCad(); prjRedesenhar();
+}
+async function prjExcluirEquipe(nome) {
+  const n = prjDb.projetos.filter(p => Object.values(p.equipes || {}).includes(nome)).length;
+  if (!confirm(`Excluir a equipe "${nome}"?${n ? `\n\n${n} projeto(s) continuam mostrando o nome dela até você trocar.` : ''}`)) return;
+  if (!await prjSalvarEquipesCad(prjEquipesLista().filter(q => q !== nome))) return;
+  prjRenderEquipesCad();
+}
+function prjRenderEquipesCad() {
+  const box = document.getElementById('prj-eq-cad'); if (!box) return;
+  box.innerHTML = prjEquipesLista().map(q => {
+    const n = prjDb.projetos.filter(p => p.status !== 'cancelado' && p.status !== 'concluido' && Object.values(p.equipes || {}).includes(q)).length;
+    return `<tr><td><span class="prj-dot" style="background:${prjCorEquipe(q)};margin-right:8px"></span><b>${prjEsc(q)}</b></td><td style="text-align:center">${n}</td>
+      <td class="actions"><button class="btn btn-secondary btn-sm" onclick="prjRenomearEquipe('${prjEsc(q).replace(/'/g, "&#39;")}')">Renomear</button>
+      <button class="btn btn-danger btn-sm" onclick="prjExcluirEquipe('${prjEsc(q).replace(/'/g, "&#39;")}')">Excluir</button></td></tr>`;
+  }).join('') || '<tr><td colspan="3" class="empty-state">Nenhuma equipe.</td></tr>';
+}
+function prjEquipesFichaHtml(p) {
+  const ets = prjEtapas().filter(prjUsaEquipe);
+  if (!ets.length) return '';
+  const eqs = p.equipes || {};
+  const bloq = p.status === 'cancelado';
+  const opts = v => '<option value="">— sem equipe —</option>' + [...new Set([...prjEquipesLista(), ...(v && !prjEquipesLista().includes(v) ? [v] : [])])]
+    .map(q => `<option value="${prjEsc(q)}" ${q === v ? 'selected' : ''}>${prjEsc(q)}</option>`).join('') + '<option value="__nova__">+ Nova equipe...</option>';
+  return `<div class="prj-eq-box">
+    <div style="font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#57534e;margin-bottom:8px">👥 Equipe responsável</div>
+    ${ets.map(e => `<div class="prj-eq-row"><span class="prj-dot" style="background:${prjEsc(e.cor)}"></span><span class="nm">${prjEsc(e.nome)}${e.id === p.etapa_id ? ' <span class="badge badge-blue" style="padding:1px 7px;font-size:10px">atual</span>' : ''}</span>
+      <select ${bloq ? 'disabled' : ''} onchange="prjDefinirEquipe('${p.id}','${e.id}',this)">${opts(eqs[e.id] || '')}</select></div>`).join('')}
+    <div style="font-size:11.5px;color:#a8a29e;margin-top:6px">Pode ser definida antes do projeto chegar na etapa — aparece no Cronograma (Gantt).</div>
+  </div>`;
+}
+async function prjDefinirEquipe(id, etapaId, sel) {
+  const p = prjProjeto(id); if (!p) return;
+  let v = sel.value;
+  if (v === '__nova__') {
+    const nome = (prompt('Nome da nova equipe:', 'Equipe ' + String(prjEquipesLista().length + 1).padStart(2, '0')) || '').trim();
+    if (!nome) { prjAbrirFicha(id); return; }
+    if (!prjEquipesLista().some(q => normText(q) === normText(nome))) { if (!await prjSalvarEquipesCad([...prjEquipesLista(), nome])) { prjAbrirFicha(id); return; } }
+    v = prjEquipesLista().find(q => normText(q) === normText(nome)) || nome;
+  }
+  const eqs = { ...(p.equipes || {}) };
+  if (v) eqs[etapaId] = v; else delete eqs[etapaId];
+  const ok = await sbFetch('proj_projetos', 'PATCH', { equipes: eqs }, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao salvar a equipe.' + sbErroDetalhe() + '\n\nSe citar "equipes", rode o SQL projetos_v5.'); prjAbrirFicha(id); return; }
+  p.equipes = eqs;
+  prjRedesenhar();
+  prjAbrirFicha(id);
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -21602,8 +21765,8 @@ function acaoRenderLista() {
   const colsK = [['pendente','Pendentes'],['andamento','Em andamento'],['atrasado','Atrasados'],['concluido','Concluídos']];
   document.getElementById('acao-kanban').innerHTML = colsK.map(([k, nome]) => {
     const l = lista.filter(a => acaoSit(a) === k);
-    return `<div class="acao-col" style="--c:${ACAO_ST_COR[k]}"><h4>${nome}<span style="background:#fff;border:1px solid #e7e5e4;border-radius:10px;padding:1px 8px;font-size:11px">${l.length}</span></h4><div class="bd">${
-      l.map(a => `<div class="acao-card" style="--s:${ACAO_ST_COR[k]}" onclick="acaoAbrir('${a.id}')">
+    return `<div class="acao-col" data-k="${k}" style="--c:${ACAO_ST_COR[k]}" ondragover="acaoDragOver(event,'${k}')" ondragleave="acaoDragLeave(event)" ondrop="acaoDrop(event,'${k}')"><h4>${nome}<span style="background:#fff;border:1px solid #e7e5e4;border-radius:10px;padding:1px 8px;font-size:11px">${l.length}</span></h4><div class="bd">${
+      l.map(a => `<div class="acao-card" draggable="true" ondragstart="acaoDragStart(event,'${a.id}')" ondragend="acaoDragEnd(event)" style="--s:${ACAO_ST_COR[k]}" onclick="acaoAbrir('${a.id}')">
         <div style="font-family:DM Mono,monospace;font-size:11px;color:#a8a29e">${acaoNum(a)}${a.prioridade === 'alta' ? ' · 🔴 Alta' : ''} · LT ${acaoLead(a) ?? '—'}d</div>
         <div class="t">${prjEsc(a.oque)}</div>
         ${acaoAceiteBadge(a) ? '<div style="margin-top:4px">' + acaoAceiteBadge(a) + '</div>' : ''}
@@ -22153,6 +22316,50 @@ async function acaoCiDecidir(aprovar) {
   closeModal('modal-acao-ciencia');
   acaoRedesenhar();
   setTimeout(acaoVerificarPendencias, 200);
+}
+
+
+// ══ QUADRO 5W2H — arrastar o plano entre as colunas ══
+// Pendentes ↔ Em andamento ↔ Concluídos. "Atrasados" é calculado pelo
+// prazo: soltar ali não muda nada (o plano continua atrasado até ser
+// concluído ou ter o prazo alterado).
+let _acaoArr = null;
+function acaoDragStart(ev, id) {
+  _acaoArr = id;
+  try { ev.dataTransfer.setData('text/plain', id); ev.dataTransfer.effectAllowed = 'move'; } catch(e) {}
+  ev.currentTarget.classList.add('arrastando');
+  document.querySelectorAll('.acao-col[data-k="atrasado"]').forEach(c => c.classList.add('acao-nodrop'));
+}
+function acaoDragEnd(ev) {
+  ev.currentTarget.classList.remove('arrastando');
+  document.querySelectorAll('.acao-col').forEach(c => c.classList.remove('acao-drop', 'acao-nodrop'));
+}
+function acaoDragOver(ev, k) { if (k === 'atrasado') return; ev.preventDefault(); ev.currentTarget.classList.add('acao-drop'); }
+function acaoDragLeave(ev) { if (!ev.currentTarget.contains(ev.relatedTarget)) ev.currentTarget.classList.remove('acao-drop'); }
+async function acaoDrop(ev, k) {
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('acao-drop');
+  let id = _acaoArr; try { id = ev.dataTransfer.getData('text/plain') || id; } catch(e) {}
+  _acaoArr = null;
+  if (!id || k === 'atrasado') return;
+  await acaoMoverStatus(id, k);
+}
+async function acaoMoverStatus(id, k) {
+  const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
+  if (a.status === k) return;
+  if ((a.aceite || 'aceito') === 'pendente' && acaoDoUsuario(a)) { acaoAbrirCiencia(id); return; }
+  if (k === 'concluido') { await acaoConcluir(id); return; }
+  const de = a.status;
+  if (de === 'concluido' && !confirm(`Reabrir o plano ${acaoNum(a)} (volta para "${ACAO_ST[k]}")?`)) return;
+  if (k === 'pendente' && acaoRodando(id) && !await acaoStop(id, true)) return;
+  const rec = { status: k };
+  if (de === 'concluido') { rec.dt_conclusao = null; if (acaoProg(a) >= 100) rec.progresso = 90; }
+  if (k === 'andamento' && !a.dt_primeira_acao) rec.dt_primeira_acao = new Date().toISOString();
+  const ok = await sbFetch('acao_planos', 'PATCH', rec, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao mover o plano.' + sbErroDetalhe()); return; }
+  Object.assign(a, rec);
+  await acaoRegistrar(id, `Movido no quadro: ${ACAO_ST[de] || de} → ${ACAO_ST[k]}`);
+  acaoRedesenhar();
 }
 </script>
 </body>
