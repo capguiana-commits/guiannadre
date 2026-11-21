@@ -1039,6 +1039,65 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .tf-swap:hover { background:#ea580c; color:#fff; }
 .tf-saldo { font-size:11.5px; color:#78716c; margin-top:5px; min-height:14px; font-family:'DM Mono',monospace; }
 @media (max-width:640px) { .tf-contas { grid-template-columns:1fr; } .tf-swap { margin:0 auto; transform:rotate(90deg); } }
+
+/* ══ PROJETOS (móveis sob medida) ══ */
+.prj-filtros { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end; margin-bottom:14px; }
+.prj-filtros .form-group { margin-bottom:0; min-width:170px; }
+.prj-filtros label.prj-chk { display:flex; align-items:center; gap:6px; font-size:12.5px; color:#57534e; padding-bottom:9px; cursor:pointer; }
+.prj-board { display:flex; gap:12px; overflow-x:auto; padding-bottom:14px; align-items:flex-start; }
+.prj-col { flex:0 0 262px; background:#f7f6f4; border:1px solid #ece9e6; border-radius:14px; display:flex; flex-direction:column; max-height:calc(100vh - 250px); border-top:4px solid var(--c,#94a3b8); }
+.prj-col-head { padding:10px 12px 9px; border-bottom:1px solid #ece9e6; }
+.prj-col-tit { display:flex; align-items:center; gap:8px; font-weight:700; font-size:12.5px; color:#1f2937; }
+.prj-col-tit .prj-cnt { margin-left:auto; background:#fff; border:1px solid #e7e5e4; border-radius:10px; padding:1px 8px; font-size:11px; color:#57534e; }
+.prj-col-sub { font-size:11px; color:#a8a29e; margin-top:3px; }
+.prj-col-body { padding:10px; overflow-y:auto; flex:1; min-height:90px; }
+.prj-col.prj-drop { background:#eff6ff; border-color:#93c5fd; }
+.prj-card { background:#fff; border:1px solid #e7e5e4; border-left:4px solid var(--s,#d6d3d1); border-radius:10px; padding:10px 11px; margin-bottom:9px; cursor:grab; box-shadow:0 1px 2px rgba(15,30,58,.05); transition:box-shadow .15s; }
+.prj-card:hover { box-shadow:0 4px 12px rgba(15,30,58,.10); }
+.prj-card.prj-arrastando { opacity:.45; }
+.prj-card-top { display:flex; align-items:center; gap:6px; font-size:11px; color:#a8a29e; font-family:'DM Mono',monospace; }
+.prj-card-top .prj-pri { margin-left:auto; }
+.prj-card-tit { font-weight:700; font-size:13px; color:#1f2937; margin:3px 0 2px; line-height:1.3; }
+.prj-card-cli { font-size:12px; color:#57534e; }
+.prj-card-inf { display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; font-size:11px; }
+.prj-tag { display:inline-flex; align-items:center; gap:4px; padding:2px 7px; border-radius:8px; background:#f5f5f4; color:#57534e; font-weight:600; }
+.prj-tag.verde { background:#dcfce7; color:#166534; }
+.prj-tag.amarelo { background:#fef3c7; color:#92400e; }
+.prj-tag.vermelho { background:#fee2e2; color:#991b1b; }
+.prj-card-nav { display:flex; justify-content:space-between; margin-top:8px; }
+.prj-card-nav button { border:1px solid #e7e5e4; background:#fff; border-radius:6px; font-size:11px; padding:2px 8px; cursor:pointer; color:#57534e; }
+.prj-card-nav button:hover { background:#f5f5f4; }
+.prj-card-nav button:disabled { opacity:.35; cursor:default; }
+.prj-vazio { font-size:12px; color:#a8a29e; text-align:center; padding:14px 4px; }
+.prj-dot { width:10px; height:10px; border-radius:50%; display:inline-block; flex:0 0 10px; }
+.prj-kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-bottom:18px; }
+.prj-kpi { background:#fff; border:1px solid var(--border,#e7e5e4); border-radius:12px; padding:14px 16px; border-left:4px solid var(--k,#2563eb); }
+.prj-kpi .v { font-size:24px; font-weight:700; font-family:'DM Mono',monospace; color:#1f2937; }
+.prj-kpi .l { font-size:11px; color:#a8a29e; text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+.prj-kpi .s { font-size:11.5px; color:#57534e; margin-top:4px; }
+.prj-bar-row { display:grid; grid-template-columns:190px 1fr 120px; gap:10px; align-items:center; font-size:12.5px; padding:5px 0; }
+.prj-bar-row .nm { display:flex; align-items:center; gap:7px; color:#44403c; font-weight:600; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.prj-bar { background:#f5f5f4; border-radius:6px; height:16px; overflow:hidden; position:relative; }
+.prj-bar > span { display:block; height:100%; border-radius:6px; }
+.prj-bar-row .vl { text-align:right; font-family:'DM Mono',monospace; font-size:12px; color:#57534e; }
+.prj-grid2 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px; }
+@media (max-width:900px){ .prj-grid2 { grid-template-columns:1fr; } .prj-bar-row { grid-template-columns:120px 1fr 90px; } }
+.prj-steps { display:flex; gap:4px; overflow-x:auto; padding:4px 0 10px; }
+.prj-step { flex:1 0 92px; text-align:center; font-size:10.5px; color:#a8a29e; position:relative; }
+.prj-step .b { height:6px; border-radius:4px; background:#e7e5e4; margin-bottom:6px; }
+.prj-step.feito .b { background:#16a34a; }
+.prj-step.atual .b { background:var(--c,#2563eb); }
+.prj-step.atual { color:#1f2937; font-weight:700; }
+.prj-step.feito { color:#57534e; }
+.prj-step .d { font-size:10px; color:#a8a29e; font-weight:400; margin-top:2px; }
+.prj-ficha-info { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px 16px; font-size:13px; }
+.prj-ficha-info .k { font-size:10.5px; color:#a8a29e; text-transform:uppercase; letter-spacing:.5px; }
+.prj-ficha-info .x { color:#1f2937; font-weight:600; margin-top:1px; }
+@media (max-width:700px){ .prj-ficha-info { grid-template-columns:1fr 1fr; } }
+.prj-chk-item { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid #f5f4f2; font-size:13px; cursor:pointer; }
+.prj-chk-item input { width:16px; height:16px; }
+.prj-chk-item.ok span { color:#a8a29e; text-decoration:line-through; }
+.prj-acoes-etapa { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
 </style>
 </head>
 <body>
@@ -1281,6 +1340,31 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
         </div>
       </div>
 
+
+      <!-- GRUPO: Projetos (móveis sob medida) -->
+      <div class="nav-group-header open" onclick="toggleNavGroup('grp-projetos',this)" style="margin-top:4px;">
+        <span>Projetos</span>
+        <span class="nav-group-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="nav-group-items" id="grp-projetos" style="max-height:400px">
+        <div class="nav-sub-item" onclick="showPage('proj-quadro')" id="nav-proj-quadro">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="4" height="8" rx="1"/></svg>
+          Quadro de Fases
+        </div>
+        <div class="nav-sub-item" onclick="showPage('proj-lista')" id="nav-proj-lista">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Projetos
+        </div>
+        <div class="nav-sub-item" onclick="showPage('proj-painel')" id="nav-proj-painel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Painel de Projetos
+        </div>
+        <div class="nav-sub-item" onclick="showPage('proj-etapas')" id="nav-proj-etapas">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          Etapas
+        </div>
+      </div>
+
       <!-- Admin -->
       <div class="nav-label" id="nav-label-admin" style="display:none;margin-top:8px;">Administração</div>
       <div class="nav-item" id="nav-item-usuarios" onclick="showPage('usuarios')" style="display:none">
@@ -1308,6 +1392,86 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
   <!-- MAIN -->
   <div class="main">
 
+
+
+    <!-- ══ PROJETOS — QUADRO DE FASES ══ -->
+    <div class="page" id="page-proj-quadro">
+      <div class="page-header">
+        <div><div class="page-title">Quadro de Fases</div><div class="page-sub" style="margin-bottom:0">Arraste o cartão para mudar o projeto de etapa · clique para abrir a ficha</div></div>
+        <button class="btn-novo" onclick="prjAbrirProjeto()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Projeto
+        </button>
+      </div>
+      <div class="est-aviso prj-aviso" style="display:none"></div>
+      <div class="prj-filtros">
+        <div class="form-group"><label>Buscar</label><input type="text" id="prj-q-busca" placeholder="🔍 Código, projeto ou cliente" oninput="prjRenderQuadro()" /></div>
+        <div class="form-group"><label>Responsável</label><select id="prj-q-resp" onchange="prjRenderQuadro()"><option value="">Todos</option></select></div>
+        <label class="prj-chk"><input type="checkbox" id="prj-q-concl" onchange="prjRenderQuadro()" /> Mostrar concluídos</label>
+      </div>
+      <div class="prj-board" id="prj-board"></div>
+    </div>
+
+    <!-- ══ PROJETOS — LISTA ══ -->
+    <div class="page" id="page-proj-lista">
+      <div class="page-header">
+        <div><div class="page-title">Projetos</div><div class="page-sub" style="margin-bottom:0">Todos os projetos, com etapa atual, prazos e status</div></div>
+        <button class="btn-novo" onclick="prjAbrirProjeto()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Projeto
+        </button>
+      </div>
+      <div class="est-aviso prj-aviso" style="display:none"></div>
+      <div class="card" style="margin-top:16px">
+        <div class="prj-filtros">
+          <div class="form-group"><label>Buscar</label><input type="text" id="prj-l-busca" placeholder="🔍 Código, projeto ou cliente" oninput="prjRenderLista()" /></div>
+          <div class="form-group"><label>Status</label><select id="prj-l-status" onchange="prjRenderLista()"><option value="">Todos</option><option value="ativo" selected>Em andamento</option><option value="pausado">Pausado</option><option value="concluido">Concluído</option><option value="cancelado">Cancelado</option></select></div>
+          <div class="form-group"><label>Etapa</label><select id="prj-l-etapa" onchange="prjRenderLista()"><option value="">Todas</option></select></div>
+          <div class="form-group"><label>Responsável</label><select id="prj-l-resp" onchange="prjRenderLista()"><option value="">Todos</option></select></div>
+        </div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr>
+          <th>Código</th><th>Projeto</th><th>Cliente</th><th>Responsável</th><th>Etapa</th><th style="text-align:center">Dias na etapa</th>
+          <th>Entrega prevista</th><th class="num">Valor</th><th>Status</th><th>Ações</th>
+        </tr></thead><tbody id="prj-tb-lista"><tr><td colspan="10" class="empty-state">Carregando...</td></tr></tbody>
+        <tfoot id="prj-tf-lista"></tfoot></table></div>
+      </div>
+    </div>
+
+    <!-- ══ PROJETOS — PAINEL ══ -->
+    <div class="page" id="page-proj-painel">
+      <div class="page-header">
+        <div><div class="page-title">Painel de Projetos</div><div class="page-sub" style="margin-bottom:0">Visão geral da carteira, gargalos por etapa e próximas entregas</div></div>
+      </div>
+      <div class="est-aviso prj-aviso" style="display:none"></div>
+      <div class="prj-kpis" id="prj-kpis" style="margin-top:16px"></div>
+      <div class="prj-grid2">
+        <div class="card"><div class="card-title">Projetos em andamento por etapa</div><div id="prj-p-etapas"></div></div>
+        <div class="card"><div class="card-title">Tempo médio em cada etapa (dias) × prazo padrão</div><div id="prj-p-tempo"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Entregas atrasadas e próximos 30 dias</div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr>
+          <th>Entrega prevista</th><th>Código</th><th>Projeto</th><th>Cliente</th><th>Etapa atual</th><th class="num">Valor</th><th>Situação</th>
+        </tr></thead><tbody id="prj-tb-entregas"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ══ PROJETOS — ETAPAS ══ -->
+    <div class="page" id="page-proj-etapas">
+      <div class="page-header">
+        <div><div class="page-title">Etapas dos Projetos</div><div class="page-sub" style="margin-bottom:0">Fases que formam as colunas do quadro, na ordem em que o projeto anda</div></div>
+        <button class="btn-novo" onclick="prjAbrirEtapa()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Etapa
+        </button>
+      </div>
+      <div class="est-aviso prj-aviso" style="display:none"></div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Etapas cadastradas</div>
+        <div class="table-scroll" style="overflow:auto"><table><thead><tr>
+          <th style="width:90px">Ordem</th><th>Etapa</th><th style="text-align:center">Prazo padrão</th><th style="text-align:center">Itens de checklist</th>
+          <th style="text-align:center">Projetos nela</th><th style="text-align:center">Encerra o projeto</th><th>Ações</th>
+        </tr></thead><tbody id="prj-tb-etapas"></tbody></table></div>
+        <div class="lanc-note" style="margin-top:12px">O prazo padrão é usado no semáforo dos cartões: verde até 70% do prazo, amarelo até 100%, vermelho quando passa. Ao entrar numa etapa que "encerra o projeto", ele é marcado como concluído.</div>
+      </div>
+    </div>
 
     <!-- ══ CONTROLE DE ESTOQUE — PRODUTOS ══ -->
     <div class="page" id="page-est-produtos">
@@ -3317,6 +3481,101 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
   </div>
 </div>
 
+
+<!-- ══ MODAL PROJETOS — CADASTRO ══ -->
+<div class="modal-overlay" id="modal-prj-projeto">
+  <div class="modal lanc-modal">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">🪚</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title" id="prj-f-titulo">Novo Projeto</div>
+        <div class="lanc-head-sub">Projetos · campos com * são obrigatórios</div>
+      </div>
+      <button type="button" class="lanc-close" onclick="closeModal('modal-prj-projeto')" title="Fechar">✕</button>
+    </div>
+    <div class="lanc-body">
+      <input type="hidden" id="prj-f-id" />
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">1</span>Projeto e cliente</div>
+        <div class="grid3 form-compacto">
+          <div class="form-group"><label>Código</label><input id="prj-f-codigo" type="text" placeholder="Automático" /></div>
+          <div class="form-group" style="grid-column:span 2"><label>Projeto / Ambientes *</label><input id="prj-f-nome" type="text" placeholder="Ex.: Cozinha + Dormitório casal" /></div>
+          <div class="form-group" style="grid-column:span 2"><label class="label-add">Cliente *<button type="button" class="btn-add-inline" title="Cadastrar novo cliente" onclick="abrirCadastroRapido('cliente','prj-f-cliente')">+</button></label><select id="prj-f-cliente"><option value="">Selecione...</option></select></div>
+          <div class="form-group"><label>Responsável (projetista)</label><input id="prj-f-resp" type="text" list="prj-dl-resp" placeholder="Nome" /><datalist id="prj-dl-resp"></datalist></div>
+          <div class="form-group" style="grid-column:span 3"><label>Endereço da obra / montagem</label><input id="prj-f-end" type="text" placeholder="Rua, número, bairro, cidade" /></div>
+        </div>
+      </div>
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">2</span>Valores, prazos e etapa</div>
+        <div class="grid3 form-compacto">
+          <div class="form-group"><label>Valor do contrato (R$)</label><input id="prj-f-valor" type="number" step="any" placeholder="0,00" /></div>
+          <div class="form-group"><label>Data da venda</label><input id="prj-f-dtvenda" type="date" /></div>
+          <div class="form-group"><label>Entrega prometida</label><input id="prj-f-dtentrega" type="date" /></div>
+          <div class="form-group"><label>Prioridade</label><select id="prj-f-pri"><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></div>
+          <div class="form-group" id="prj-f-etapa-wrap"><label>Etapa inicial *</label><select id="prj-f-etapa"></select></div>
+          <div class="form-group"><label>Status</label><select id="prj-f-status"><option value="ativo">Em andamento</option><option value="pausado">Pausado</option><option value="concluido">Concluído</option><option value="cancelado">Cancelado</option></select></div>
+        </div>
+      </div>
+      <div class="lanc-sec">
+        <div class="lanc-sec-title"><span class="n">3</span>Observações</div>
+        <div class="form-group"><textarea id="prj-f-obs" rows="3" placeholder="Detalhes do projeto, materiais, cores, ferragens..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer lanc-foot">
+      <span class="lanc-foot-info">A tela só fecha pelo ✕ ou por Cancelar</span>
+      <button class="btn btn-secondary" onclick="closeModal('modal-prj-projeto')">Cancelar</button>
+      <button class="btn btn-primary" onclick="prjSalvarProjeto()">Salvar Projeto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL PROJETOS — FICHA ══ -->
+<div class="modal-overlay" id="modal-prj-ficha">
+  <div class="modal lanc-modal" style="width:900px;max-width:96vw">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">📋</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title" id="prj-fc-titulo">Projeto</div>
+        <div class="lanc-head-sub" id="prj-fc-sub"></div>
+      </div>
+      <button type="button" class="lanc-close" onclick="closeModal('modal-prj-ficha')" title="Fechar">✕</button>
+    </div>
+    <div class="lanc-body" id="prj-fc-body"></div>
+    <div class="modal-footer lanc-foot" id="prj-fc-foot"></div>
+  </div>
+</div>
+
+<!-- ══ MODAL PROJETOS — ETAPA ══ -->
+<div class="modal-overlay" id="modal-prj-etapa">
+  <div class="modal lanc-modal" style="width:520px">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">🧩</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title" id="prj-e-titulo">Nova Etapa</div>
+        <div class="lanc-head-sub">Projetos · etapas do quadro</div>
+      </div>
+      <button type="button" class="lanc-close" onclick="closeModal('modal-prj-etapa')" title="Fechar">✕</button>
+    </div>
+    <div class="lanc-body">
+      <input type="hidden" id="prj-e-id" />
+      <div class="lanc-sec">
+        <div class="grid2 form-compacto">
+          <div class="form-group" style="grid-column:span 2"><label>Nome da etapa *</label><input id="prj-e-nome" type="text" placeholder="Ex.: Produção" /></div>
+          <div class="form-group"><label>Prazo padrão (dias)</label><input id="prj-e-prazo" type="number" min="0" step="1" placeholder="0 = sem prazo" /></div>
+          <div class="form-group"><label>Cor</label><input id="prj-e-cor" type="color" value="#2563eb" style="height:38px;padding:3px" /></div>
+          <div class="form-group" style="grid-column:span 2"><label class="prj-chk" style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="prj-e-final" style="width:auto" /> Esta etapa encerra o projeto (marca como concluído)</label></div>
+          <div class="form-group" style="grid-column:span 2"><label>Checklist da etapa (um item por linha)</label><textarea id="prj-e-check" rows="5" placeholder="Ex.:&#10;Plano de corte conferido&#10;Ferragens separadas"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer lanc-foot">
+      <span class="lanc-foot-info"></span>
+      <button class="btn btn-secondary" onclick="closeModal('modal-prj-etapa')">Cancelar</button>
+      <button class="btn btn-primary" onclick="prjSalvarEtapa()">Salvar Etapa</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ MODAL ESTOQUE — PRODUTO ══ -->
 <div class="modal-overlay" id="modal-est-produto">
   <div class="modal lanc-modal">
@@ -4485,6 +4744,10 @@ const PAGES_CONFIG = [
   { id:'est-tipos',         label:'Estoque — Tipos de Material', grupo:'estoque' },
   { id:'est-lancamentos',   label:'Estoque — Lançamento Mensal', grupo:'estoque' },
   { id:'est-variacao',      label:'Estoque — Variação do Estoque', grupo:'estoque' },
+  { id:'proj-quadro',       label:'Projetos — Quadro de Fases', grupo:'projetos' },
+  { id:'proj-lista',        label:'Projetos — Lista',        grupo:'projetos' },
+  { id:'proj-painel',       label:'Projetos — Painel',       grupo:'projetos' },
+  { id:'proj-etapas',       label:'Projetos — Etapas',       grupo:'projetos' },
 ];
 
 // ══════════════════════════════════════════
@@ -5166,6 +5429,7 @@ function showPage(p) {
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
   if (p === 'est-produtos' || p === 'est-tipos' || p === 'est-lancamentos' || p === 'est-variacao') estAbrirPagina(p);
+  if (p === 'proj-quadro' || p === 'proj-lista' || p === 'proj-painel' || p === 'proj-etapas') prjAbrirPagina(p);
   if (p === 'backup')            bkRenderTela();
 }
 
@@ -5206,6 +5470,7 @@ function renderPaginaAtual() {
   if (p === 'dre-analise-subcat'){ popularCategoriasAnaliseSub(); renderAnaliseSubcategoria(); }
   if (p === 'metas-categoria')   { carregarMetasCategoria().then(abrirMetasCategoria); }
   if (p === 'est-produtos' || p === 'est-tipos' || p === 'est-lancamentos' || p === 'est-variacao') estAbrirPagina(p);
+  if (p === 'proj-quadro' || p === 'proj-lista' || p === 'proj-painel' || p === 'proj-etapas') prjAbrirPagina(p);
   if (p === 'usuarios')          renderUsuariosAdmin();
   if (p === 'empresas')          renderEmpresas();
   if (p === 'backup')            bkRenderTela();
@@ -5891,7 +6156,7 @@ async function salvarCadastroRapido() {
   // Recarrega os selects e as listas afetadas
   if (tipo === 'fornecedor') { populateFornSelects(); renderFornecedores(); }
   if (tipo === 'produto')    { populateProdSelects(); renderProdutos(); }
-  if (tipo === 'cliente')    { populateClienteSelects(); renderClientes(); }
+  if (tipo === 'cliente')    { populateClienteSelects(); renderClientes(); if (typeof prjPopularClientes === 'function') prjPopularClientes(); }
   if (tipo === 'prodvenda')  { populateProdVendaSelects(); renderProdVenda(); }
   if (tipo === 'categoria')  {
     populateDreCatSelects();
@@ -8599,7 +8864,8 @@ async function backupLancamentos() {
 const BACKUP_TABELAS = ['empresas','fornecedores','produtos','lancamentos','faturamento','recebimentos',
   'metas','clientes','prodvenda','lancreceber','dfc_categorias','dfc_subcategorias','dfc_lancamentos',
   'bancos','dre_grupos','transferencias','pedidos_cancelados','reposicoes','cartoes','cartao_despesas',
-  'config','est_tipos','est_produtos','est_lancamentos'];
+  'config','est_tipos','est_produtos','est_lancamentos',
+  'proj_etapas','proj_projetos','proj_historico'];
 
 // Busca, direto do banco, todas as tabelas de dados do sistema.
 async function buscarDadosCompletos() {
@@ -10738,7 +11004,7 @@ function applyNavPermissions() {
   // aqui, antes de decidir quais cabeçalhos de grupo continuam visíveis.
   aplicarOcultacoesMenu();
   // Ocultar cabeçalho do grupo se todos os itens estiverem ocultos
-  ['grp-pagar','grp-receber','grp-dfc','grp-dre','grp-estoque'].forEach(grpId => {
+  ['grp-pagar','grp-receber','grp-dfc','grp-dre','grp-estoque','grp-projetos'].forEach(grpId => {
     const grp = document.getElementById(grpId);
     if(!grp) return;
     const visivel = grp.querySelectorAll('.nav-sub-item:not([style*="none"])').length > 0;
@@ -10767,6 +11033,7 @@ async function renderUsuariosAdmin() {
     const pagDfc     = PAGES_CONFIG.filter(pg=>pg.grupo==='dfc');
     const pagDre     = PAGES_CONFIG.filter(pg=>pg.grupo==='dre');
     const pagEstoque = PAGES_CONFIG.filter(pg=>pg.grupo==='estoque');
+    const pagProjetos = PAGES_CONFIG.filter(pg=>pg.grupo==='projetos');
     const buildPerms = (pgs) => pgs.map(pg => {
       const checked = (u.pages || []).includes(pg.id);
       const disabled = isAdmin ? ' disabled-perm' : '';
@@ -10790,7 +11057,9 @@ async function renderUsuariosAdmin() {
       <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📈 DRE</div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${buildPerms(pagDre)}</div>
       <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🗃️ Controle de Estoque</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px">${buildPerms(pagEstoque)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${buildPerms(pagEstoque)}</div>
+      <div style="font-size:10px;color:#a8a29e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🪚 Projetos</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">${buildPerms(pagProjetos)}</div>
     </div>`;
 
     // Último login deste usuário
@@ -19085,6 +19354,689 @@ function estRenderVariacao() {
   tb.innerHTML = meses.map(x => `<tr><td class="mes">${EST_MESES[x.m - 1]}/${yy}</td>${cel(x.ini)}${cel(x.fim)}${celVar(x.v)}</tr>`).join('');
   const tot = meses[11].fim - meses[0].ini;
   document.getElementById('est-tf-var').innerHTML = `<tr><td class="mes">Total ${ano}</td>${cel(meses[0].ini)}${cel(meses[11].fim)}${celVar(tot)}</tr>`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// PROJETOS — acompanhamento de projetos de móveis sob medida por fase
+// Tabelas no Supabase: proj_etapas, proj_projetos, proj_historico
+// (SQL de criação entregue junto com esta versão).
+//   • Cada projeto está em UMA etapa por vez (proj_projetos.etapa_id).
+//   • Toda mudança de etapa grava uma linha em proj_historico
+//     (entrada/saída + usuário) → tempo em cada fase e gargalos.
+//   • Checklist: itens definidos na etapa; marcações ficam no projeto.
+//   • Financeiro: só LEITURA dos lançamentos a receber do cliente.
+// ══════════════════════════════════════════════════════════════════
+let prjDb = { etapas: [], projetos: [], hist: [] };
+let prjCarregado = false, prjErro = '';
+let _prjArrastando = null;
+
+const PRJ_ETAPAS_PADRAO = [
+  { nome:'Medição inicial',               prazo:3,  cor:'#64748b', check:['Visita agendada','Medidas e fotos do ambiente'] },
+  { nome:'Projeto 3D / Orçamento',        prazo:5,  cor:'#8b5cf6', check:['Projeto 3D enviado','Orçamento enviado'] },
+  { nome:'Aprovação / Contrato',          prazo:7,  cor:'#a855f7', check:['Projeto aprovado','Contrato assinado','Entrada recebida'] },
+  { nome:'Medição fina',                  prazo:3,  cor:'#0ea5e9', check:['Medidas conferidas na obra','Pontos elétricos/hidráulicos conferidos'] },
+  { nome:'Projeto executivo / Plano de corte', prazo:4, cor:'#06b6d4', check:['Projeto executivo revisado','Plano de corte gerado'] },
+  { nome:'Compra de materiais',           prazo:7,  cor:'#f59e0b', check:['Chapas compradas','Ferragens compradas','Materiais recebidos'] },
+  { nome:'Produção',                      prazo:10, cor:'#ea580c', check:['Corte','Fita de borda','Usinagem / furação'] },
+  { nome:'Pré-montagem / Acabamento',     prazo:3,  cor:'#d97706', check:['Pré-montagem conferida','Peças embaladas e identificadas'] },
+  { nome:'Entrega',                       prazo:2,  cor:'#2563eb', check:['Entrega agendada','Material entregue'] },
+  { nome:'Montagem no cliente',           prazo:4,  cor:'#1d4ed8', check:['Montagem concluída','Limpeza do local'] },
+  { nome:'Vistoria / Assistência',        prazo:5,  cor:'#0d9488', check:['Vistoria com o cliente','Termo de entrega assinado'] },
+  { nome:'Concluído',                     prazo:0,  cor:'#16a34a', check:[], final:true }
+];
+const PRJ_STATUS = { ativo:'Em andamento', pausado:'Pausado', concluido:'Concluído', cancelado:'Cancelado' };
+const PRJ_STATUS_COR = { ativo:'badge-blue', pausado:'badge-yellow', concluido:'badge-green', cancelado:'badge-gray' };
+const PRJ_PRI = { normal:'', alta:'🟠 Alta', urgente:'🔴 Urgente' };
+
+function prjEsc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function prjNum(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
+function prjDias(desde, ate) {
+  if (!desde) return 0;
+  const a = new Date(desde), b = ate ? new Date(ate) : new Date();
+  return Math.max(0, Math.floor((b - a) / 86400000));
+}
+function prjDataLocal(ts) { // timestamp → 'AAAA-MM-DD' no fuso local
+  if (!ts) return '';
+  const d = new Date(ts); if (isNaN(d)) return String(ts).slice(0,10);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function prjHoje() { return prjDataLocal(new Date().toISOString()); }
+
+async function prjCarregar(forcar) {
+  if (prjCarregado && !forcar) return;
+  prjErro = '';
+  const teste = await sbFetch('proj_etapas', 'GET', null, '?limit=1');
+  if (teste === null) {
+    prjErro = '⚠️ Não foi possível acessar as tabelas do módulo de Projetos.' + sbErroDetalhe() +
+      '\n\nRode o SQL de criação das tabelas (proj_etapas, proj_projetos, proj_historico) no SQL Editor do Supabase.';
+    prjDb = { etapas: [], projetos: [], hist: [] };
+    return;
+  }
+  const [e, p, h] = await Promise.all([
+    fetchAll('proj_etapas', 'ordem'),
+    fetchAll('proj_projetos', 'created_at'),
+    fetchAll('proj_historico', 'dt_entrada')
+  ]);
+  prjDb.etapas = e || []; prjDb.projetos = p || []; prjDb.hist = h || [];
+  if (!prjDb.etapas.length) await prjSemearEtapas();
+  prjCarregado = true;
+}
+
+// Primeira vez: cria as etapas padrão de marcenaria sob medida.
+async function prjSemearEtapas() {
+  const recs = PRJ_ETAPAS_PADRAO.map((x, i) => ({
+    id: uid() + i, nome: x.nome, ordem: i + 1, cor: x.cor, prazo_dias: x.prazo,
+    final: !!x.final, checklist: x.check
+  }));
+  const ok = await sbFetch('proj_etapas', 'POST', recs);
+  if (ok) prjDb.etapas = recs;
+}
+
+function prjMostrarErro() {
+  document.querySelectorAll('.prj-aviso').forEach(el => {
+    el.textContent = prjErro; el.style.display = prjErro ? 'block' : 'none';
+  });
+}
+
+async function prjAbrirPagina(p) {
+  await prjCarregar();
+  prjMostrarErro();
+  if (p === 'proj-quadro')  prjRenderQuadro();
+  if (p === 'proj-lista')   prjRenderLista();
+  if (p === 'proj-painel')  prjRenderPainel();
+  if (p === 'proj-etapas')  prjRenderEtapas();
+}
+function prjRedesenhar() {
+  const p = _paginaAtual;
+  if (p === 'proj-quadro')  prjRenderQuadro();
+  if (p === 'proj-lista')   prjRenderLista();
+  if (p === 'proj-painel')  prjRenderPainel();
+  if (p === 'proj-etapas')  prjRenderEtapas();
+}
+
+// ── Auxiliares ──
+function prjEtapas() { return [...prjDb.etapas].sort((a,b) => (a.ordem||0) - (b.ordem||0)); }
+function prjEtapa(id) { return prjDb.etapas.find(e => e.id === id) || null; }
+function prjProjeto(id) { return prjDb.projetos.find(p => p.id === id) || null; }
+function prjClienteNome(p) {
+  const c = (db.clientes || []).find(x => x.id === p.cliente_id);
+  return c ? c.nome : (p.cliente_nome || '—');
+}
+function prjResponsaveis() {
+  return [...new Set(prjDb.projetos.map(p => (p.responsavel || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
+}
+function prjPopularResp(selId) {
+  const sel = document.getElementById(selId); if (!sel) return;
+  const v = sel.value;
+  sel.innerHTML = '<option value="">Todos</option>' + prjResponsaveis().map(r => `<option value="${prjEsc(r)}">${prjEsc(r)}</option>`).join('');
+  sel.value = v;
+}
+function prjPopularClientes(valor) {
+  const sel = document.getElementById('prj-f-cliente'); if (!sel) return;
+  const v = valor !== undefined ? valor : sel.value;
+  sel.innerHTML = '<option value="">Selecione...</option>' + [...(db.clientes || [])]
+    .sort((a,b) => String(a.nome||'').localeCompare(String(b.nome||''), 'pt-BR'))
+    .map(c => `<option value="${c.id}">${prjEsc(c.nome)}</option>`).join('');
+  sel.value = v || '';
+}
+function prjFiltroTexto(p, termo) {
+  if (!termo) return true;
+  return normText([p.codigo, p.nome, prjClienteNome(p), p.responsavel].join(' ')).includes(termo);
+}
+// Semáforo do tempo na etapa atual (prazo padrão da etapa)
+function prjSemaforo(p) {
+  const et = prjEtapa(p.etapa_id);
+  const dias = prjDias(p.dt_etapa);
+  const prazo = et ? prjNum(et.prazo_dias) : 0;
+  if (!prazo || p.status !== 'ativo') return { dias, prazo, cls:'', cor:'#d6d3d1' };
+  const r = dias / prazo;
+  if (r > 1)    return { dias, prazo, cls:'vermelho', cor:'#dc2626' };
+  if (r >= 0.7) return { dias, prazo, cls:'amarelo',  cor:'#f59e0b' };
+  return { dias, prazo, cls:'verde', cor:'#16a34a' };
+}
+// Situação da entrega prometida
+function prjEntrega(p) {
+  if (!p.dt_entrega_prev) return null;
+  if (p.status === 'concluido' || p.status === 'cancelado') return { cls:'', txt:'Entrega ' + fmtDate(p.dt_entrega_prev) };
+  const hoje = prjHoje();
+  if (p.dt_entrega_prev < hoje) return { cls:'vermelho', txt:'Atrasado ' + prjDias(p.dt_entrega_prev, hoje) + 'd', atrasado:true };
+  if (prjDias(hoje, p.dt_entrega_prev) <= 7) return { cls:'amarelo', txt:'Entrega ' + fmtDate(p.dt_entrega_prev) };
+  return { cls:'', txt:'Entrega ' + fmtDate(p.dt_entrega_prev) };
+}
+function prjProximoCodigo() {
+  let max = 0;
+  prjDb.projetos.forEach(p => { const m = String(p.codigo || '').match(/(\d+)\s*$/); if (m) max = Math.max(max, parseInt(m[1], 10)); });
+  return 'P' + String(max + 1).padStart(4, '0');
+}
+
+// ══ QUADRO (KANBAN) ══
+function prjRenderQuadro() {
+  const board = document.getElementById('prj-board'); if (!board) return;
+  prjPopularResp('prj-q-resp');
+  const termo = normText((document.getElementById('prj-q-busca') || {}).value || '');
+  const resp = (document.getElementById('prj-q-resp') || {}).value || '';
+  const verConcl = !!(document.getElementById('prj-q-concl') || {}).checked;
+  const etapas = prjEtapas();
+  if (!etapas.length) { board.innerHTML = '<div class="prj-vazio">Nenhuma etapa cadastrada. Cadastre em Projetos → Etapas.</div>'; return; }
+  const visiveis = prjDb.projetos.filter(p => p.status !== 'cancelado'
+    && (verConcl || p.status !== 'concluido')
+    && (!resp || (p.responsavel || '') === resp)
+    && prjFiltroTexto(p, termo));
+  const ordemPri = { urgente:0, alta:1, normal:2 };
+  board.innerHTML = etapas.map((et, idx) => {
+    const lista = visiveis.filter(p => p.etapa_id === et.id)
+      .sort((a,b) => (ordemPri[a.prioridade||'normal'] - ordemPri[b.prioridade||'normal']) || String(a.dt_entrega_prev||'9999').localeCompare(String(b.dt_entrega_prev||'9999')));
+    const total = lista.reduce((s,p) => s + prjNum(p.valor), 0);
+    const cards = lista.map(p => prjCardHtml(p, idx, etapas.length)).join('') || '<div class="prj-vazio">—</div>';
+    return `<div class="prj-col" style="--c:${prjEsc(et.cor||'#94a3b8')}" data-etapa="${et.id}"
+        ondragover="prjDragOver(event)" ondragleave="prjDragLeave(event)" ondrop="prjDrop(event,'${et.id}')">
+      <div class="prj-col-head">
+        <div class="prj-col-tit"><span class="prj-dot" style="background:${prjEsc(et.cor||'#94a3b8')}"></span>${prjEsc(et.nome)}<span class="prj-cnt">${lista.length}</span></div>
+        <div class="prj-col-sub">${total ? fmtBRL(total) : '&nbsp;'}${et.prazo_dias ? ' · prazo ' + et.prazo_dias + 'd' : ''}</div>
+      </div>
+      <div class="prj-col-body">${cards}</div>
+    </div>`;
+  }).join('');
+}
+
+function prjCardHtml(p, idx, nEtapas) {
+  const s = prjSemaforo(p);
+  const ent = prjEntrega(p);
+  const tags = [];
+  tags.push(`<span class="prj-tag ${s.cls}" title="Dias nesta etapa${s.prazo ? ' (prazo ' + s.prazo + 'd)' : ''}">⏱ ${s.dias}d${s.prazo ? '/' + s.prazo + 'd' : ''}</span>`);
+  if (ent) tags.push(`<span class="prj-tag ${ent.cls}">📅 ${ent.txt}</span>`);
+  if (p.status === 'pausado') tags.push('<span class="prj-tag amarelo">⏸ Pausado</span>');
+  if (p.status === 'concluido') tags.push('<span class="prj-tag verde">✔ Concluído</span>');
+  if (p.responsavel) tags.push(`<span class="prj-tag">👤 ${prjEsc(p.responsavel)}</span>`);
+  const chk = prjChecklistResumo(p);
+  if (chk.total) tags.push(`<span class="prj-tag ${chk.feitos === chk.total ? 'verde' : ''}">☑ ${chk.feitos}/${chk.total}</span>`);
+  return `<div class="prj-card" style="--s:${s.cor}" draggable="true"
+      ondragstart="prjDragStart(event,'${p.id}')" ondragend="prjDragEnd(event)" onclick="prjAbrirFicha('${p.id}')">
+    <div class="prj-card-top"><span>${prjEsc(p.codigo || '')}</span>${PRJ_PRI[p.prioridade] ? `<span class="prj-pri">${PRJ_PRI[p.prioridade]}</span>` : ''}</div>
+    <div class="prj-card-tit">${prjEsc(p.nome)}</div>
+    <div class="prj-card-cli">${prjEsc(prjClienteNome(p))}${p.valor ? ' · ' + fmtBRL(prjNum(p.valor)) : ''}</div>
+    <div class="prj-card-inf">${tags.join('')}</div>
+    <div class="prj-card-nav">
+      <button type="button" title="Voltar etapa" ${idx === 0 ? 'disabled' : ''} onclick="event.stopPropagation();prjPasso('${p.id}',-1)">◀</button>
+      <button type="button" title="Avançar etapa" ${idx === nEtapas - 1 ? 'disabled' : ''} onclick="event.stopPropagation();prjPasso('${p.id}',1)">▶</button>
+    </div>
+  </div>`;
+}
+
+function prjDragStart(ev, id) {
+  _prjArrastando = id;
+  try { ev.dataTransfer.setData('text/plain', id); ev.dataTransfer.effectAllowed = 'move'; } catch(e) {}
+  ev.currentTarget.classList.add('prj-arrastando');
+}
+function prjDragEnd(ev) {
+  ev.currentTarget.classList.remove('prj-arrastando');
+  document.querySelectorAll('.prj-col.prj-drop').forEach(c => c.classList.remove('prj-drop'));
+}
+function prjDragOver(ev) { ev.preventDefault(); ev.currentTarget.classList.add('prj-drop'); }
+function prjDragLeave(ev) { if (!ev.currentTarget.contains(ev.relatedTarget)) ev.currentTarget.classList.remove('prj-drop'); }
+async function prjDrop(ev, etapaId) {
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('prj-drop');
+  let id = _prjArrastando;
+  try { id = ev.dataTransfer.getData('text/plain') || id; } catch(e) {}
+  _prjArrastando = null;
+  if (id) await prjMover(id, etapaId);
+}
+async function prjPasso(id, dir) {
+  const p = prjProjeto(id); if (!p) return;
+  const etapas = prjEtapas();
+  const i = etapas.findIndex(e => e.id === p.etapa_id);
+  const alvo = etapas[i + dir];
+  if (alvo) await prjMover(id, alvo.id);
+}
+
+// Muda o projeto de etapa e registra no histórico.
+async function prjMover(id, novaEtapaId) {
+  const p = prjProjeto(id);
+  const et = prjEtapa(novaEtapaId);
+  if (!p || !et || p.etapa_id === novaEtapaId) return false;
+  if (p.status === 'cancelado') { alert('Projeto cancelado. Reative-o na ficha para movimentar.'); return false; }
+  const agora = new Date().toISOString();
+  const rec = { etapa_id: novaEtapaId, dt_etapa: agora };
+  if (et.final) { rec.status = 'concluido'; rec.dt_conclusao = prjHoje(); }
+  else if (p.status === 'concluido') { rec.status = 'ativo'; rec.dt_conclusao = null; }
+  const ok = await sbFetch('proj_projetos', 'PATCH', rec, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao mover o projeto.' + sbErroDetalhe()); return false; }
+  Object.assign(p, rec);
+  const abertos = prjDb.hist.filter(h => h.projeto_id === id && !h.dt_saida);
+  if (abertos.length) {
+    await sbFetch('proj_historico', 'PATCH', { dt_saida: agora }, `?projeto_id=eq.${id}&dt_saida=is.null`);
+    abertos.forEach(h => h.dt_saida = agora);
+  }
+  await prjRegistrarHist(id, et, agora);
+  prjRedesenhar();
+  if (document.getElementById('modal-prj-ficha').classList.contains('open')) prjAbrirFicha(id);
+  return true;
+}
+async function prjRegistrarHist(projetoId, et, quando) {
+  const h = { id: uid(), projeto_id: projetoId, etapa_id: et.id, etapa_nome: et.nome,
+    dt_entrada: quando, dt_saida: null, usuario: (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.nome || currentUser.user || '') : '' };
+  const ok = await sbFetch('proj_historico', 'POST', h);
+  if (ok) prjDb.hist.push(h);
+}
+
+// ══ CADASTRO ══
+function prjAbrirProjeto(id) {
+  const p = id ? prjProjeto(id) : null;
+  if (!p && !prjEtapas().length) { alert('Cadastre as etapas antes (Projetos → Etapas).' + (prjErro ? '\n\n' + prjErro : '')); return; }
+  document.getElementById('prj-f-titulo').textContent = p ? 'Editar Projeto' : 'Novo Projeto';
+  document.getElementById('prj-f-id').value = p ? p.id : '';
+  document.getElementById('prj-f-codigo').value = p ? (p.codigo || '') : prjProximoCodigo();
+  document.getElementById('prj-f-nome').value = p ? (p.nome || '') : '';
+  prjPopularClientes(p ? (p.cliente_id || '') : '');
+  document.getElementById('prj-f-resp').value = p ? (p.responsavel || '') : '';
+  document.getElementById('prj-dl-resp').innerHTML = prjResponsaveis().map(r => `<option value="${prjEsc(r)}"></option>`).join('');
+  document.getElementById('prj-f-end').value = p ? (p.endereco || '') : '';
+  document.getElementById('prj-f-valor').value = p ? (p.valor ?? '') : '';
+  document.getElementById('prj-f-dtvenda').value = p ? (p.dt_venda || '') : prjHoje();
+  document.getElementById('prj-f-dtentrega').value = p ? (p.dt_entrega_prev || '') : '';
+  document.getElementById('prj-f-pri').value = p ? (p.prioridade || 'normal') : 'normal';
+  document.getElementById('prj-f-status').value = p ? (p.status || 'ativo') : 'ativo';
+  document.getElementById('prj-f-obs').value = p ? (p.obs || '') : '';
+  // A etapa só é escolhida no cadastro; depois ela muda pelo quadro/ficha (fica no histórico).
+  const selEt = document.getElementById('prj-f-etapa');
+  selEt.innerHTML = prjEtapas().map(e => `<option value="${e.id}">${prjEsc(e.nome)}</option>`).join('');
+  document.getElementById('prj-f-etapa-wrap').style.display = p ? 'none' : '';
+  const stWrap = document.getElementById('prj-f-status').closest('.form-group');
+  if (stWrap) stWrap.style.display = p ? '' : 'none';
+  openModal('modal-prj-projeto');
+  setTimeout(() => document.getElementById('prj-f-nome').focus(), 50);
+}
+
+async function prjSalvarProjeto() {
+  const id = document.getElementById('prj-f-id').value;
+  const nome = document.getElementById('prj-f-nome').value.trim();
+  const cliente_id = document.getElementById('prj-f-cliente').value;
+  if (!nome) { alert('Informe o projeto / ambientes.'); return; }
+  if (!cliente_id) { alert('Selecione o cliente.'); return; }
+  let codigo = document.getElementById('prj-f-codigo').value.trim() || prjProximoCodigo();
+  if (prjDb.projetos.some(p => p.id !== id && String(p.codigo||'').trim().toLowerCase() === codigo.toLowerCase())) {
+    alert('Já existe um projeto com o código ' + codigo + '.'); return;
+  }
+  const cli = (db.clientes || []).find(c => c.id === cliente_id);
+  const rec = {
+    codigo, nome, cliente_id, cliente_nome: cli ? cli.nome : '',
+    responsavel: document.getElementById('prj-f-resp').value.trim(),
+    endereco: document.getElementById('prj-f-end').value.trim(),
+    valor: prjNum(document.getElementById('prj-f-valor').value),
+    dt_venda: document.getElementById('prj-f-dtvenda').value || null,
+    dt_entrega_prev: document.getElementById('prj-f-dtentrega').value || null,
+    prioridade: document.getElementById('prj-f-pri').value,
+    obs: document.getElementById('prj-f-obs').value.trim()
+  };
+  if (id) {
+    const p = prjProjeto(id);
+    const st = document.getElementById('prj-f-status').value;
+    rec.status = st;
+    if (st === 'concluido' && p.status !== 'concluido') rec.dt_conclusao = prjHoje();
+    if (st !== 'concluido') rec.dt_conclusao = null;
+    const ok = await sbFetch('proj_projetos', 'PATCH', rec, `?id=eq.${id}`);
+    if (!ok) { alert('❌ Erro ao salvar o projeto.' + sbErroDetalhe()); return; }
+    Object.assign(p, rec);
+  } else {
+    const etapa_id = document.getElementById('prj-f-etapa').value;
+    const et = prjEtapa(etapa_id);
+    if (!et) { alert('Selecione a etapa inicial.'); return; }
+    const agora = new Date().toISOString();
+    const novo = { id: uid(), ...rec, etapa_id, dt_etapa: agora,
+      status: et.final ? 'concluido' : 'ativo', dt_conclusao: et.final ? prjHoje() : null,
+      checklist: {}, created_at: agora };
+    const ok = await sbFetch('proj_projetos', 'POST', novo);
+    if (!ok) { alert('❌ Erro ao salvar o projeto.' + sbErroDetalhe()); return; }
+    prjDb.projetos.push(novo);
+    await prjRegistrarHist(novo.id, et, agora);
+  }
+  closeModal('modal-prj-projeto');
+  prjRedesenhar();
+  if (id && document.getElementById('modal-prj-ficha').classList.contains('open')) prjAbrirFicha(id);
+}
+
+async function prjExcluirProjeto(id) {
+  const p = prjProjeto(id); if (!p) return;
+  if (!confirm(`Excluir o projeto "${p.codigo} — ${p.nome}"?\n\nO histórico de etapas dele também será apagado. Essa ação não pode ser desfeita.`)) return;
+  const okH = await sbFetch('proj_historico', 'DELETE', null, `?projeto_id=eq.${id}`);
+  if (!okH) { alert('❌ Erro ao excluir o histórico do projeto.' + sbErroDetalhe()); return; }
+  const ok = await sbFetch('proj_projetos', 'DELETE', null, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao excluir o projeto.' + sbErroDetalhe()); return; }
+  prjDb.hist = prjDb.hist.filter(h => h.projeto_id !== id);
+  prjDb.projetos = prjDb.projetos.filter(x => x.id !== id);
+  closeModal('modal-prj-ficha');
+  prjRedesenhar();
+}
+
+async function prjMudarStatus(id, status) {
+  const p = prjProjeto(id); if (!p) return;
+  const nomes = { cancelado:'cancelar', ativo:'reativar', pausado:'pausar' };
+  if (status === 'cancelado' && !confirm(`Deseja ${nomes[status]} o projeto "${p.codigo} — ${p.nome}"?`)) return;
+  const rec = { status };
+  if (status === 'ativo') { const et = prjEtapa(p.etapa_id); if (et && et.final) rec.status = 'concluido'; }
+  const ok = await sbFetch('proj_projetos', 'PATCH', rec, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao alterar o status.' + sbErroDetalhe()); return; }
+  Object.assign(p, rec);
+  prjRedesenhar();
+  prjAbrirFicha(id);
+}
+
+// ── Checklist ──
+function prjChecklistResumo(p) {
+  const et = prjEtapa(p.etapa_id);
+  const itens = (et && Array.isArray(et.checklist)) ? et.checklist : [];
+  const marc = ((p.checklist || {})[p.etapa_id]) || {};
+  return { total: itens.length, feitos: itens.filter(i => marc[i]).length };
+}
+async function prjMarcarItem(id, etapaId, idx, valor) {
+  const p = prjProjeto(id); const et = prjEtapa(etapaId);
+  if (!p || !et) return;
+  const item = (et.checklist || [])[idx]; if (item == null) return;
+  const chk = JSON.parse(JSON.stringify(p.checklist || {}));
+  chk[etapaId] = chk[etapaId] || {};
+  if (valor) chk[etapaId][item] = true; else delete chk[etapaId][item];
+  const ok = await sbFetch('proj_projetos', 'PATCH', { checklist: chk }, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao salvar o checklist.' + sbErroDetalhe()); prjAbrirFicha(id); return; }
+  p.checklist = chk;
+  prjRedesenhar();
+  prjAbrirFicha(id);
+}
+
+// ══ FICHA DO PROJETO ══
+function prjAbrirFicha(id) {
+  const p = prjProjeto(id); if (!p) return;
+  const etapas = prjEtapas();
+  const iAtual = etapas.findIndex(e => e.id === p.etapa_id);
+  const et = etapas[iAtual] || null;
+  const hist = prjDb.hist.filter(h => h.projeto_id === id).sort((a,b) => String(a.dt_entrada).localeCompare(String(b.dt_entrada)));
+  const s = prjSemaforo(p);
+  const ent = prjEntrega(p);
+
+  document.getElementById('prj-fc-titulo').textContent = (p.codigo ? p.codigo + ' — ' : '') + p.nome;
+  document.getElementById('prj-fc-sub').innerHTML = `${prjEsc(prjClienteNome(p))} · <span class="badge ${PRJ_STATUS_COR[p.status]||'badge-gray'}">${PRJ_STATUS[p.status]||p.status}</span>${PRJ_PRI[p.prioridade] ? ' · ' + PRJ_PRI[p.prioridade] : ''}`;
+
+  // Linha de etapas
+  const steps = etapas.map((e, i) => {
+    const ult = [...hist].reverse().find(h => h.etapa_id === e.id);
+    const cls = i < iAtual ? 'feito' : (i === iAtual ? 'atual' : '');
+    return `<div class="prj-step ${cls}" style="--c:${prjEsc(e.cor||'#2563eb')}" title="${prjEsc(e.nome)}"><div class="b"></div>${prjEsc(e.nome)}<div class="d">${ult ? fmtDate(prjDataLocal(ult.dt_entrada)) : ''}</div></div>`;
+  }).join('');
+
+  const opcoesMover = etapas.map(e => `<option value="${e.id}" ${e.id === p.etapa_id ? 'selected' : ''}>${prjEsc(e.nome)}</option>`).join('');
+  const bloqueado = p.status === 'cancelado';
+  const acoesEtapa = `<div class="prj-acoes-etapa">
+      <button class="btn btn-secondary btn-sm" ${iAtual <= 0 || bloqueado ? 'disabled' : ''} onclick="prjPasso('${id}',-1)">◀ Voltar etapa</button>
+      <button class="btn btn-primary btn-sm" ${iAtual >= etapas.length - 1 || bloqueado ? 'disabled' : ''} onclick="prjPasso('${id}',1)">Avançar etapa ▶</button>
+      <span style="font-size:12px;color:#a8a29e;margin-left:6px">ou mover para</span>
+      <select id="prj-fc-mover" style="width:auto;min-width:200px" ${bloqueado ? 'disabled' : ''} onchange="prjMover('${id}', this.value)">${opcoesMover}</select>
+    </div>`;
+
+  // Checklist da etapa atual
+  const itens = (et && Array.isArray(et.checklist)) ? et.checklist : [];
+  const marc = ((p.checklist || {})[p.etapa_id]) || {};
+  const checkHtml = itens.length ? itens.map((it, i) => `<label class="prj-chk-item ${marc[it] ? 'ok' : ''}">
+      <input type="checkbox" ${marc[it] ? 'checked' : ''} onchange="prjMarcarItem('${id}','${p.etapa_id}',${i},this.checked)"><span>${prjEsc(it)}</span></label>`).join('')
+    : '<div style="font-size:12.5px;color:#a8a29e">Esta etapa não tem checklist. Os itens podem ser definidos em Projetos → Etapas.</div>';
+
+  // Histórico
+  const histHtml = hist.length ? `<div class="table-scroll" style="overflow:auto"><table><thead><tr><th>Etapa</th><th>Entrada</th><th>Saída</th><th style="text-align:center">Dias</th><th>Prazo</th><th>Usuário</th></tr></thead><tbody>
+    ${[...hist].reverse().map(h => {
+      const e = prjEtapa(h.etapa_id);
+      const d = prjDias(h.dt_entrada, h.dt_saida);
+      const pz = e ? prjNum(e.prazo_dias) : 0;
+      const estourou = pz && d > pz;
+      return `<tr><td><span class="prj-dot" style="background:${prjEsc((e&&e.cor)||'#94a3b8')};margin-right:6px"></span>${prjEsc(h.etapa_nome || (e && e.nome) || '—')}</td>
+        <td>${fmtDate(prjDataLocal(h.dt_entrada))}</td><td>${h.dt_saida ? fmtDate(prjDataLocal(h.dt_saida)) : '<span class="badge badge-blue">atual</span>'}</td>
+        <td style="text-align:center;${estourou ? 'color:#dc2626;font-weight:700' : ''}">${d}</td><td>${pz ? pz + 'd' : '—'}</td><td>${prjEsc(h.usuario || '—')}</td></tr>`;
+    }).join('')}</tbody></table></div>` : '<div style="font-size:12.5px;color:#a8a29e">Sem movimentações.</div>';
+
+  // Financeiro (somente leitura — lançamentos a receber do cliente)
+  let finHtml = '<div style="font-size:12.5px;color:#a8a29e">Sem cliente vinculado.</div>';
+  if (p.cliente_id && typeof getParcelasReceber === 'function') {
+    const rec = getParcelasReceber(true).filter(x => x.cliente === p.cliente_id);
+    const abe = getParcelasReceber(false).filter(x => x.cliente === p.cliente_id);
+    const tRec = rec.reduce((s,x) => s + prjNum(x.valParc), 0);
+    const tAbe = abe.reduce((s,x) => s + prjNum(x.valParc), 0);
+    const tVenc = abe.filter(x => x.venc && x.venc < prjHoje()).reduce((s,x) => s + prjNum(x.valParc), 0);
+    const contrato = prjNum(p.valor);
+    finHtml = `<div class="prj-ficha-info">
+        <div><div class="k">Valor do contrato</div><div class="x">${contrato ? fmtBRL(contrato) : '—'}</div></div>
+        <div><div class="k">Recebido do cliente</div><div class="x" style="color:#166534">${fmtBRL(tRec)}</div></div>
+        <div><div class="k">A receber do cliente</div><div class="x">${fmtBRL(tAbe)}${tVenc ? ` <span class="badge badge-red" style="margin-left:4px">${fmtBRL(tVenc)} vencido</span>` : ''}</div></div>
+      </div>
+      <div class="lanc-note" style="margin-top:10px">Valores somados de todos os lançamentos a receber deste cliente (Contas a Receber / Recebidas). Nada é alterado no financeiro por esta tela.</div>`;
+  }
+
+  document.getElementById('prj-fc-body').innerHTML = `
+    <div class="lanc-sec">
+      <div class="lanc-sec-title"><span class="n">1</span>Etapa atual<span class="hint">${et ? prjEsc(et.nome) : '—'} · ${s.dias} dia(s)${s.prazo ? ' de ' + s.prazo + ' previstos' : ''}</span></div>
+      <div class="prj-steps">${steps}</div>
+      ${acoesEtapa}
+    </div>
+    <div class="lanc-sec">
+      <div class="lanc-sec-title"><span class="n">2</span>Checklist — ${et ? prjEsc(et.nome) : ''}</div>
+      ${checkHtml}
+    </div>
+    <div class="lanc-sec">
+      <div class="lanc-sec-title"><span class="n">3</span>Dados do projeto</div>
+      <div class="prj-ficha-info">
+        <div><div class="k">Cliente</div><div class="x">${prjEsc(prjClienteNome(p))}</div></div>
+        <div><div class="k">Responsável</div><div class="x">${prjEsc(p.responsavel || '—')}</div></div>
+        <div><div class="k">Valor</div><div class="x">${p.valor ? fmtBRL(prjNum(p.valor)) : '—'}</div></div>
+        <div><div class="k">Data da venda</div><div class="x">${p.dt_venda ? fmtDate(p.dt_venda) : '—'}</div></div>
+        <div><div class="k">Entrega prometida</div><div class="x">${p.dt_entrega_prev ? fmtDate(p.dt_entrega_prev) : '—'}${ent && ent.atrasado ? ' <span class="badge badge-red">' + ent.txt + '</span>' : ''}</div></div>
+        <div><div class="k">Concluído em</div><div class="x">${p.dt_conclusao ? fmtDate(p.dt_conclusao) : '—'}</div></div>
+        <div style="grid-column:1/-1"><div class="k">Endereço da obra</div><div class="x">${prjEsc(p.endereco || '—')}</div></div>
+        ${p.obs ? `<div style="grid-column:1/-1"><div class="k">Observações</div><div class="x" style="font-weight:400;white-space:pre-line">${prjEsc(p.obs)}</div></div>` : ''}
+      </div>
+    </div>
+    <div class="lanc-sec">
+      <div class="lanc-sec-title"><span class="n">4</span>Financeiro do cliente</div>
+      ${finHtml}
+    </div>
+    <div class="lanc-sec">
+      <div class="lanc-sec-title"><span class="n">5</span>Histórico de etapas</div>
+      ${histHtml}
+    </div>`;
+
+  const btStatus = p.status === 'cancelado'
+    ? `<button class="btn btn-secondary" onclick="prjMudarStatus('${id}','ativo')">Reativar</button>`
+    : (p.status === 'pausado'
+        ? `<button class="btn btn-secondary" onclick="prjMudarStatus('${id}','ativo')">▶ Retomar</button>`
+        : (p.status === 'ativo' ? `<button class="btn btn-secondary" onclick="prjMudarStatus('${id}','pausado')">⏸ Pausar</button>` : ''))
+      + (p.status !== 'concluido' ? ` <button class="btn btn-secondary" onclick="prjMudarStatus('${id}','cancelado')">Cancelar projeto</button>` : '');
+  document.getElementById('prj-fc-foot').innerHTML = `
+    <button class="btn btn-danger" onclick="prjExcluirProjeto('${id}')">Excluir</button>
+    <span class="lanc-foot-info"></span>
+    ${btStatus}
+    <button class="btn btn-secondary" onclick="prjAbrirProjeto('${id}')">Editar dados</button>
+    <button class="btn btn-primary" onclick="closeModal('modal-prj-ficha')">Fechar</button>`;
+  openModal('modal-prj-ficha');
+}
+
+// ══ LISTA ══
+function prjRenderLista() {
+  const tb = document.getElementById('prj-tb-lista'); if (!tb) return;
+  prjPopularResp('prj-l-resp');
+  const selEt = document.getElementById('prj-l-etapa');
+  if (selEt) { const v = selEt.value; selEt.innerHTML = '<option value="">Todas</option>' + prjEtapas().map(e => `<option value="${e.id}">${prjEsc(e.nome)}</option>`).join(''); selEt.value = v; }
+  const termo = normText((document.getElementById('prj-l-busca') || {}).value || '');
+  const st = (document.getElementById('prj-l-status') || {}).value || '';
+  const etf = selEt ? selEt.value : '';
+  const resp = (document.getElementById('prj-l-resp') || {}).value || '';
+  const lista = prjDb.projetos.filter(p => (!st || p.status === st) && (!etf || p.etapa_id === etf)
+      && (!resp || (p.responsavel || '') === resp) && prjFiltroTexto(p, termo))
+    .sort((a,b) => String(b.codigo||'').localeCompare(String(a.codigo||''), 'pt-BR', { numeric:true }));
+  const tf = document.getElementById('prj-tf-lista');
+  if (!lista.length) {
+    tb.innerHTML = `<tr><td colspan="10" class="empty-state">${prjDb.projetos.length ? 'Nenhum projeto encontrado com esses filtros.' : 'Nenhum projeto cadastrado.'}</td></tr>`;
+    if (tf) tf.innerHTML = ''; return;
+  }
+  tb.innerHTML = lista.map(p => {
+    const et = prjEtapa(p.etapa_id); const s = prjSemaforo(p); const ent = prjEntrega(p);
+    return `<tr style="cursor:pointer" onclick="prjAbrirFicha('${p.id}')">
+      <td style="font-family:DM Mono,monospace;font-size:12px"><b>${prjEsc(p.codigo || '—')}</b></td>
+      <td><b>${prjEsc(p.nome)}</b>${PRJ_PRI[p.prioridade] ? '<div style="font-size:11px">' + PRJ_PRI[p.prioridade] + '</div>' : ''}</td>
+      <td>${prjEsc(prjClienteNome(p))}</td>
+      <td>${prjEsc(p.responsavel || '—')}</td>
+      <td>${et ? `<span class="badge" style="white-space:nowrap;background:${prjEsc(et.cor)}1a;color:${prjEsc(et.cor)};border:1px solid ${prjEsc(et.cor)}55">${prjEsc(et.nome)}</span>` : '—'}</td>
+      <td style="text-align:center"><span class="prj-tag ${s.cls}">${s.dias}d${s.prazo ? '/' + s.prazo + 'd' : ''}</span></td>
+      <td>${p.dt_entrega_prev ? fmtDate(p.dt_entrega_prev) : '—'}${ent && ent.atrasado ? ' <span class="badge badge-red">' + ent.txt + '</span>' : ''}</td>
+      <td class="num">${p.valor ? fmtBRL(prjNum(p.valor)) : '—'}</td>
+      <td><span style="white-space:nowrap" class="badge ${PRJ_STATUS_COR[p.status]||'badge-gray'}">${PRJ_STATUS[p.status]||p.status}</span></td>
+      <td class="actions" onclick="event.stopPropagation()">
+        <button class="btn btn-secondary btn-sm" onclick="prjAbrirFicha('${p.id}')">Abrir</button>
+        <button class="btn btn-secondary btn-sm" onclick="prjAbrirProjeto('${p.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="prjExcluirProjeto('${p.id}')">Excluir</button>
+      </td></tr>`;
+  }).join('');
+  const total = lista.reduce((s,p) => s + prjNum(p.valor), 0);
+  if (tf) tf.innerHTML = `<tr><td colspan="7" style="font-weight:700">${lista.length} projeto(s)</td><td class="num" style="font-weight:700">${fmtBRL(total)}</td><td colspan="2"></td></tr>`;
+}
+
+// ══ PAINEL ══
+function prjRenderPainel() {
+  const box = document.getElementById('prj-kpis'); if (!box) return;
+  const hoje = prjHoje();
+  const anoAtual = hoje.slice(0,4), mesAtual = hoje.slice(0,7);
+  const ativos = prjDb.projetos.filter(p => p.status === 'ativo' || p.status === 'pausado');
+  const atrasados = ativos.filter(p => p.dt_entrega_prev && p.dt_entrega_prev < hoje);
+  const estourados = ativos.filter(p => prjSemaforo(p).cls === 'vermelho');
+  const doMes = ativos.filter(p => (p.dt_entrega_prev || '').slice(0,7) === mesAtual);
+  const conclAno = prjDb.projetos.filter(p => p.status === 'concluido' && (p.dt_conclusao || '').slice(0,4) === anoAtual);
+  const ciclos = conclAno.map(p => prjDias(p.dt_venda || prjDataLocal(p.created_at), p.dt_conclusao)).filter(d => d >= 0);
+  const cicloMedio = ciclos.length ? Math.round(ciclos.reduce((a,b) => a + b, 0) / ciclos.length) : null;
+  const soma = arr => arr.reduce((s,p) => s + prjNum(p.valor), 0);
+  const kpi = (v, l, s, cor) => `<div class="prj-kpi" style="--k:${cor}"><div class="v">${v}</div><div class="l">${l}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`;
+  box.innerHTML =
+    kpi(ativos.length, 'Em andamento', fmtBRL(soma(ativos)) + ' em carteira', '#2563eb') +
+    kpi(atrasados.length, 'Entregas atrasadas', atrasados.length ? fmtBRL(soma(atrasados)) : 'Nenhum atraso', '#dc2626') +
+    kpi(estourados.length, 'Acima do prazo da etapa', 'Parados além do prazo padrão', '#f59e0b') +
+    kpi(doMes.length, 'Entregas previstas no mês', fmtBRL(soma(doMes)), '#0d9488') +
+    kpi(conclAno.length, 'Concluídos em ' + anoAtual, fmtBRL(soma(conclAno)), '#16a34a') +
+    kpi(cicloMedio == null ? '—' : cicloMedio + 'd', 'Ciclo médio', 'Da venda à conclusão (' + anoAtual + ')', '#8b5cf6');
+
+  const etapas = prjEtapas().filter(e => !e.final);
+  const porEt = etapas.map(e => { const l = ativos.filter(p => p.etapa_id === e.id); return { e, n: l.length, v: soma(l) }; });
+  const maxN = Math.max(1, ...porEt.map(x => x.n));
+  document.getElementById('prj-p-etapas').innerHTML = porEt.map(x => `<div class="prj-bar-row">
+      <div class="nm" title="${prjEsc(x.e.nome)}"><span class="prj-dot" style="background:${prjEsc(x.e.cor)}"></span>${prjEsc(x.e.nome)}</div>
+      <div class="prj-bar"><span style="width:${(x.n / maxN) * 100}%;background:${prjEsc(x.e.cor)}"></span></div>
+      <div class="vl">${x.n} · ${fmtBRLCompacto(x.v)}</div></div>`).join('') || '<div class="prj-vazio">Sem etapas.</div>';
+
+  // Tempo médio por etapa (passagens já encerradas)
+  const tempos = etapas.map(e => {
+    const hs = prjDb.hist.filter(h => h.etapa_id === e.id && h.dt_saida);
+    const media = hs.length ? hs.reduce((s,h) => s + prjDias(h.dt_entrada, h.dt_saida), 0) / hs.length : null;
+    return { e, media, n: hs.length, prazo: prjNum(e.prazo_dias) };
+  });
+  const maxT = Math.max(1, ...tempos.map(t => Math.max(t.media || 0, t.prazo)));
+  document.getElementById('prj-p-tempo').innerHTML = tempos.map(t => {
+    const cor = t.media == null ? '#d6d3d1' : (t.prazo && t.media > t.prazo ? '#dc2626' : '#16a34a');
+    return `<div class="prj-bar-row">
+      <div class="nm" title="${prjEsc(t.e.nome)}"><span class="prj-dot" style="background:${prjEsc(t.e.cor)}"></span>${prjEsc(t.e.nome)}</div>
+      <div class="prj-bar" title="${t.n} passagem(ns)"><span style="width:${((t.media || 0) / maxT) * 100}%;background:${cor}"></span>
+        ${t.prazo ? `<i style="position:absolute;top:0;bottom:0;left:${(t.prazo / maxT) * 100}%;border-left:2px dashed #57534e"></i>` : ''}</div>
+      <div class="vl">${t.media == null ? '—' : t.media.toFixed(1).replace('.', ',') + 'd'}${t.prazo ? ' / ' + t.prazo + 'd' : ''}</div></div>`;
+  }).join('') + '<div class="lanc-note" style="margin-top:10px">Barra verde = dentro do prazo padrão, vermelha = acima. A linha tracejada marca o prazo.</div>';
+
+  // Entregas: atrasadas + próximos 30 dias
+  const lim = prjDataLocal(new Date(Date.now() + 30 * 86400000).toISOString());
+  const ent = ativos.filter(p => p.dt_entrega_prev && p.dt_entrega_prev <= lim)
+    .sort((a,b) => a.dt_entrega_prev.localeCompare(b.dt_entrega_prev));
+  document.getElementById('prj-tb-entregas').innerHTML = ent.length ? ent.map(p => {
+    const et = prjEtapa(p.etapa_id); const at = p.dt_entrega_prev < hoje;
+    return `<tr style="cursor:pointer" onclick="prjAbrirFicha('${p.id}')"><td><b>${fmtDate(p.dt_entrega_prev)}</b></td>
+      <td style="font-family:DM Mono,monospace;font-size:12px">${prjEsc(p.codigo||'')}</td><td>${prjEsc(p.nome)}</td><td>${prjEsc(prjClienteNome(p))}</td>
+      <td>${et ? prjEsc(et.nome) : '—'}</td><td class="num">${p.valor ? fmtBRL(prjNum(p.valor)) : '—'}</td>
+      <td>${at ? `<span class="badge badge-red">Atrasado ${prjDias(p.dt_entrega_prev, hoje)}d</span>` : `<span class="badge badge-yellow">Faltam ${prjDias(hoje, p.dt_entrega_prev)}d</span>`}</td></tr>`;
+  }).join('') : '<tr><td colspan="7" class="empty-state">Nenhuma entrega atrasada ou prevista para os próximos 30 dias.</td></tr>';
+}
+
+// ══ ETAPAS ══
+function prjRenderEtapas() {
+  const tb = document.getElementById('prj-tb-etapas'); if (!tb) return;
+  const etapas = prjEtapas();
+  if (!etapas.length) { tb.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhuma etapa cadastrada.</td></tr>'; return; }
+  tb.innerHTML = etapas.map((e, i) => {
+    const n = prjDb.projetos.filter(p => p.etapa_id === e.id && p.status !== 'cancelado').length;
+    return `<tr>
+      <td><button class="btn btn-secondary btn-sm" ${i === 0 ? 'disabled' : ''} onclick="prjOrdemEtapa('${e.id}',-1)">▲</button>
+          <button class="btn btn-secondary btn-sm" ${i === etapas.length - 1 ? 'disabled' : ''} onclick="prjOrdemEtapa('${e.id}',1)">▼</button></td>
+      <td><span class="prj-dot" style="background:${prjEsc(e.cor)};margin-right:8px"></span><b>${i + 1}. ${prjEsc(e.nome)}</b></td>
+      <td style="text-align:center">${e.prazo_dias ? e.prazo_dias + ' dias' : '—'}</td>
+      <td style="text-align:center">${(e.checklist || []).length || '—'}</td>
+      <td style="text-align:center">${n}</td>
+      <td style="text-align:center">${e.final ? '<span class="badge badge-green">Sim</span>' : '—'}</td>
+      <td class="actions">
+        <button class="btn btn-secondary btn-sm" onclick="prjAbrirEtapa('${e.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="prjExcluirEtapa('${e.id}')">Excluir</button>
+      </td></tr>`;
+  }).join('');
+}
+
+function prjAbrirEtapa(id) {
+  const e = id ? prjEtapa(id) : null;
+  document.getElementById('prj-e-titulo').textContent = e ? 'Editar Etapa' : 'Nova Etapa';
+  document.getElementById('prj-e-id').value = e ? e.id : '';
+  document.getElementById('prj-e-nome').value = e ? e.nome : '';
+  document.getElementById('prj-e-prazo').value = e ? (e.prazo_dias || '') : '';
+  document.getElementById('prj-e-cor').value = e ? (e.cor || '#2563eb') : '#2563eb';
+  document.getElementById('prj-e-final').checked = e ? !!e.final : false;
+  document.getElementById('prj-e-check').value = e ? (e.checklist || []).join('\n') : '';
+  openModal('modal-prj-etapa');
+  setTimeout(() => document.getElementById('prj-e-nome').focus(), 50);
+}
+
+async function prjSalvarEtapa() {
+  if (prjErro) { alert(prjErro); return; }
+  const id = document.getElementById('prj-e-id').value;
+  const nome = document.getElementById('prj-e-nome').value.trim();
+  if (!nome) { alert('Informe o nome da etapa.'); return; }
+  const checklist = [...new Set(document.getElementById('prj-e-check').value.split('\n').map(s => s.trim()).filter(Boolean))];
+  const rec = { nome, prazo_dias: Math.max(0, parseInt(document.getElementById('prj-e-prazo').value, 10) || 0),
+    cor: document.getElementById('prj-e-cor').value, final: document.getElementById('prj-e-final').checked, checklist };
+  if (id) {
+    const ok = await sbFetch('proj_etapas', 'PATCH', rec, `?id=eq.${id}`);
+    if (!ok) { alert('❌ Erro ao salvar a etapa.' + sbErroDetalhe()); return; }
+    Object.assign(prjEtapa(id), rec);
+  } else {
+    const ordem = Math.max(0, ...prjDb.etapas.map(e => e.ordem || 0)) + 1;
+    const novo = { id: uid(), ordem, ...rec };
+    const ok = await sbFetch('proj_etapas', 'POST', novo);
+    if (!ok) { alert('❌ Erro ao salvar a etapa.' + sbErroDetalhe()); return; }
+    prjDb.etapas.push(novo);
+  }
+  closeModal('modal-prj-etapa');
+  prjRedesenhar();
+}
+
+async function prjOrdemEtapa(id, dir) {
+  const etapas = prjEtapas();
+  const i = etapas.findIndex(e => e.id === id);
+  const a = etapas[i], b = etapas[i + dir];
+  if (!a || !b) return;
+  // Renumera tudo em sequência para evitar ordens repetidas
+  etapas.splice(i, 1); etapas.splice(i + dir, 0, a);
+  const mud = etapas.map((e, k) => ({ e, ordem: k + 1 })).filter(x => x.e.ordem !== x.ordem);
+  for (const x of mud) {
+    const ok = await sbFetch('proj_etapas', 'PATCH', { ordem: x.ordem }, `?id=eq.${x.e.id}`);
+    if (!ok) { alert('❌ Erro ao reordenar.' + sbErroDetalhe()); return; }
+    x.e.ordem = x.ordem;
+  }
+  prjRenderEtapas();
+}
+
+async function prjExcluirEtapa(id) {
+  const e = prjEtapa(id); if (!e) return;
+  const n = prjDb.projetos.filter(p => p.etapa_id === id).length;
+  if (n) { alert(`Não é possível excluir: há ${n} projeto(s) nesta etapa. Mova-os para outra etapa antes.`); return; }
+  if (!confirm(`Excluir a etapa "${e.nome}"?\n\nO histórico antigo continua mostrando o nome dela.`)) return;
+  const ok = await sbFetch('proj_etapas', 'DELETE', null, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao excluir a etapa.' + sbErroDetalhe()); return; }
+  prjDb.etapas = prjDb.etapas.filter(x => x.id !== id);
+  prjRenderEtapas();
 }
 </script>
 </body>
