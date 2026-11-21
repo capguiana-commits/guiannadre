@@ -1186,6 +1186,25 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .acao-svg-leg { display:flex; flex-wrap:wrap; gap:14px; font-size:11.5px; color:#57534e; margin-top:6px; }
 .acao-svg-leg span.sw { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:5px; vertical-align:-2px; }
 .acao-h-tb input[type=time] { padding:6px 8px; width:110px; }
+/* 5W2H compacto + ciência */
+.acao-compacta td { padding-top:8px; padding-bottom:8px; vertical-align:middle; }
+.acao-trunc { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12.5px; cursor:help; }
+.acao-cols-menu { position:absolute; right:0; top:100%; z-index:50; background:#fff; border:1px solid #e7e5e4; border-radius:12px; box-shadow:0 10px 30px rgba(15,30,58,.15); padding:10px 14px; min-width:190px; }
+.acao-cols-menu label { display:flex; align-items:center; gap:8px; font-size:13px; padding:4px 0; cursor:pointer; color:#44403c; }
+.acao-cols-menu input { width:15px; height:15px; }
+.acao-tag-ci { display:inline-flex; align-items:center; gap:3px; font-size:10.5px; font-weight:700; padding:1px 7px; border-radius:8px; background:#fef3c7; color:#92400e; cursor:pointer; white-space:nowrap; }
+.acao-tag-ci.prop { background:#ffedd5; color:#9a3412; }
+.acao-nav-badge { margin-left:auto; background:#dc2626; color:#fff; font-size:10.5px; font-weight:700; border-radius:10px; padding:1px 7px; }
+.acao-ci-box { display:grid; gap:8px; margin-bottom:12px; }
+.acao-ci-l { display:grid; grid-template-columns:110px 1fr; gap:10px; font-size:13px; }
+.acao-ci-l .k { font-size:10.5px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:#a8a29e; padding-top:2px; }
+.acao-ci-l .v { color:#1f2937; white-space:pre-line; }
+.acao-ci-proj { background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:10px 12px; margin-bottom:12px; font-size:13px; }
+.acao-ci-prazo { background:#faf9f7; border:1px solid #efedeb; border-radius:10px; padding:10px 12px; margin-bottom:12px; font-size:13.5px; }
+.acao-ci-op { display:flex; align-items:flex-start; gap:9px; font-size:13.5px; padding:6px 0; cursor:pointer; color:#1f2937; }
+.acao-ci-op input { width:17px; height:17px; margin-top:1px; flex:0 0 17px; }
+.acao-compacta th, .acao-compacta td { padding-left:8px !important; padding-right:8px !important; }
+.acao-compacta th { white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -1674,6 +1693,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
       <div class="prj-kpis" id="acao-kpis" style="margin-top:16px"></div>
       <div class="card">
         <div class="prj-filtros">
+          <div class="form-group"><label>Ver</label><select id="acao-f-visao" onchange="acaoRenderLista()"></select></div>
           <div class="form-group"><label>Buscar</label><input type="text" id="acao-busca" placeholder="🔍 Texto do plano" oninput="acaoRenderLista()" /></div>
           <div class="form-group"><label>Situação</label><select id="acao-f-status" onchange="acaoRenderLista()"><option value="">Todas</option><option value="abertos" selected>Em aberto (pendentes + andamento)</option><option value="pendente">Pendente</option><option value="andamento">Em andamento</option><option value="atrasado">Atrasados</option><option value="concluido">Concluído</option><option value="cancelado">Cancelado</option></select></div>
           <div class="form-group"><label>Responsável (Quem)</label><select id="acao-f-quem" onchange="acaoRenderLista()"><option value="">Todos</option></select></div>
@@ -1682,10 +1702,12 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <div class="form-group" style="min-width:auto"><label>Visualizar</label>
             <div class="gt-zoom"><button id="acao-v-lista" class="on" onclick="acaoVisao('lista')">Lista</button><button id="acao-v-quadro" onclick="acaoVisao('quadro')">Quadro</button></div>
           </div>
+          <div class="form-group" style="min-width:auto;position:relative"><label>&nbsp;</label>
+            <button class="btn btn-secondary" onclick="acaoColsMenu(event)">▦ Colunas</button>
+            <div id="acao-cols-menu" class="acao-cols-menu" style="display:none"></div>
+          </div>
         </div>
-        <div id="acao-wrap-lista" class="table-scroll" style="overflow:auto"><table class="acao-tab"><thead><tr>
-          <th>Nº</th><th>O quê</th><th>Por quê</th><th>Quem</th><th>Onde</th><th>Quando</th><th>Como</th><th class="num">Quanto</th><th style="text-align:center">Lead time</th><th style="text-align:center">Tempo trabalhado</th><th>Progresso</th><th>Situação</th><th>Ações</th>
-        </tr></thead><tbody id="acao-tb"></tbody></table></div>
+        <div id="acao-wrap-lista" class="table-scroll" style="overflow:auto"><table class="acao-tab acao-compacta"><thead><tr id="acao-th"></tr></thead><tbody id="acao-tb"></tbody></table></div>
         <div id="acao-wrap-quadro" style="display:none"><div class="acao-kanban" id="acao-kanban"></div></div>
       </div>
     </div>
@@ -3940,7 +3962,7 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
           <div class="form-group" style="grid-column:span 2"><label><span class="acao-w">W</span>O quê? (What) *</label><input id="acao-oque" type="text" placeholder="Ação a ser executada" /></div>
           <div class="form-group" style="grid-column:span 2"><label><span class="acao-w">W</span>Por quê? (Why)</label><textarea id="acao-porque" rows="2" placeholder="Justificativa / problema que resolve"></textarea></div>
           <div class="form-group"><label><span class="acao-w">W</span>Onde? (Where)</label><input id="acao-onde" type="text" placeholder="Setor, local, processo" /></div>
-          <div class="form-group"><label><span class="acao-w">W</span>Quem? (Who) *</label><input id="acao-quem" type="text" list="acao-dl-quem" placeholder="Responsável" /><datalist id="acao-dl-quem"></datalist></div>
+          <div class="form-group"><label><span class="acao-w">W</span>Quem? (Who) * <span style="font-weight:400;color:#a8a29e">— usuário responsável</span></label><select id="acao-quem"></select></div>
           <div class="form-group"><label>Data de abertura *<span style="font-weight:400;color:#a8a29e"> (base do lead time)</span></label><input id="acao-abertura" type="date" /></div>
           <div class="form-group"><label><span class="acao-w">W</span>Quando? Início</label><input id="acao-inicio" type="date" /></div>
           <div class="form-group"><label><span class="acao-w">W</span>Quando? Prazo *</label><input id="acao-prazo" type="date" /></div>
@@ -3979,6 +4001,21 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 
 <!-- ══ CRONÔMETRO FLUTUANTE (5W2H) ══ -->
 <div id="acao-flutuante" style="display:none"></div>
+
+<!-- ══ MODAL 5W2H — CIÊNCIA DA TAREFA ══ -->
+<div class="modal-overlay" id="modal-acao-ciencia" style="z-index:280;">
+  <div class="modal lanc-modal" style="width:640px">
+    <div class="lanc-head">
+      <div class="lanc-head-ico">👁</div>
+      <div class="lanc-head-txt">
+        <div class="modal-title" id="acao-ci-tit">Ciência da tarefa</div>
+        <div class="lanc-head-sub" id="acao-ci-sub"></div>
+      </div>
+    </div>
+    <div class="lanc-body"><input type="hidden" id="acao-ci-id" /><div class="lanc-sec" id="acao-ci-body"></div></div>
+    <div class="modal-footer lanc-foot" id="acao-ci-foot"></div>
+  </div>
+</div>
 <!-- ══ MODAL ESTOQUE — PRODUTO ══ -->
 <div class="modal-overlay" id="modal-est-produto">
   <div class="modal lanc-modal">
@@ -21110,6 +21147,7 @@ async function acaoCarregar(forcar, silencioso) {
   const tt = await sbFetch('acao_tempos', 'GET', null, '?limit=1');
   if (tt === null) acaoErro = '⚠️ Falta a tabela acao_tempos (cronômetro). Rode o SQL "projetos_v3" no Supabase.';
   if (!acaoHorario) await acaoCarregarHorario();
+  if (typeof USERS !== 'undefined' && !USERS.length && typeof loadPerfis === 'function') { try { await loadPerfis(); } catch(e) {} }
   acaoCarregado = true;
 }
 async function acaoAbrirPagina(p) {
@@ -21121,6 +21159,7 @@ async function acaoAbrirPagina(p) {
   if (p === 'acao-painel')  acaoRenderPainel();
   if (p === 'acao-horario') acaoRenderHorario();
   acaoAtualizarFlutuante();
+  acaoVerificarPendencias();
 }
 function acaoRedesenhar() {
   if (_paginaAtual === 'acao-lista') acaoRenderLista();
@@ -21135,7 +21174,7 @@ function acaoSit(a) {
   return a.status || 'pendente';
 }
 function acaoAberto(a) { return a.status === 'pendente' || a.status === 'andamento'; }
-function acaoQuemLista() { return [...new Set(acaoDb.planos.map(a => (a.quem || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'pt-BR')); }
+function acaoQuemLista() { return [...new Set(acaoPlanosVis().map(a => (a.quem || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'pt-BR')); }
 function acaoNum(a) { return '#' + String(a.numero || 0).padStart(3, '0'); }
 function acaoProg(a) { return a.status === 'concluido' ? 100 : Math.max(0, Math.min(100, prjNum(a.progresso))); }
 function acaoKpi(v, l, s, cor) { return `<div class="prj-kpi" style="--k:${cor}"><div class="v">${v}</div><div class="l">${l}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`; }
@@ -21318,6 +21357,7 @@ async function acaoPlay(id) {
   if (acaoErro) { alert(acaoErro); return; }
   const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
   if (acaoRodando(id)) return acaoStop(id);
+  if ((a.aceite || 'aceito') === 'pendente' && acaoDoUsuario(a)) { acaoAbrirCiencia(id); return; }
   if (!acaoAberto(a)) { alert('Este plano está ' + ACAO_ST[a.status].toLowerCase() + '. Reabra-o para usar o cronômetro.'); return; }
   const meu = acaoMeuRodando();
   if (meu) {
@@ -21357,6 +21397,7 @@ function acaoPosCron(id) {
 async function acaoConcluir(id) {
   const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
   if (a.status === 'concluido') return;
+  if ((a.aceite || 'aceito') === 'pendente' && acaoDoUsuario(a)) { acaoAbrirCiencia(id); return; }
   if (!confirm(`Concluir o plano ${acaoNum(a)} — "${a.oque}"?`)) return;
   if (acaoRodando(id) && !await acaoStop(id, true)) return;
   const agora = new Date().toISOString();
@@ -21401,6 +21442,7 @@ async function acaoLancarTempo(id) {
 }
 // Cronômetro flutuante (aparece em qualquer tela enquanto o play do usuário estiver ligado)
 function acaoAtualizarFlutuante() {
+  acaoAtualizarBadge();
   const box = document.getElementById('acao-flutuante'); if (!box) return;
   const r = (typeof currentUser !== 'undefined' && currentUser) ? acaoMeuRodando() : null;
   if (!r) { box.style.display = 'none'; box.dataset.id = ''; return; }
@@ -21431,31 +21473,35 @@ setInterval(async () => {
   if (!logado) { if (_acaoBoot) { _acaoBoot = false; const b = document.getElementById('acao-flutuante'); if (b) b.style.display = 'none'; } return; }
   if (_acaoBoot) return;
   _acaoBoot = true;
-  try { await acaoCarregar(false, true); acaoAtualizarFlutuante(); } catch(e) { console.warn('[5W2H] boot', e); }
+  try { await acaoCarregar(false, true); acaoAtualizarFlutuante(); acaoVerificarPendencias(); } catch(e) { console.warn('[5W2H] boot', e); }
 }, 3000);
 
 // ══ LISTA / QUADRO ══
 function acaoKpisLista() {
-  const L = acaoDb.planos;
+  const L = acaoPlanosVis();
   const abertos = L.filter(acaoAberto);
   const atras = L.filter(a => acaoSit(a) === 'atrasado');
   const concl = L.filter(a => a.status === 'concluido');
   const noPrazo = concl.filter(a => !a.prazo || (a.dt_conclusao || '') <= a.prazo).length;
   const lts = concl.map(acaoLead).filter(x => x != null);
-  const rod = acaoDb.tempos.filter(t => !t.fim).length;
+  const rod = acaoDb.tempos.filter(t => !t.fim && L.some(a => a.id === t.plano_id)).length;
   return acaoKpi(abertos.length, 'Em aberto', `${L.filter(a => a.status === 'andamento').length} em andamento${rod ? ` · ▶ ${rod} com play ligado` : ''}`, '#2563eb') +
     acaoKpi(atras.length, 'Atrasados', 'Prazo vencido', '#dc2626') +
     acaoKpi(concl.length, 'Concluídos', concl.length ? `${Math.round(noPrazo / concl.length * 100)}% dentro do prazo` : '—', '#16a34a') +
     acaoKpi(lts.length ? acaoFmtDias(lts.reduce((a,b) => a + b, 0) / lts.length) : '—', 'Lead time médio', 'Planos concluídos', '#8b5cf6') +
-    acaoKpi(acaoFmtHoras(acaoDb.tempos.reduce((s,t) => s + acaoSegTempo(t), 0)), 'Horas trabalhadas', 'Total do cronômetro', '#0d9488');
+    acaoKpi(acaoFmtHoras(acaoDb.tempos.filter(t => L.some(a => a.id === t.plano_id)).reduce((s,t) => s + acaoSegTempo(t), 0)), 'Horas trabalhadas', 'Total do cronômetro', '#0d9488');
 }
 function acaoFiltrados() {
   const termo = normText(document.getElementById('acao-busca').value || '');
   const st = document.getElementById('acao-f-status').value;
   const quem = document.getElementById('acao-f-quem').value;
   const ate = document.getElementById('acao-f-ate').value;
-  return acaoDb.planos.filter(a => {
+  const visao = (document.getElementById('acao-f-visao') || {}).value || '';
+  return acaoPlanosVis().filter(a => {
     const sit = acaoSit(a);
+    if (visao === 'meus' && !acaoDoUsuario(a)) return false;
+    if (visao === 'criados' && !(acaoCriadoPorMim(a) && !acaoDoUsuario(a))) return false;
+    if (visao === 'ciencia' && (a.aceite || 'aceito') === 'aceito') return false;
     if (st === 'abertos' && !acaoAberto(a)) return false;
     if (st && st !== 'abertos' && sit !== st) return false;
     if (quem && (a.quem || '') !== quem) return false;
@@ -21476,42 +21522,91 @@ function acaoLeadHtml(a) {
   const tit = a.status === 'concluido' ? 'concluído em' : 'aberto há';
   return `<div style="font-family:DM Mono,monospace;font-weight:700;font-size:12.5px">${lt}d</div><div style="font-size:10.5px;color:#a8a29e">${tit}</div>`;
 }
+// Colunas da lista (as ocultas ficam salvas no navegador e podem ser reexibidas em "▦ Colunas")
+const ACAO_COLS = [
+  { k:'num', t:'Nº', fixo:true }, { k:'oque', t:'O quê' }, { k:'porque', t:'Por quê' }, { k:'quem', t:'Quem' },
+  { k:'onde', t:'Onde' }, { k:'quando', t:'Quando' }, { k:'como', t:'Como' }, { k:'quanto', t:'Quanto', num:true },
+  { k:'lead', t:'Lead time', centro:true }, { k:'tempo', t:'Tempo' }, { k:'prog', t:'Progresso' }, { k:'sit', t:'Situação' },
+  { k:'acoes', t:'Ações', fixo:true }
+];
+let acaoColsOcultas = (function(){ try { const v = JSON.parse(localStorage.getItem('acao_cols_ocultas')); if (Array.isArray(v)) return v; } catch(e) {} return ['quanto','prog','sit']; })();
+function acaoColVis(k) { return !acaoColsOcultas.includes(k); }
+function acaoColsMenu(ev) {
+  if (ev) ev.stopPropagation();
+  const m = document.getElementById('acao-cols-menu'); if (!m) return;
+  if (m.style.display === 'block') { m.style.display = 'none'; return; }
+  m.innerHTML = '<div style="font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#a8a29e;margin-bottom:6px">Mostrar colunas</div>' +
+    ACAO_COLS.filter(c => !c.fixo).map(c => `<label><input type="checkbox" ${acaoColVis(c.k) ? 'checked' : ''} onchange="acaoToggleCol('${c.k}',this.checked)"> ${c.t}</label>`).join('') +
+    '<div style="border-top:1px solid #f1efed;margin-top:6px;padding-top:6px"><a href="#" onclick="event.preventDefault();acaoColsPadrao()" style="font-size:12px">Restaurar padrão</a></div>';
+  m.style.display = 'block';
+}
+document.addEventListener('click', e => { const m = document.getElementById('acao-cols-menu'); if (m && m.style.display === 'block' && !m.contains(e.target)) m.style.display = 'none'; });
+function acaoToggleCol(k, on) {
+  acaoColsOcultas = on ? acaoColsOcultas.filter(x => x !== k) : [...new Set([...acaoColsOcultas, k])];
+  try { localStorage.setItem('acao_cols_ocultas', JSON.stringify(acaoColsOcultas)); } catch(e) {}
+  acaoRenderLista();
+}
+function acaoColsPadrao() { acaoColsOcultas = ['quanto','prog','sit']; try { localStorage.setItem('acao_cols_ocultas', JSON.stringify(acaoColsOcultas)); } catch(e) {} document.getElementById('acao-cols-menu').style.display = 'none'; acaoRenderLista(); }
+function acaoTrunc(t, w) {
+  t = String(t || '').trim();
+  if (!t) return '<span style="color:#a8a29e">—</span>';
+  return `<span class="acao-trunc" style="max-width:${w}px" title="${prjEsc(t)}">${prjEsc(t)}</span>`;
+}
+function acaoAceiteBadge(a) {
+  const ac = a.aceite || 'aceito';
+  if (ac === 'pendente') return `<span class="acao-tag-ci" onclick="event.stopPropagation();acaoAbrirCiencia('${a.id}')" title="Responsável ainda não deu ciência">⏳ aguardando ciência</span>`;
+  if (ac === 'proposta') return `<span class="acao-tag-ci prop" onclick="event.stopPropagation();acaoAbrirCiencia('${a.id}')" title="Responsável propôs outra data">📅 nova data proposta ${a.prazo_proposto ? fmtDate(a.prazo_proposto) : ''}</span>`;
+  return '';
+}
+function acaoCelula(k, a) {
+  const sit = acaoSit(a), pg = acaoProg(a);
+  switch (k) {
+    case 'num': return `<td style="font-family:DM Mono,monospace;font-size:12px;white-space:nowrap"><span class="prj-dot" title="${ACAO_ST[sit]}" style="background:${ACAO_ST_COR[sit]};margin-right:6px"></span><b>${acaoNum(a)}</b></td>`;
+    case 'oque': return `<td>${acaoTrunc(a.oque, 210)}<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:2px">${a.prioridade === 'alta' ? '<span class="badge badge-red" style="padding:1px 7px;font-size:10px">Alta</span>' : ''}${a.projeto_id && prjProjeto(a.projeto_id) ? `<span style="font-size:11px;color:#a8a29e">🪚 ${prjEsc(prjProjeto(a.projeto_id).codigo)}</span>` : ''}${acaoAceiteBadge(a)}${!acaoColVis('sit') && sit === 'atrasado' ? '<span class="badge badge-red" style="padding:1px 7px;font-size:10px">Atrasado</span>' : ''}</div></td>`;
+    case 'porque': return `<td>${acaoTrunc(a.porque, 130)}</td>`;
+    case 'quem': return `<td style="white-space:nowrap">${prjEsc(a.quem || '—')}${a.criado_por && !acaoMesmaPessoa(a) ? `<div style="font-size:10.5px;color:#a8a29e">por ${prjEsc(a.criado_por)}</div>` : ''}</td>`;
+    case 'onde': return `<td>${acaoTrunc(a.onde, 95)}</td>`;
+    case 'quando': return `<td style="white-space:nowrap">${a.prazo ? fmtDate(a.prazo) : '—'}<div style="font-size:10.5px;color:#a8a29e">aberto ${fmtDate(acaoDtAbertura(a))}</div></td>`;
+    case 'como': return `<td>${acaoTrunc(a.como, 130)}</td>`;
+    case 'quanto': return `<td class="num" style="white-space:nowrap">${a.quanto ? fmtBRL(prjNum(a.quanto)) : '—'}</td>`;
+    case 'lead': return `<td style="text-align:center">${acaoLeadHtml(a)}</td>`;
+    case 'tempo': return `<td onclick="event.stopPropagation()">${acaoPlayHtml(a)}</td>`;
+    case 'prog': return `<td style="min-width:80px"><div style="font-size:11px;font-weight:700">${pg}%</div><div class="acao-prog"><span style="width:${pg}%;background:${ACAO_ST_COR[sit]}"></span></div></td>`;
+    case 'sit': return `<td><span class="badge ${ACAO_ST_BADGE[sit]}" style="white-space:nowrap">${ACAO_ST[sit]}</span></td>`;
+    case 'acoes': return `<td class="actions" onclick="event.stopPropagation()" style="white-space:nowrap">
+        ${acaoAberto(a) ? `<button class="acao-ok-btn" title="Dar como concluído" onclick="acaoConcluir('${a.id}')">✔</button>` : ''}
+        <button class="btn btn-secondary btn-sm" onclick="acaoAbrir('${a.id}')">Abrir</button></td>`;
+  }
+  return '<td></td>';
+}
 function acaoRenderLista() {
   const tb = document.getElementById('acao-tb'); if (!tb) return;
   document.getElementById('acao-kpis').innerHTML = acaoKpisLista();
+  const sv = document.getElementById('acao-f-visao');
+  if (sv && !sv.dataset.ok) {
+    sv.innerHTML = `<option value="">${acaoEhAdmin() ? 'Todos os usuários' : 'Meus + criados por mim'}</option><option value="meus">Atribuídos a mim</option><option value="criados">Criados por mim para outros</option><option value="ciencia">Aguardando ciência / nova data</option>`;
+    sv.dataset.ok = '1';
+  }
   const sq = document.getElementById('acao-f-quem'); const vq = sq.value;
   sq.innerHTML = '<option value="">Todos</option>' + acaoQuemLista().map(q => `<option value="${prjEsc(q)}">${prjEsc(q)}</option>`).join(''); sq.value = vq;
   const lista = acaoFiltrados();
   document.getElementById('acao-wrap-lista').style.display = _acaoVisao === 'lista' ? '' : 'none';
   document.getElementById('acao-wrap-quadro').style.display = _acaoVisao === 'quadro' ? '' : 'none';
-  const corta = (t, n) => { t = String(t || ''); return t.length > n ? prjEsc(t.slice(0, n)) + '…' : prjEsc(t) || '<span style="color:#a8a29e">—</span>'; };
-  tb.innerHTML = lista.length ? lista.map(a => {
-    const sit = acaoSit(a); const pg = acaoProg(a);
-    return `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')">
-      <td style="font-family:DM Mono,monospace;font-size:12px"><b>${acaoNum(a)}</b></td>
-      <td class="w"><b>${prjEsc(a.oque)}</b>${a.prioridade === 'alta' ? ' <span class="badge badge-red">Alta</span>' : ''}${a.projeto_id && prjProjeto(a.projeto_id) ? `<div style="font-size:11px;color:#a8a29e">🪚 ${prjEsc(prjProjeto(a.projeto_id).codigo)}</div>` : ''}</td>
-      <td class="w">${corta(a.porque, 70)}</td>
-      <td style="white-space:nowrap">${prjEsc(a.quem || '—')}</td>
-      <td class="w">${corta(a.onde, 30)}</td>
-      <td style="white-space:nowrap">${a.prazo ? fmtDate(a.prazo) : '—'}<div style="font-size:11px;color:#a8a29e">aberto ${fmtDate(acaoDtAbertura(a))}</div></td>
-      <td class="w">${corta(a.como, 70)}</td>
-      <td class="num">${a.quanto ? fmtBRL(prjNum(a.quanto)) : '—'}</td>
-      <td style="text-align:center">${acaoLeadHtml(a)}</td>
-      <td onclick="event.stopPropagation()">${acaoPlayHtml(a)}</td>
-      <td style="min-width:80px"><div style="font-size:11px;font-weight:700">${pg}%</div><div class="acao-prog"><span style="width:${pg}%;background:${ACAO_ST_COR[sit]}"></span></div></td>
-      <td><span class="badge ${ACAO_ST_BADGE[sit]}" style="white-space:nowrap">${ACAO_ST[sit]}</span></td>
-      <td class="actions" onclick="event.stopPropagation()" style="white-space:nowrap">
-        ${acaoAberto(a) ? `<button class="acao-ok-btn" title="Dar como concluído" onclick="acaoConcluir('${a.id}')">✔ Concluir</button>` : ''}
-        <button class="btn btn-secondary btn-sm" onclick="acaoAbrir('${a.id}')">Abrir</button></td></tr>`;
-  }).join('') + `<tr><td colspan="7" style="font-weight:700">${lista.length} plano(s)</td><td class="num" style="font-weight:700">${fmtBRL(lista.reduce((s,a) => s + prjNum(a.quanto), 0))}</td><td></td><td style="font-weight:700;font-family:DM Mono,monospace;font-size:12px">${acaoFmtHoras(lista.reduce((s,a) => s + acaoSegPlano(a.id), 0))}</td><td colspan="3"></td></tr>`
-    : `<tr><td colspan="13" class="empty-state">${acaoDb.planos.length ? 'Nenhum plano com esses filtros.' : 'Nenhum plano de ação cadastrado.'}</td></tr>`;
-  const cols = [['pendente','Pendentes'],['andamento','Em andamento'],['atrasado','Atrasados'],['concluido','Concluídos']];
-  document.getElementById('acao-kanban').innerHTML = cols.map(([k, nome]) => {
+  const cols = ACAO_COLS.filter(c => c.fixo || acaoColVis(c.k));
+  document.getElementById('acao-th').innerHTML = cols.map(c => `<th${c.num ? ' class="num"' : ''}${c.centro ? ' style="text-align:center"' : ''}>${c.t}</th>`).join('');
+  tb.innerHTML = lista.length ? lista.map(a => `<tr style="cursor:pointer" onclick="acaoAbrir('${a.id}')">${cols.map(c => acaoCelula(c.k, a)).join('')}</tr>`).join('') +
+      `<tr>${cols.map((c, i) => i === 0 ? `<td colspan="1" style="font-weight:700;white-space:nowrap">${lista.length} plano(s)</td>`
+        : c.k === 'quanto' ? `<td class="num" style="font-weight:700;white-space:nowrap">${fmtBRL(lista.reduce((s,a) => s + prjNum(a.quanto), 0))}</td>`
+        : c.k === 'tempo' ? `<td style="font-weight:700;font-family:DM Mono,monospace;font-size:12px">${acaoFmtHoras(lista.reduce((s,a) => s + acaoSegPlano(a.id), 0))}</td>` : '<td></td>').join('')}</tr>`
+    : `<tr><td colspan="${cols.length}" class="empty-state">${acaoPlanosVis().length ? 'Nenhum plano com esses filtros.' : 'Nenhum plano de ação cadastrado.'}</td></tr>`;
+  const colsK = [['pendente','Pendentes'],['andamento','Em andamento'],['atrasado','Atrasados'],['concluido','Concluídos']];
+  document.getElementById('acao-kanban').innerHTML = colsK.map(([k, nome]) => {
     const l = lista.filter(a => acaoSit(a) === k);
     return `<div class="acao-col" style="--c:${ACAO_ST_COR[k]}"><h4>${nome}<span style="background:#fff;border:1px solid #e7e5e4;border-radius:10px;padding:1px 8px;font-size:11px">${l.length}</span></h4><div class="bd">${
       l.map(a => `<div class="acao-card" style="--s:${ACAO_ST_COR[k]}" onclick="acaoAbrir('${a.id}')">
         <div style="font-family:DM Mono,monospace;font-size:11px;color:#a8a29e">${acaoNum(a)}${a.prioridade === 'alta' ? ' · 🔴 Alta' : ''} · LT ${acaoLead(a) ?? '—'}d</div>
         <div class="t">${prjEsc(a.oque)}</div>
+        ${acaoAceiteBadge(a) ? '<div style="margin-top:4px">' + acaoAceiteBadge(a) + '</div>' : ''}
         <div class="m">👤 ${prjEsc(a.quem || '—')} · 📅 ${a.prazo ? fmtDate(a.prazo) : '—'}${a.quanto ? ' · ' + fmtBRL(prjNum(a.quanto)) : ''}</div>
         <div class="acao-prog"><span style="width:${acaoProg(a)}%;background:${ACAO_ST_COR[k]}"></span></div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px" onclick="event.stopPropagation()">${acaoPlayHtml(a)}
@@ -21527,13 +21622,13 @@ function acaoAbrir(id) {
   document.getElementById('acao-titulo').textContent = a ? `Plano de Ação ${acaoNum(a)}` : 'Novo Plano de Ação';
   document.getElementById('acao-id').value = a ? a.id : '';
   const set = (k, v) => { const el = document.getElementById(k); if (el) el.value = v == null ? '' : v; };
-  set('acao-oque', a && a.oque); set('acao-porque', a && a.porque); set('acao-onde', a && a.onde); set('acao-quem', a && a.quem);
+  set('acao-oque', a && a.oque); set('acao-porque', a && a.porque); set('acao-onde', a && a.onde);
+  acaoPopularQuem(a);
   set('acao-abertura', a ? acaoDtAbertura(a) : prjHoje());
   set('acao-inicio', a ? a.dt_inicio : prjHoje()); set('acao-prazo', a && a.prazo); set('acao-como', a && a.como);
   set('acao-quanto', a && a.quanto); set('acao-status', a ? a.status : 'pendente'); set('acao-pri', a ? (a.prioridade || 'media') : 'media');
   set('acao-obs', a && a.obs);
   const pg = a ? acaoProg(a) : 0; set('acao-prog', pg); document.getElementById('acao-prog-v').textContent = pg + '%';
-  document.getElementById('acao-dl-quem').innerHTML = acaoQuemLista().map(q => `<option value="${prjEsc(q)}"></option>`).join('');
   const sp = document.getElementById('acao-projeto');
   sp.innerHTML = '<option value="">Nenhum</option>' + (typeof prjDb !== 'undefined' ? prjDb.projetos : [])
     .filter(p => p.status !== 'cancelado' || (a && a.projeto_id === p.id))
@@ -21623,7 +21718,11 @@ async function acaoComentar() {
 async function acaoSalvar() {
   const id = document.getElementById('acao-id').value;
   const g = k => document.getElementById(k).value;
-  const oque = g('acao-oque').trim(), quem = g('acao-quem').trim(), prazo = g('acao-prazo'), abertura = g('acao-abertura');
+  const quemSel = g('acao-quem');
+  const oque = g('acao-oque').trim(), prazo = g('acao-prazo'), abertura = g('acao-abertura');
+  let quem = '', quem_email = null;
+  if (quemSel.startsWith('nome:')) quem = quemSel.slice(5);
+  else if (quemSel) { const u = acaoUsuarios().find(x => x.email === quemSel); quem = u ? u.nome : quemSel; quem_email = quemSel; }
   if (!oque) { alert('Preencha "O quê?".'); return; }
   if (!quem) { alert('Preencha "Quem?" (responsável).'); return; }
   if (!abertura) { alert('Informe a data de abertura.'); return; }
@@ -21633,12 +21732,22 @@ async function acaoSalvar() {
   const status = g('acao-status');
   const ant = id ? acaoDb.planos.find(x => x.id === id) : null;
   if (ant && status !== 'pendente' && status !== 'andamento' && acaoRodando(id)) { if (!await acaoStop(id, true)) return; }
-  const rec = { oque, porque: g('acao-porque').trim(), onde: g('acao-onde').trim(), quem, dt_abertura: abertura, dt_inicio: g('acao-inicio') || null, prazo,
+  const rec = { oque, porque: g('acao-porque').trim(), onde: g('acao-onde').trim(), quem, quem_email, dt_abertura: abertura, dt_inicio: g('acao-inicio') || null, prazo,
     como: g('acao-como').trim(), quanto: prjNum(g('acao-quanto')), projeto_id: g('acao-projeto') || null, status,
     prioridade: g('acao-pri'), progresso: status === 'concluido' ? 100 : parseInt(g('acao-prog'), 10) || 0, obs: g('acao-obs').trim() };
   if (status === 'concluido') rec.dt_conclusao = (ant && ant.status === 'concluido' && ant.dt_conclusao) ? ant.dt_conclusao : prjHoje();
   else rec.dt_conclusao = null;
   if (status !== 'pendente' && !(ant && ant.dt_primeira_acao)) rec.dt_primeira_acao = new Date().toISOString();
+  // Ciência: tarefa aberta para outra pessoa precisa da ciência dela (data + projeto).
+  // Para si mesmo já nasce aceita. Trocar o responsável ou o prazo pede ciência de novo.
+  const paraMim = quem_email ? quem_email === acaoMeuUser() : normText(quem) === normText(acaoMeuNome());
+  if (!ant) {
+    Object.assign(rec, paraMim ? { aceite: 'aceito', dt_aceite: new Date().toISOString() } : { aceite: 'pendente', dt_aceite: null }, { prazo_proposto: null, aceite_obs: null });
+  } else if (!paraMim && ((ant.quem_email || null) !== quem_email || (ant.quem || '') !== quem || ((ant.prazo || '') !== prazo && (ant.aceite || 'aceito') !== 'proposta'))) {
+    Object.assign(rec, { aceite: 'pendente', dt_aceite: null, prazo_proposto: null, aceite_obs: (ant.prazo || '') !== prazo ? `Prazo alterado por ${acaoMeuNome()}: ${ant.prazo ? fmtDate(ant.prazo) : '—'} → ${fmtDate(prazo)}` : null });
+  } else if (paraMim && (ant.aceite || 'aceito') !== 'aceito') {
+    Object.assign(rec, { aceite: 'aceito', dt_aceite: new Date().toISOString(), prazo_proposto: null });
+  }
   if (ant) {
     const ok = await sbFetch('acao_planos', 'PATCH', rec, `?id=eq.${id}`);
     if (!ok) { alert('❌ Erro ao salvar o plano.' + sbErroDetalhe()); return; }
@@ -21651,15 +21760,16 @@ async function acaoSalvar() {
       await sbFetch('acao_tempos', 'PATCH', { projeto_id: rec.projeto_id }, `?plano_id=eq.${id}`);
       acaoDb.tempos.forEach(t => { if (t.plano_id === id) t.projeto_id = rec.projeto_id; });
     }
+    if (rec.aceite === 'pendente' && (ant.aceite || 'aceito') !== 'pendente') mud.push(`Enviado para ciência de ${quem}`);
     Object.assign(ant, rec);
     if (mud.length) await acaoRegistrar(id, mud.join(' · '));
   } else {
     const numero = Math.max(0, ...acaoDb.planos.map(a => a.numero || 0)) + 1;
-    const novo = { id: uid(), numero, ...rec, created_at: new Date().toISOString(), criado_por: acaoMeuNome() };
+    const novo = { id: uid(), numero, ...rec, created_at: new Date().toISOString(), criado_por: acaoMeuNome(), criado_por_email: acaoMeuUser() || null };
     const ok = await sbFetch('acao_planos', 'POST', novo);
     if (!ok) { alert('❌ Erro ao salvar o plano.' + sbErroDetalhe() + '\n\nSe o erro citar dt_abertura/dt_primeira_acao, rode o SQL "projetos_v3".'); return; }
     acaoDb.planos.push(novo);
-    await acaoRegistrar(novo.id, 'Plano criado');
+    await acaoRegistrar(novo.id, 'Plano criado' + (novo.aceite === 'pendente' ? ` para ${quem} — aguardando ciência` : ''));
   }
   closeModal('modal-acao');
   acaoRedesenhar();
@@ -21722,8 +21832,9 @@ function acaoRenderPainel() {
   // Filtros
   const sAno = document.getElementById('ap-ano');
   const anos = new Set([anoAtual]);
-  acaoDb.planos.forEach(a => { anos.add(acaoDtAbertura(a).slice(0,4)); if (a.dt_conclusao) anos.add(a.dt_conclusao.slice(0,4)); });
-  acaoDb.tempos.forEach(t => anos.add(prjDataLocal(t.inicio).slice(0,4)));
+  acaoPlanosVis().forEach(a => { anos.add(acaoDtAbertura(a).slice(0,4)); if (a.dt_conclusao) anos.add(a.dt_conclusao.slice(0,4)); });
+  const _idsVis = new Set(acaoPlanosVis().map(a => a.id));
+  acaoDb.tempos.filter(t => _idsVis.has(t.plano_id)).forEach(t => anos.add(prjDataLocal(t.inicio).slice(0,4)));
   const lAnos = [...anos].filter(Boolean).sort().reverse();
   const vAno = sAno.value || anoAtual;
   sAno.innerHTML = lAnos.map(a => `<option value="${a}">${a}</option>`).join(''); sAno.value = lAnos.includes(vAno) ? vAno : anoAtual;
@@ -21731,11 +21842,11 @@ function acaoRenderPainel() {
   const sQ = document.getElementById('ap-quem'); const vQ = sQ.value;
   sQ.innerHTML = '<option value="">Todos</option>' + acaoQuemLista().map(q => `<option value="${prjEsc(q)}">${prjEsc(q)}</option>`).join(''); sQ.value = vQ;
   const sP = document.getElementById('ap-proj'); const vP = sP.value;
-  const projIds = [...new Set(acaoDb.planos.map(a => a.projeto_id).filter(Boolean))];
+  const projIds = [...new Set(acaoPlanosVis().map(a => a.projeto_id).filter(Boolean))];
   sP.innerHTML = '<option value="">Todos</option><option value="__sem__">Sem projeto</option>' + projIds.map(id => { const p = typeof prjProjeto === 'function' ? prjProjeto(id) : null; return `<option value="${id}">${p ? prjEsc(p.codigo + ' — ' + p.nome) : '(projeto removido)'}</option>`; }).join('');
   sP.value = vP;
   const quem = sQ.value, proj = sP.value;
-  const L = acaoDb.planos.filter(a => (!quem || (a.quem || '') === quem) && (!proj || (proj === '__sem__' ? !a.projeto_id : a.projeto_id === proj)));
+  const L = acaoPlanosVis().filter(a => (!quem || (a.quem || '') === quem) && (!proj || (proj === '__sem__' ? !a.projeto_id : a.projeto_id === proj)));
   const idsL = new Set(L.map(a => a.id));
   const T = acaoDb.tempos.filter(t => idsL.has(t.plano_id));
   const abertosAno = L.filter(a => acaoDtAbertura(a).slice(0,4) === ano);
@@ -21823,7 +21934,7 @@ function acaoRenderPainel() {
 // Planos de ação vinculados a um projeto (seção da ficha do projeto) + tempo utilizado
 function acaoHtmlProjeto(p) {
   if (!acaoCarregado) return '';
-  const l = acaoDb.planos.filter(a => a.projeto_id === p.id);
+  const l = acaoPlanosVis().filter(a => a.projeto_id === p.id);
   const ids = new Set(l.map(a => a.id));
   const seg = acaoDb.tempos.filter(t => ids.has(t.plano_id)).reduce((s,t) => s + acaoSegTempo(t), 0);
   const pode = typeof currentUser === 'undefined' || !currentUser || currentUser.role === 'admin' || (currentUser.pages || []).includes('acao-lista');
@@ -21867,6 +21978,181 @@ async function usrExcluir(email) {
   if (!ok || (resta && resta.length)) { alert('❌ O usuário não foi excluído.' + sbErroDetalhe() + '\n\nProvável falta de permissão de exclusão na tabela perfis — rode o trecho "perfis" do SQL projetos_v3.'); return; }
   renderUsuariosAdmin();
   alert(`✅ Usuário excluído.\n\nA conta de login (${email}) ainda existe no Supabase Auth — se quiser apagar de vez, remova em Authentication → Users.`);
+}
+
+
+// ══════════════════════════════════════════════════════════════════
+// RESPONSÁVEL, VISIBILIDADE E CIÊNCIA
+// • "Quem" é um usuário do sistema: um usuário pode abrir tarefa para outro.
+// • Administrador vê todos os planos; os demais veem só os atribuídos a
+//   eles e os que eles criaram (para outros ou para si).
+// • Tarefa aberta para outra pessoa abre, para ela, a tela de ciência:
+//   ciente da tarefa/projeto + aprova o prazo ou propõe outra data.
+//   Se propuser, quem criou aprova a nova data ou mantém a original.
+// ══════════════════════════════════════════════════════════════════
+function acaoEhAdmin() { return typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'admin'; }
+function acaoUsuarios() {
+  return (typeof USERS !== 'undefined' ? USERS : []).map(u => ({ email: u.user || u.email, nome: u.nome || u.user })).filter(u => u.email)
+    .sort((a,b) => String(a.nome).localeCompare(String(b.nome), 'pt-BR'));
+}
+function acaoDoUsuario(a) {
+  if (a.quem_email) return a.quem_email === acaoMeuUser();
+  return !!a.quem && normText(a.quem) === normText(acaoMeuNome());
+}
+function acaoCriadoPorMim(a) {
+  if (a.criado_por_email) return a.criado_por_email === acaoMeuUser();
+  return !!a.criado_por && normText(a.criado_por) === normText(acaoMeuNome());
+}
+function acaoMesmaPessoa(a) {
+  if (a.quem_email && a.criado_por_email) return a.quem_email === a.criado_por_email;
+  return normText(a.quem || '') === normText(a.criado_por || '');
+}
+function acaoVisivel(a) {
+  if (typeof currentUser === 'undefined' || !currentUser) return true;
+  return acaoEhAdmin() || acaoDoUsuario(a) || acaoCriadoPorMim(a);
+}
+function acaoPlanosVis() { return acaoDb.planos.filter(acaoVisivel); }
+function acaoPopularQuem(a) {
+  const sel = document.getElementById('acao-quem'); if (!sel) return;
+  const us = acaoUsuarios();
+  let atual = a ? (a.quem_email || '') : acaoMeuUser();
+  let extra = '';
+  if (a && !a.quem_email && a.quem) {
+    const u = us.find(x => normText(x.nome) === normText(a.quem));
+    if (u) atual = u.email; else { atual = 'nome:' + a.quem; extra = `<option value="${prjEsc(atual)}">${prjEsc(a.quem)} (sem usuário)</option>`; }
+  }
+  sel.innerHTML = '<option value="">Selecione...</option>' + extra +
+    us.map(u => `<option value="${prjEsc(u.email)}">${prjEsc(u.nome)}${u.email === acaoMeuUser() ? ' (eu)' : ''}</option>`).join('');
+  sel.value = atual;
+}
+function acaoPendentesCiencia() { return acaoDb.planos.filter(a => (a.aceite || 'aceito') === 'pendente' && acaoDoUsuario(a) && acaoAberto(a)); }
+function acaoPendentesProposta() { return acaoDb.planos.filter(a => (a.aceite || 'aceito') === 'proposta' && acaoCriadoPorMim(a) && acaoAberto(a)); }
+function acaoAtualizarBadge() {
+  const nav = document.getElementById('nav-acao-lista'); if (!nav) return;
+  const n = (typeof currentUser !== 'undefined' && currentUser && acaoCarregado) ? acaoPendentesCiencia().length + acaoPendentesProposta().length : 0;
+  let b = nav.querySelector('.acao-nav-badge');
+  if (!n) { if (b) b.remove(); return; }
+  if (!b) { b = document.createElement('span'); b.className = 'acao-nav-badge'; nav.appendChild(b); }
+  b.textContent = n; b.title = n + ' tarefa(s) aguardando sua ciência/aprovação';
+}
+let _acaoCiAdiadas = new Set();
+function acaoVerificarPendencias() {
+  if (typeof currentUser === 'undefined' || !currentUser || !acaoCarregado) return;
+  const m = document.getElementById('modal-acao-ciencia');
+  if (!m || m.classList.contains('open')) return;
+  if (document.querySelector('.modal-overlay.open')) return;   // não atropela outra tela aberta
+  const prox = [...acaoPendentesCiencia(), ...acaoPendentesProposta()].find(a => !_acaoCiAdiadas.has(a.id + ':' + (a.aceite || '')));
+  if (prox) acaoAbrirCiencia(prox.id);
+}
+function acaoCiInfo(a) {
+  const p = a.projeto_id && typeof prjProjeto === 'function' ? prjProjeto(a.projeto_id) : null;
+  const et = p && typeof prjEtapa === 'function' ? prjEtapa(p.etapa_id) : null;
+  const lin = (k, v) => v ? `<div class="acao-ci-l"><div class="k">${k}</div><div class="v">${v}</div></div>` : '';
+  return `<div class="acao-ci-box">
+    ${lin('O quê', '<b>' + prjEsc(a.oque) + '</b>')}
+    ${lin('Por quê', prjEsc(a.porque || ''))}
+    ${lin('Como', prjEsc(a.como || ''))}
+    ${lin('Onde', prjEsc(a.onde || ''))}
+    ${lin('Quanto', a.quanto ? fmtBRL(prjNum(a.quanto)) : '')}
+    ${lin('Prioridade', { baixa:'Baixa', media:'Média', alta:'🔴 Alta' }[a.prioridade] || '')}
+    ${lin('Observação', prjEsc(a.obs || ''))}
+  </div>
+  ${p ? `<div class="acao-ci-proj"><div style="font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#9a3412;margin-bottom:6px">🪚 Projeto vinculado</div>
+      <b>${prjEsc(p.codigo || '')} — ${prjEsc(p.nome)}</b><br>
+      <span style="font-size:12.5px;color:#57534e">Cliente: ${prjEsc(prjClienteNome(p))}${et ? ' · Etapa atual: ' + prjEsc(et.nome) : ''}${p.dt_entrega_prev ? ' · Entrega prometida: ' + fmtDate(p.dt_entrega_prev) : ''}${p.responsavel ? ' · Responsável: ' + prjEsc(p.responsavel) : ''}</span></div>` : ''}`;
+}
+function acaoAbrirCiencia(id) {
+  const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
+  const ac = a.aceite || 'aceito';
+  const body = document.getElementById('acao-ci-body'), foot = document.getElementById('acao-ci-foot');
+  document.getElementById('acao-ci-id').value = id;
+  const sub = `Aberta por <b>${prjEsc(a.criado_por || '—')}</b> em ${fmtDate(acaoDtAbertura(a))} · responsável <b>${prjEsc(a.quem || '—')}</b>`;
+  if (ac === 'pendente' && acaoDoUsuario(a)) {
+    document.getElementById('acao-ci-tit').textContent = `Nova tarefa para você — ${acaoNum(a)}`;
+    document.getElementById('acao-ci-sub').innerHTML = sub;
+    body.innerHTML = acaoCiInfo(a) + `
+      ${a.aceite_obs ? `<div class="lanc-note" style="margin-bottom:12px">${prjEsc(a.aceite_obs)}</div>` : ''}
+      <div class="acao-ci-prazo">Prazo solicitado: <b>${a.prazo ? fmtDate(a.prazo) : '—'}</b>${a.dt_inicio ? ` · início ${fmtDate(a.dt_inicio)}` : ''}</div>
+      <label class="acao-ci-op"><input type="checkbox" id="acao-ci-ciente"> <span>Estou ciente desta tarefa${a.projeto_id ? ' e do projeto vinculado' : ''}.</span></label>
+      <label class="acao-ci-op"><input type="radio" name="acao-ci-prazo" value="ok" checked onchange="document.getElementById('acao-ci-nova').style.display='none'"> <span>Aprovo o prazo de <b>${a.prazo ? fmtDate(a.prazo) : '—'}</b>.</span></label>
+      <label class="acao-ci-op"><input type="radio" name="acao-ci-prazo" value="nova" onchange="document.getElementById('acao-ci-nova').style.display='flex'"> <span>Preciso de outra data.</span></label>
+      <div id="acao-ci-nova" style="display:none;gap:8px;margin:4px 0 0 26px;flex-wrap:wrap">
+        <input type="date" id="acao-ci-data" style="max-width:170px" min="${prjHoje()}" /><input type="text" id="acao-ci-motivo" placeholder="Motivo (obrigatório)" style="flex:1;min-width:200px" /></div>`;
+    foot.innerHTML = `<button class="btn btn-secondary" onclick="acaoCiAdiar()">Ver depois</button><span class="lanc-foot-info"></span>
+      <button class="btn btn-primary" onclick="acaoCiConfirmar()">Confirmar ciência</button>`;
+  } else if (ac === 'proposta' && (acaoCriadoPorMim(a) || acaoEhAdmin())) {
+    document.getElementById('acao-ci-tit').textContent = `Nova data proposta — ${acaoNum(a)}`;
+    document.getElementById('acao-ci-sub').innerHTML = sub;
+    body.innerHTML = acaoCiInfo(a) + `<div class="acao-ci-prazo"><b>${prjEsc(a.quem)}</b> deu ciência e pediu para mudar o prazo de <b>${a.prazo ? fmtDate(a.prazo) : '—'}</b> para <b style="color:#b45309">${a.prazo_proposto ? fmtDate(a.prazo_proposto) : '—'}</b>.</div>
+      ${a.aceite_obs ? `<div class="lanc-note" style="margin-bottom:12px">Motivo: ${prjEsc(a.aceite_obs)}</div>` : ''}
+      <div class="form-group"><label>Resposta (opcional)</label><input type="text" id="acao-ci-resp" placeholder="Ex.: ok, pode ser" /></div>`;
+    foot.innerHTML = `<button class="btn btn-secondary" onclick="acaoCiAdiar()">Ver depois</button><span class="lanc-foot-info"></span>
+      <button class="btn btn-secondary" onclick="acaoCiDecidir(false)">Manter prazo original</button>
+      <button class="btn btn-primary" onclick="acaoCiDecidir(true)">Aprovar nova data</button>`;
+  } else {
+    document.getElementById('acao-ci-tit').textContent = `Ciência — ${acaoNum(a)}`;
+    document.getElementById('acao-ci-sub').innerHTML = sub;
+    const txt = ac === 'pendente' ? `Aguardando ${prjEsc(a.quem || 'o responsável')} dar ciência e aprovar o prazo de ${a.prazo ? fmtDate(a.prazo) : '—'}.`
+      : ac === 'proposta' ? `${prjEsc(a.quem)} propôs ${a.prazo_proposto ? fmtDate(a.prazo_proposto) : '—'} — aguardando ${prjEsc(a.criado_por || 'quem criou')} aprovar.`
+      : `Ciência dada ${a.dt_aceite ? 'em ' + fmtTs(a.dt_aceite) : ''}.`;
+    body.innerHTML = acaoCiInfo(a) + `<div class="acao-ci-prazo">${txt}</div>`;
+    foot.innerHTML = `<span class="lanc-foot-info"></span><button class="btn btn-primary" onclick="closeModal('modal-acao-ciencia')">Fechar</button>`;
+  }
+  openModal('modal-acao-ciencia');
+}
+function acaoCiAdiar() {
+  const id = document.getElementById('acao-ci-id').value;
+  const a = acaoDb.planos.find(x => x.id === id);
+  if (a) _acaoCiAdiadas.add(a.id + ':' + (a.aceite || ''));
+  closeModal('modal-acao-ciencia');
+  setTimeout(acaoVerificarPendencias, 150);
+}
+async function acaoCiConfirmar() {
+  const id = document.getElementById('acao-ci-id').value;
+  const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
+  if (!document.getElementById('acao-ci-ciente').checked) { alert('Marque "Estou ciente" para confirmar.'); return; }
+  const op = (document.querySelector('input[name="acao-ci-prazo"]:checked') || {}).value;
+  const agora = new Date().toISOString();
+  let rec, msg;
+  if (op === 'nova') {
+    const d = document.getElementById('acao-ci-data').value, mot = document.getElementById('acao-ci-motivo').value.trim();
+    if (!d) { alert('Informe a nova data.'); return; }
+    if (!mot) { alert('Informe o motivo da nova data.'); return; }
+    if (d === a.prazo) { alert('A data é igual ao prazo atual — escolha "Aprovo o prazo".'); return; }
+    rec = { aceite: 'proposta', prazo_proposto: d, aceite_obs: mot, dt_aceite: agora };
+    msg = `👁 Ciência dada por ${acaoMeuNome()} · propôs nova data: ${fmtDate(a.prazo)} → ${fmtDate(d)} (${mot})`;
+  } else {
+    rec = { aceite: 'aceito', dt_aceite: agora, prazo_proposto: null, aceite_obs: null };
+    msg = `👁 Ciência dada por ${acaoMeuNome()} · prazo ${a.prazo ? fmtDate(a.prazo) : '—'} aprovado`;
+  }
+  if (!a.dt_primeira_acao) rec.dt_primeira_acao = agora;
+  const ok = await sbFetch('acao_planos', 'PATCH', rec, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao salvar.' + sbErroDetalhe() + '\n\nSe citar "aceite", rode o SQL projetos_v4.'); return; }
+  Object.assign(a, rec);
+  await acaoRegistrar(id, msg);
+  closeModal('modal-acao-ciencia');
+  acaoRedesenhar();
+  setTimeout(acaoVerificarPendencias, 200);
+}
+async function acaoCiDecidir(aprovar) {
+  const id = document.getElementById('acao-ci-id').value;
+  const a = acaoDb.planos.find(x => x.id === id); if (!a) return;
+  const resp = (document.getElementById('acao-ci-resp') || {}).value || '';
+  let rec, msg;
+  if (aprovar) {
+    rec = { aceite: 'aceito', prazo: a.prazo_proposto || a.prazo, prazo_proposto: null, aceite_obs: null };
+    msg = `✔ Nova data aprovada por ${acaoMeuNome()}: ${fmtDate(a.prazo)} → ${fmtDate(rec.prazo)}${resp ? ' · ' + resp : ''}`;
+  } else {
+    rec = { aceite: 'pendente', prazo_proposto: null, dt_aceite: null, aceite_obs: `Prazo original mantido por ${acaoMeuNome()}${resp ? ': ' + resp : ''}.` };
+    msg = `Prazo original (${fmtDate(a.prazo)}) mantido por ${acaoMeuNome()}${resp ? ' · ' + resp : ''} — volta para ciência de ${a.quem}`;
+  }
+  const ok = await sbFetch('acao_planos', 'PATCH', rec, `?id=eq.${id}`);
+  if (!ok) { alert('❌ Erro ao salvar.' + sbErroDetalhe()); return; }
+  Object.assign(a, rec);
+  await acaoRegistrar(id, msg);
+  closeModal('modal-acao-ciencia');
+  acaoRedesenhar();
+  setTimeout(acaoVerificarPendencias, 200);
 }
 </script>
 </body>
