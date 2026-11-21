@@ -1216,6 +1216,54 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 .acao-card.arrastando { opacity:.45; }
 .acao-col.acao-drop { background:#eff6ff; border-color:#93c5fd; }
 .acao-col.acao-nodrop { opacity:.55; }
+.gt-bar.gt-bar-sel { box-shadow:none; overflow:visible; background:transparent; }
+.gt-bar.gt-bar-sel .gt-seg { border-radius:5px; box-shadow:0 1px 3px rgba(15,30,58,.2); }
+.gt-bar.gt-bar-sel .gt-seg + .gt-seg { border-left:none; }
+.gt-bar.gt-bar-sel .gt-seg.prev { opacity:.75; }
+/* ── Gantt v2 ── */
+.gt2-toolbar { background:#fff; border:1px solid #ece9e6; border-radius:14px; padding:12px 14px; margin:14px 0 14px; box-shadow:0 1px 3px rgba(15,30,58,.04); }
+.gt2-tb-row { display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px; }
+.gt2-tb-row + .gt2-tb-row { margin-top:12px; padding-top:12px; border-top:1px solid #f1efed; align-items:center; }
+.gt2-search { flex:1 1 220px; min-width:200px; }
+.gt2-search input { width:100%; }
+.gt2-field { display:flex; flex-direction:column; gap:3px; }
+.gt2-field label { font-size:10.5px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:#a8a29e; }
+.gt2-field select { padding:7px 10px; min-width:130px; }
+.gt2-sp { flex:1 1 auto; }
+.gt2-btn { border:1px solid #e7e5e4; background:#fff; border-radius:9px; padding:8px 13px; font-size:12.5px; font-weight:600; color:#44403c; cursor:pointer; }
+.gt2-btn:hover { background:#f5f5f4; }
+.gt2-lbl { font-size:10.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:#a8a29e; margin-right:2px; }
+.gt2-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.gt2-chip { display:inline-flex; align-items:center; gap:6px; border:1px solid #e7e5e4; background:#fff; color:#a8a29e; border-radius:20px; padding:4px 11px 4px 8px; font-size:12px; font-weight:600; cursor:pointer; transition:all .12s; user-select:none; }
+.gt2-chip .d { width:10px; height:10px; border-radius:50%; background:#d6d3d1; }
+.gt2-chip.on { color:#1f2937; border-color:var(--c); background:color-mix(in srgb, var(--c) 10%, #fff); }
+.gt2-chip.on .d { background:var(--c); }
+.gt2-chip:hover { border-color:var(--c); }
+.gt2-link { border:none; background:none; color:#2563eb; font-size:12px; font-weight:600; cursor:pointer; padding:4px 6px; }
+.gt2-link:hover { text-decoration:underline; }
+.gt2 .gt-left, .gt2 .gt-row { height:58px; }
+.gt2 .gt-row.z, .gt2 .gt-left.z { background:#fcfcfb; }
+.gt2 .gt-left .t1 .cd { background:#f5f5f4; border-radius:5px; padding:1px 6px; color:#78716c; }
+.gt2-track { position:absolute; top:28px; height:2px; background:#e7e5e4; border-radius:2px; }
+.gt2-track.atr { background:repeating-linear-gradient(90deg,#dc2626 0 5px,transparent 5px 9px); height:2px; }
+.gt2-blk { position:absolute; top:16px; height:26px; border-radius:7px; display:flex; overflow:hidden; box-shadow:0 1px 2px rgba(15,30,58,.18), 0 3px 8px rgba(15,30,58,.07); cursor:pointer; }
+.gt2-blk:hover { box-shadow:0 0 0 2px rgba(37,99,235,.35), 0 4px 12px rgba(15,30,58,.15); z-index:3; }
+.gt2-blk .re { height:100%; }
+.gt2-blk .pv { height:100%; background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.5) 0 5px, transparent 5px 10px); opacity:.55; }
+.gt2-blk .tx { position:absolute; inset:0; display:flex; align-items:center; padding:0 8px; gap:5px; font-size:11px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-shadow:0 1px 2px rgba(0,0,0,.35); pointer-events:none; }
+.gt2-blk.atual { outline:2px solid #1f2937; outline-offset:1px; }
+.gt2 .gt-entrega { top:22px; }
+.gt2 .gt-lbl { top:21px; font-size:11px; color:#78716c; font-weight:500; }
+.gt2 .gt-lbl b { color:#1f2937; }
+.gt2-grp-l, .gt2-grp-r { height:34px; background:#f7f6f4; border-bottom:1px solid #ece9e6; border-top:1px solid #ece9e6; box-sizing:border-box; }
+.gt2-grp-l { position:sticky; left:0; z-index:3; display:flex; align-items:center; gap:8px; padding:0 14px; font-size:12px; font-weight:800; color:#1f2937; text-transform:uppercase; letter-spacing:.4px; border-right:1px solid #ece9e6; }
+.gt2-grp-l .q { font-weight:600; color:#a8a29e; text-transform:none; letter-spacing:0; margin-left:auto; font-size:11.5px; }
+.gt2-pill { display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:700; padding:1px 8px; border-radius:10px; white-space:nowrap; }
+.gt2-hoje-tag { position:absolute; top:0; transform:translateX(-50%); background:#2563eb; color:#fff; font-size:9.5px; font-weight:800; padding:1px 6px; border-radius:0 0 6px 6px; z-index:3; letter-spacing:.4px; }
+.gt2-blk .pv { opacity:.72; }
+.gt2-track.atr { background:repeating-linear-gradient(90deg,rgba(220,38,38,.55) 0 5px,transparent 5px 9px); }
+.gt2-grp-l { white-space:nowrap; overflow:hidden; }
+.gt2-grp-l .q { overflow:hidden; text-overflow:ellipsis; }
 </style>
 </head>
 <body>
@@ -1643,27 +1691,36 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
     <!-- ══ PROJETOS — GANTT ══ -->
     <div class="page" id="page-proj-gantt">
       <div class="page-header">
-        <div><div class="page-title">Cronograma de Projetos</div><div class="page-sub" style="margin-bottom:0">Gantt com as etapas já realizadas, a previsão das próximas e a data de entrega prometida</div></div>
+        <div><div class="page-title">Cronograma de Projetos</div><div class="page-sub" style="margin-bottom:0">Planejamento por etapa e equipe · realizado, previsto e entrega prometida</div></div>
         <button class="btn-novo" onclick="prjAbrirProjeto()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Projeto
         </button>
       </div>
       <div class="est-aviso prj-aviso" style="display:none"></div>
-      <div class="prj-filtros" style="margin-top:12px">
-        <div class="form-group"><label>Buscar</label><input type="text" id="gt-busca" placeholder="🔍 Código, projeto ou cliente" oninput="prjRenderGantt()" /></div>
-        <div class="form-group"><label>Responsável</label><select id="gt-resp" onchange="prjRenderGantt()"><option value="">Todos</option></select></div>
-        <div class="form-group"><label>Etapa</label><select id="gt-etapa" onchange="prjRenderGantt()"><option value="">Todas as etapas</option></select></div>
-        <div class="form-group" id="gt-etapa-modo-wrap" style="display:none"><label>Projetos</label><select id="gt-etapa-modo" onchange="prjRenderGantt()"><option value="afazer">Que ainda têm esta etapa a fazer</option><option value="agora">Só os que estão nela agora</option></select></div>
-        <div class="form-group"><label>Equipe</label><select id="gt-equipe" onchange="prjRenderGantt()"><option value="">Todas</option></select></div>
-        <div class="form-group"><label>Mostrar</label><select id="gt-status" onchange="prjRenderGantt()"><option value="ativos">Em andamento e pausados</option><option value="todos">Inclui concluídos</option></select></div>
-        <div class="form-group"><label>Ordenar por</label><select id="gt-ordem" onchange="prjRenderGantt()"><option value="entrega">Entrega prometida</option><option value="inicio">Início</option><option value="codigo">Código</option><option value="risco">Risco de atraso</option></select></div>
-        <div class="form-group" style="min-width:auto"><label>Escala</label>
+
+      <div class="gt2-toolbar">
+        <div class="gt2-tb-row">
+          <div class="gt2-search"><input type="text" id="gt-busca" placeholder="🔍 Buscar código, projeto ou cliente" oninput="prjRenderGantt()" /></div>
+          <div class="gt2-field"><label>Equipe</label><select id="gt-equipe" onchange="prjRenderGantt()"><option value="">Todas</option></select></div>
+          <div class="gt2-field"><label>Responsável</label><select id="gt-resp" onchange="prjRenderGantt()"><option value="">Todos</option></select></div>
+          <div class="gt2-field"><label>Projetos</label><select id="gt-escopo" onchange="prjRenderGantt()"><option value="afazer">Com as etapas exibidas a fazer</option><option value="ativos">Todos em andamento</option><option value="todos">Inclui concluídos</option></select></div>
+          <div class="gt2-field"><label>Agrupar</label><select id="gt-agrupar" onchange="prjRenderGantt()"><option value="equipe">Por equipe</option><option value="etapa">Por etapa atual</option><option value="">Sem agrupar</option></select></div>
+          <div class="gt2-field"><label>Ordenar</label><select id="gt-ordem" onchange="prjRenderGantt()"><option value="etapa">Início da etapa</option><option value="entrega">Entrega prometida</option><option value="risco">Risco de atraso</option><option value="codigo">Código</option></select></div>
+          <div class="gt2-sp"></div>
           <div class="gt-zoom" id="gt-zoom"><button data-z="dia" onclick="prjGanttZoom('dia')">Dias</button><button data-z="semana" onclick="prjGanttZoom('semana')" class="on">Semanas</button><button data-z="mes" onclick="prjGanttZoom('mes')">Meses</button></div>
+          <button class="gt2-btn" onclick="prjGanttHoje()">📍 Hoje</button>
         </div>
-        <button class="btn btn-secondary" style="margin-bottom:1px" onclick="prjGanttHoje()">📍 Hoje</button>
+        <div class="gt2-tb-row gt2-etapas">
+          <span class="gt2-lbl">Etapas exibidas</span>
+          <div id="gt-chips" class="gt2-chips"></div>
+          <div class="gt2-sp"></div>
+          <button class="gt2-link" onclick="prjGanttEtapasPreset('equipe')">Só etapas com equipe</button>
+          <button class="gt2-link" onclick="prjGanttEtapasPreset('todas')">Todas</button>
+        </div>
       </div>
+
       <div class="prj-kpis" id="gt-kpis"></div>
-      <div class="gt-wrap">
+      <div class="gt-wrap gt2">
         <div class="gt-scroll" id="gt-scroll"><div id="gt-grid"></div></div>
         <div class="gt-legenda" id="gt-legenda"></div>
       </div>
@@ -19946,7 +20003,7 @@ async function prjAbrirPagina(p) {
   if (p === 'proj-lista')   prjRenderLista();
   if (p === 'proj-painel')  prjRenderPainel();
   if (p === 'proj-etapas')  prjRenderEtapas();
-  if (p === 'proj-gantt')   prjRenderGantt();
+  if (p === 'proj-gantt')   { prjRenderGantt(); setTimeout(prjGanttHoje, 30); }
   if (p === 'proj-cancelados') prjRenderCancelados();
 }
 function prjRedesenhar() {
@@ -20826,77 +20883,121 @@ function prjGanttHoje() {
   sc.scrollLeft = Math.max(0, gtX(gtD(prjHoje())) - (sc.clientWidth - 320) * 0.3);
 }
 
+// Etapas exibidas no Gantt (salvas no navegador). Padrão: etapas com equipe (Produção).
+let _gtEtVis = null;
+function prjGanttEtapasVis() {
+  const ets = prjEtapas().filter(e => !e.final);
+  if (!_gtEtVis) {
+    try { const v = JSON.parse(localStorage.getItem('gt_etapas_vis')); if (Array.isArray(v)) _gtEtVis = new Set(v); } catch(e) {}
+  }
+  if (!_gtEtVis || ![..._gtEtVis].some(id => ets.some(e => e.id === id))) {
+    const pad = ets.filter(prjUsaEquipe);
+    _gtEtVis = new Set((pad.length ? pad : ets).map(e => e.id));
+  }
+  return _gtEtVis;
+}
+function prjGanttSalvarVis() { try { localStorage.setItem('gt_etapas_vis', JSON.stringify([..._gtEtVis])); } catch(e) {} }
+function prjGanttToggleEtapa(id) {
+  const v = prjGanttEtapasVis();
+  if (v.has(id)) { if (v.size === 1) { alert('Deixe pelo menos uma etapa visível.'); return; } v.delete(id); } else v.add(id);
+  prjGanttSalvarVis(); prjRenderGantt();
+}
+function prjGanttEtapasPreset(tipo) {
+  const ets = prjEtapas().filter(e => !e.final);
+  const sel = tipo === 'todas' ? ets : ets.filter(prjUsaEquipe);
+  _gtEtVis = new Set((sel.length ? sel : ets).map(e => e.id));
+  prjGanttSalvarVis(); prjRenderGantt();
+}
+
 function prjRenderGantt() {
   const grid = document.getElementById('gt-grid'); if (!grid) return;
   { const t = document.getElementById('gt-tip'); if (t) { t.dataset.id = ''; t.style.display = 'none'; } }
   prjPopularResp('gt-resp');
+  const etapasTodas = prjEtapas().filter(e => !e.final);
+  const vis = prjGanttEtapasVis();
+  // Chips de etapas
+  document.getElementById('gt-chips').innerHTML = etapasTodas.map(e =>
+    `<span class="gt2-chip ${vis.has(e.id) ? 'on' : ''}" style="--c:${prjEsc(e.cor)}" onclick="prjGanttToggleEtapa('${e.id}')" title="Clique para ${vis.has(e.id) ? 'ocultar' : 'mostrar'}"><span class="d"></span>${prjEsc(e.nome)}${prjUsaEquipe(e) ? ' 👥' : ''}</span>`).join('');
+  const selEq = document.getElementById('gt-equipe');
+  { const v = selEq.value; selEq.innerHTML = '<option value="">Todas</option><option value="__sem__">Sem equipe</option>' + prjEquipesLista().map(q => `<option value="${prjEsc(q)}">${prjEsc(q)}</option>`).join(''); selEq.value = v; }
   const termo = normText(document.getElementById('gt-busca').value || '');
   const resp = document.getElementById('gt-resp').value;
-  const modo = document.getElementById('gt-status').value;
+  const eqF = selEq.value;
+  const escopo = document.getElementById('gt-escopo').value;
+  const agrupar = document.getElementById('gt-agrupar').value;
   const ordem = document.getElementById('gt-ordem').value;
-  // Filtro por etapa (ex.: Produção) e por equipe
-  const selEt = document.getElementById('gt-etapa');
-  if (selEt) { const v = selEt.value; selEt.innerHTML = '<option value="">Todas as etapas</option>' + prjEtapas().filter(e => !e.final).map(e => `<option value="${e.id}">${prjEsc(e.nome)}</option>`).join(''); selEt.value = v; }
-  const etF = selEt ? selEt.value : '';
-  const etFIdx = etF ? prjEtapas().findIndex(e => e.id === etF) : -1;
-  const etFModo = (document.getElementById('gt-etapa-modo') || {}).value || 'afazer';
-  const wrapModo = document.getElementById('gt-etapa-modo-wrap'); if (wrapModo) wrapModo.style.display = etF ? '' : 'none';
-  const selEq = document.getElementById('gt-equipe');
-  if (selEq) { const v = selEq.value; selEq.innerHTML = '<option value="">Todas</option><option value="__sem__">Sem equipe</option>' + prjEquipesLista().map(q => `<option value="${prjEsc(q)}">${prjEsc(q)}</option>`).join(''); selEq.value = v; }
-  const eqF = selEq ? selEq.value : '';
-  const idxDe = p => prjEtapas().findIndex(e => e.id === p.etapa_id);
-  const lista = prjDb.projetos.filter(p => p.status !== 'cancelado' && (modo === 'todos' || p.status !== 'concluido')
-    && (!resp || (p.responsavel || '') === resp) && prjFiltroTexto(p, termo)
-    && (!etF || (p.status !== 'concluido' && (etFModo === 'agora' ? p.etapa_id === etF : idxDe(p) <= etFIdx)))
-    && (!eqF || (() => {
-      const eqs = p.equipes || {};
-      if (etF) return eqF === '__sem__' ? !eqs[etF] : eqs[etF] === eqF;
-      const vals = Object.values(eqs).filter(Boolean);
-      return eqF === '__sem__' ? !vals.length : vals.includes(eqF);
-    })()))
-    .map(p => ({ p, g: prjGanttPlano(p) }));
-  // Período da etapa filtrada em cada projeto
-  lista.forEach(x => {
-    if (!etF) return;
-    const ss = x.g.segs.filter(sg => sg.et && sg.et.id === etF);
-    x.etIni = ss.length ? new Date(Math.min(...ss.map(sg => sg.ini))) : null;
-    x.etFim = ss.length ? new Date(Math.max(...ss.map(sg => sg.fim))) : null;
+  const hoje = gtD(prjHoje());
+  const visEq = etapasTodas.filter(e => vis.has(e.id) && prjUsaEquipe(e)).map(e => e.id);
+  const eqDe = p => { const eqs = p.equipes || {}; for (const id of visEq) if (eqs[id]) return eqs[id]; return ''; };
+
+  // Monta cada projeto com os blocos das etapas visíveis
+  const lista = [];
+  prjDb.projetos.forEach(p => {
+    if (p.status === 'cancelado') return;
+    if (escopo !== 'todos' && p.status === 'concluido') return;
+    if (resp && (p.responsavel || '') !== resp) return;
+    if (!prjFiltroTexto(p, termo)) return;
+    const g = prjGanttPlano(p);
+    const blocos = [];
+    g.segs.forEach(sg => {
+      if (!sg.et || !vis.has(sg.et.id)) return;
+      let b = blocos.find(x => x.et.id === sg.et.id && Math.abs(x.fim - sg.ini) < GT_DIA);
+      if (!b) { b = { et: sg.et, ini: sg.ini, fim: sg.fim, partes: [], atual: false, prev: false }; blocos.push(b); }
+      b.fim = new Date(Math.max(b.fim, sg.fim));
+      b.partes.push(sg);
+      if (sg.atual) b.atual = true;
+      if (sg.prev) b.prev = true;
+    });
+    const aFazer = blocos.some(b => b.atual || b.prev);
+    if (escopo === 'afazer' && !aFazer) return;
+    if (eqF) { const e = eqDe(p); if (eqF === '__sem__' ? e : e !== eqF) return; }
+    const etIni = blocos.length ? new Date(Math.min(...blocos.map(b => b.ini))) : null;
+    const etFim = blocos.length ? new Date(Math.max(...blocos.map(b => b.fim))) : null;
+    lista.push({ p, g, blocos, etIni, etFim, eq: eqDe(p) });
   });
   const ord = {
     entrega: (a,b) => String(a.p.dt_entrega_prev || '9999').localeCompare(String(b.p.dt_entrega_prev || '9999')),
-    inicio:  (a,b) => a.g.ini - b.g.ini,
+    etapa:   (a,b) => ((a.etIni || 8.64e15) - (b.etIni || 8.64e15)) || ord.entrega(a,b),
     codigo:  (a,b) => String(a.p.codigo||'').localeCompare(String(b.p.codigo||''), 'pt-BR', { numeric:true }),
-    risco:   (a,b) => (b.g.estouro - a.g.estouro) || ord.entrega(a,b),
-    etapa:   (a,b) => ((a.etIni || 8.64e15) - (b.etIni || 8.64e15)) || ord.entrega(a,b)
+    risco:   (a,b) => (b.g.estouro - a.g.estouro) || ord.entrega(a,b)
   };
-  lista.sort(ord[etF && ordem === 'entrega' ? 'etapa' : ordem] || ord.entrega);
-  const hoje = gtD(prjHoje());
+  lista.sort(ord[ordem] || ord.etapa);
+
   // KPIs
-  const ativos = lista.filter(x => x.p.status !== 'concluido');
-  const risco = ativos.filter(x => x.g.estouro > 0 && !x.g.atrasado);
-  const atras = ativos.filter(x => x.g.atrasado);
-  const semData = ativos.filter(x => !x.g.entrega);
+  const nomeVis = etapasTodas.filter(e => vis.has(e.id)).map(e => e.nome);
+  const rotVis = nomeVis.length === 1 ? nomeVis[0] : nomeVis.length + ' etapas';
+  const agora = lista.filter(x => x.blocos.some(b => b.atual));
+  const lim14 = gtAdd(hoje, 14);
+  const prox = lista.filter(x => !x.blocos.some(b => b.atual) && x.etIni && x.etIni > hoje && x.etIni <= lim14);
+  const risco = lista.filter(x => x.p.status !== 'concluido' && x.g.estouro > 0 && !x.g.atrasado);
+  const atras = lista.filter(x => x.g.atrasado);
+  const semEq = visEq.length ? lista.filter(x => x.p.status !== 'concluido' && !x.eq).length : null;
   const kpi = (v, l, s, cor) => `<div class="prj-kpi" style="--k:${cor}"><div class="v">${v}</div><div class="l">${l}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`;
   document.getElementById('gt-kpis').innerHTML =
-    kpi(ativos.length, etF ? 'Com ' + prjEsc((prjEtapa(etF) || {}).nome || '') + (etFModo === 'agora' ? ' agora' : ' a fazer') : 'No cronograma', etF ? `${lista.filter(x => x.p.etapa_id === etF).length} nesta etapa agora` : 'Em andamento e pausados', '#2563eb') +
-    kpi(ativos.length - risco.length - atras.length - semData.length, 'Previsão dentro do prazo', 'Previsão ≤ entrega prometida', '#16a34a') +
+    kpi(lista.length, 'Projetos no cronograma', prjEsc(rotVis), '#2563eb') +
+    kpi(agora.length, 'Em ' + prjEsc(nomeVis.length === 1 ? nomeVis[0].toLowerCase() : 'execução') + ' agora', fmtBRL(agora.reduce((s,x) => s + prjNum(x.p.valor), 0)), '#ea580c') +
+    kpi(prox.length, 'Entram nos próximos 14 dias', prox.length ? prox.slice(0,3).map(x => prjEsc(x.p.codigo)).join(', ') + (prox.length > 3 ? '…' : '') : '—', '#0d9488') +
     kpi(risco.length, 'Risco de atraso', 'Previsão passa da entrega', '#f59e0b') +
-    kpi(atras.length, 'Entrega já vencida', 'Data prometida passou', '#dc2626') +
-    kpi(semData.length, 'Sem data de entrega', 'Cadastre no projeto', '#94a3b8');
-  if (!lista.length) { grid.innerHTML = '<div class="prj-vazio" style="padding:40px">Nenhum projeto para mostrar.</div>'; document.getElementById('gt-legenda').innerHTML = ''; return; }
+    kpi(atras.length, 'Entrega vencida', 'Data prometida passou', '#dc2626') +
+    (semEq != null ? kpi(semEq, 'Sem equipe definida', 'Defina na ficha do projeto', '#94a3b8') : '');
+  if (!lista.length) {
+    grid.innerHTML = `<div class="prj-vazio" style="padding:48px">Nenhum projeto com ${prjEsc(rotVis)} ${escopo === 'afazer' ? 'a fazer' : ''} nesses filtros.</div>`;
+    document.getElementById('gt-legenda').innerHTML = ''; return;
+  }
+
+  // Escala
   _gtPx = GT_PX[_gtZoom] || 10;
   const pad = { dia: 4, semana: 10, mes: 25 }[_gtZoom];
   let min = hoje, max = hoje;
-  lista.forEach(({ g }) => {
-    if (g.ini < min) min = g.ini;
-    [g.fim, g.entrega].forEach(d => { if (d && d > max) max = d; });
+  lista.forEach(x => {
+    if (x.g.ini < min) min = x.g.ini;
+    [x.g.fim, x.g.entrega].forEach(d => { if (d && d > max) max = d; });
   });
   min = gtAdd(min, -pad); max = gtAdd(max, pad + 5);
   if (_gtZoom === 'mes') { min = new Date(min.getFullYear(), min.getMonth(), 1); max = new Date(max.getFullYear(), max.getMonth() + 1, 1); }
   if (_gtZoom === 'semana') { const dw = (min.getDay() + 6) % 7; min = gtAdd(min, -dw); }
   _gtX0 = min;
-  const W = gtX(max);
-  // Cabeçalho
+  const W = Math.max(gtX(max), 600);
   const r1 = [], r2 = [];
   const mesNome = d => d.toLocaleDateString('pt-BR', { month: 'long' }) + ' ' + d.getFullYear();
   const mesAbr = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
@@ -20907,8 +21008,7 @@ function prjRenderGantt() {
     }
     for (let d = new Date(min); d < max; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) {
       const n = new Date(d.getFullYear(), d.getMonth() + 1, 1);
-      const hj = hoje >= d && hoje < n;
-      r2.push(`<div class="${hj ? 'hj' : ''}" style="left:${gtX(d)}px;width:${gtX(n) - gtX(d)}px">${mesAbr[d.getMonth()]}</div>`);
+      r2.push(`<div class="${hoje >= d && hoje < n ? 'hj' : ''}" style="left:${gtX(d)}px;width:${gtX(n) - gtX(d)}px">${mesAbr[d.getMonth()]}</div>`);
     }
   } else {
     for (let d = new Date(min.getFullYear(), min.getMonth(), 1); d < max; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) {
@@ -20918,62 +21018,87 @@ function prjRenderGantt() {
     const passo = _gtZoom === 'dia' ? 1 : 7;
     for (let d = new Date(min); d < max; d = gtAdd(d, passo)) {
       const n = gtAdd(d, passo);
-      const hj = hoje >= d && hoje < n;
       const txt = _gtZoom === 'dia' ? d.getDate() : String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
-      r2.push(`<div class="${hj ? 'hj' : ''}" style="left:${gtX(d)}px;width:${gtX(n) - gtX(d)}px">${txt}</div>`);
+      r2.push(`<div class="${hoje >= d && hoje < n ? 'hj' : ''}" style="left:${gtX(d)}px;width:${gtX(n) - gtX(d)}px">${txt}</div>`);
     }
   }
-  // Fundo (fins de semana, viradas de mês, hoje)
+  const xHoje = gtX(hoje) + Math.round(_gtPx / 2);
   const bg = [];
   if (_gtZoom === 'dia') for (let d = new Date(min); d < max; d = gtAdd(d, 1)) { if (d.getDay() === 0 || d.getDay() === 6) bg.push(`<div class="gt-bg fds" style="left:${gtX(d)}px;width:${_gtPx}px"></div>`); }
+  if (_gtZoom === 'semana') for (let d = new Date(min); d < max; d = gtAdd(d, 7)) bg.push(`<div class="gt-bg mes" style="left:${gtX(d)}px;border-left-color:#f7f6f4"></div>`);
   for (let d = new Date(min.getFullYear(), min.getMonth() + 1, 1); d < max; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) bg.push(`<div class="gt-bg mes" style="left:${gtX(d)}px"></div>`);
-  bg.push(`<div class="gt-hoje" style="left:${gtX(hoje) + Math.round(_gtPx / 2)}px" title="Hoje"></div>`);
+  bg.push(`<div class="gt-hoje" style="left:${xHoje}px"></div><div class="gt2-hoje-tag" style="left:${xHoje + 1}px">HOJE</div>`);
+
+  // Grupos
+  const grupos = [];
+  if (agrupar === 'equipe') {
+    const nomes = [...prjEquipesLista(), ...new Set(lista.map(x => x.eq).filter(e => e && !prjEquipesLista().includes(e)))];
+    nomes.forEach(n => { const l = lista.filter(x => x.eq === n); if (l.length) grupos.push({ nome: n, cor: prjCorEquipe(n), itens: l }); });
+    const sem = lista.filter(x => !x.eq); if (sem.length) grupos.push({ nome: visEq.length ? 'Sem equipe definida' : 'Projetos', cor: '#a8a29e', itens: sem });
+  } else if (agrupar === 'etapa') {
+    prjEtapas().forEach(e => { const l = lista.filter(x => x.p.etapa_id === e.id); if (l.length) grupos.push({ nome: e.nome, cor: e.cor, itens: l }); });
+  } else grupos.push({ nome: null, itens: lista });
+
   // Linhas
-  const esq = [], dir = [];
-  lista.forEach(({ p, g }) => {
-    const et = prjEtapa(p.etapa_id);
-    const risco = g.estouro > 0;
-    esq.push(`<div class="gt-left" onclick="prjAbrirFicha('${p.id}')" onmousemove="prjGanttTip(event,'${p.id}')" onmouseleave="prjGanttTip(null)">
-      <div class="t1"><span class="cd">${prjEsc(p.codigo || '')}</span>${prjEsc(p.nome)}</div>
-      <div class="t2"><span class="prj-dot" style="background:${prjEsc((et && et.cor) || '#94a3b8')}"></span>${prjEsc(et ? et.nome : '—')} · ${prjEsc(prjClienteNome(p))}
-        ${p.status === 'concluido' ? '<span class="prj-tag verde">✔</span>' : (g.atrasado ? `<span class="prj-tag vermelho">Vencida ${Math.round((hoje - g.entrega) / GT_DIA)}d</span>` : (risco ? `<span class="prj-tag amarelo">+${g.estouro}d</span>` : ''))}
-        ${p.status === 'pausado' ? '<span class="prj-tag amarelo">⏸</span>' : ''}${(() => {
-          const eqs = p.equipes || {};
-          const ids = etF ? [etF] : prjEtapas().filter(e => eqs[e.id]).map(e => e.id);
-          return ids.filter(i => eqs[i]).map(i => `<span class="prj-tag" style="background:${prjCorEquipe(eqs[i])}22;color:${prjCorEquipe(eqs[i])}" title="${prjEsc((prjEtapa(i)||{}).nome || '')}">👥 ${prjEsc(eqs[i])}</span>`).join('');
-        })()}</div>
-    </div>`);
-    const x0 = gtX(g.ini), x1 = Math.max(gtX(g.fim) + _gtPx, x0 + 4);
-    const segs = g.segs.map(s => {
-      const w = Math.max(gtX(s.fim) - gtX(s.ini), 0);
-      const eq = s.et ? (p.equipes || {})[s.et.id] : '';
-      const apagado = etF && !(s.et && s.et.id === etF);
-      return `<div class="gt-seg ${s.prev ? 'prev' : ''}" title="${prjEsc(s.nome)}${eq ? ' · ' + prjEsc(eq) : ''}" style="width:${w || 3}px;background-color:${prjEsc(s.cor)}${apagado ? ';opacity:.13' : (etF ? ';opacity:' + (s.prev ? '.8' : '1') + ';box-shadow:inset 0 0 0 2px rgba(0,0,0,.18)' : '')}">${eq && w > 46 && !apagado ? `<span class="gt-seg-eq">${prjEsc(eq)}</span>` : (eq && w > 46 && etF === '' ? '' : '')}</div>`;
-    }).join('');
-    let html = `<div class="gt-bar" style="left:${x0}px;width:${x1 - x0}px">${segs}</div>`;
-    if (risco && g.entrega && !etF) {
-      const xe = gtX(g.entrega) + Math.round(_gtPx / 2);
-      html += `<div class="gt-estouro" style="left:${xe}px;width:${Math.max(x1 - xe, 4)}px"></div>`;
+  let linha = 2, corpo = '', z = 0;
+  const celEsq = (x) => {
+    const p = x.p, g = x.g, et = prjEtapa(p.etapa_id);
+    const tag = p.status === 'concluido' ? '<span class="gt2-pill" style="background:#dcfce7;color:#166534">✔ Concluído</span>'
+      : g.atrasado ? `<span class="gt2-pill" style="background:#fee2e2;color:#991b1b">Vencida ${Math.round((hoje - g.entrega) / GT_DIA)}d</span>`
+      : g.estouro > 0 ? `<span class="gt2-pill" style="background:#fef3c7;color:#92400e">+${g.estouro}d</span>` : '';
+    return `<div class="t1"><span class="cd">${prjEsc(p.codigo || '')}</span>${prjEsc(p.nome)}</div>
+      <div class="t2"><span class="gt2-pill" style="background:${prjEsc((et && et.cor) || '#94a3b8')}1c;color:${prjEsc((et && et.cor) || '#57534e')}">● ${prjEsc(et ? et.nome : '—')}</span>
+        <span style="overflow:hidden;text-overflow:ellipsis">${prjEsc(prjClienteNome(p))}</span>
+        ${agrupar !== 'equipe' && x.eq ? `<span class="gt2-pill" style="background:${prjCorEquipe(x.eq)}1c;color:${prjCorEquipe(x.eq)}">👥 ${prjEsc(x.eq)}</span>` : ''}
+        ${p.status === 'pausado' ? '<span class="gt2-pill" style="background:#fef3c7;color:#92400e">⏸</span>' : ''}${tag}</div>`;
+  };
+  grupos.forEach(gr => {
+    if (gr.nome != null) {
+      const val = gr.itens.reduce((s,x) => s + prjNum(x.p.valor), 0);
+      corpo += `<div class="gt2-grp-l" style="grid-column:1;grid-row:${linha}"><span class="prj-dot" style="background:${prjEsc(gr.cor)}"></span>${prjEsc(gr.nome)}<span class="q">${gr.itens.length} projeto(s) · ${fmtBRLCompacto(val)}</span></div>
+        <div class="gt2-grp-r" style="grid-column:2;grid-row:${linha};width:${W}px"></div>`;
+      linha++;
     }
-    if (g.entrega) html += `<div class="gt-entrega ${p.status === 'concluido' ? (g.estouro ? 'atr' : 'ok') : (g.atrasado ? 'atr' : '')}" style="left:${gtX(g.entrega) + Math.round(_gtPx / 2)}px"></div>`;
-    const xl = Math.max(x1, g.entrega ? gtX(g.entrega) + _gtPx : 0) + 12;
-    const _x = lista.find(y => y.p === p) || {};
-    html += `<div class="gt-lbl" style="left:${xl}px">${etF && _x.etIni ? `<b>${prjEsc((prjEtapa(etF) || {}).nome || '')}: ${gtFmt(_x.etIni).slice(0,5)} → ${gtFmt(_x.etFim).slice(0,5)}</b>${(p.equipes || {})[etF] ? ' · 👥 ' + prjEsc(p.equipes[etF]) : ' · <span style="color:#b45309">sem equipe</span>'} · ` : ''}${g.prog}%${g.entrega ? ' · entrega ' + gtFmt(g.entrega).slice(0,5) : ''}${p.status !== 'concluido' ? ' · prev. ' + gtFmt(g.fim).slice(0,5) : ''}</div>`;
-    dir.push(`<div class="gt-row" style="width:${W}px" onclick="prjAbrirFicha('${p.id}')" onmousemove="prjGanttTip(event,'${p.id}')" onmouseleave="prjGanttTip(null)">${html}</div>`);
+    gr.itens.forEach(x => {
+      const p = x.p, g = x.g;
+      const zc = (z++ % 2) ? ' z' : '';
+      const x0 = gtX(g.ini), x1 = Math.max(gtX(g.fim) + _gtPx, x0 + 4);
+      let html = `<div class="gt2-track" style="left:${x0}px;width:${x1 - x0}px"></div>`;
+      if (g.estouro > 0 && g.entrega && p.status !== 'concluido') {
+        const xe = gtX(g.entrega) + Math.round(_gtPx / 2);
+        html += `<div class="gt2-track atr" style="left:${xe}px;width:${Math.max(x1 - xe, 4)}px" title="Previsão passa ${g.estouro} dia(s) da entrega"></div>`;
+      }
+      x.blocos.forEach(b => {
+        const bx0 = gtX(b.ini), bx1 = Math.max(gtX(b.fim), bx0 + Math.max(_gtPx, 8));
+        const w = bx1 - bx0;
+        const eq = (p.equipes || {})[b.et.id] || '';
+        const partes = b.partes.map(sg => { const pw = Math.max(gtX(sg.fim) - gtX(sg.ini), 0); return `<div class="${sg.prev ? 'pv' : 're'}" style="width:${pw}px;flex:${pw ? '0 0 auto' : '1 1 auto'};background-color:${prjEsc(b.et.cor)}"></div>`; }).join('');
+        const txt = w > 60 ? `${eq ? '👥 ' + prjEsc(eq) : prjEsc(b.et.nome)}${w > 150 ? ` · ${gtFmt(b.ini).slice(0,5)}–${gtFmt(b.fim).slice(0,5)}` : ''}` : '';
+        html += `<div class="gt2-blk ${b.atual ? 'atual' : ''}" style="left:${bx0}px;width:${w}px;background:${prjEsc(b.et.cor)}33" title="${prjEsc(b.et.nome)}${eq ? ' · ' + prjEsc(eq) : ''} · ${gtFmt(b.ini)} → ${gtFmt(b.fim)}${b.atual ? ' (em andamento)' : b.prev ? ' (previsto)' : ' (realizado)'}">${partes}<div class="tx">${txt}</div></div>`;
+      });
+      if (g.entrega) html += `<div class="gt-entrega ${p.status === 'concluido' ? (g.estouro ? 'atr' : 'ok') : (g.atrasado ? 'atr' : '')}" style="left:${gtX(g.entrega) + Math.round(_gtPx / 2)}px" title="Entrega prometida ${gtFmt(g.entrega)}"></div>`;
+      const xl = Math.max(x1, g.entrega ? gtX(g.entrega) + _gtPx : 0) + 14;
+      html += `<div class="gt-lbl" style="left:${xl}px">${x.etIni && nomeVis.length === 1 ? `<b>${gtFmt(x.etIni).slice(0,5)} → ${gtFmt(x.etFim).slice(0,5)}</b> · ` : ''}${g.entrega ? 'entrega ' + gtFmt(g.entrega).slice(0,5) : 'sem data de entrega'}${p.status !== 'concluido' ? ' · prev. ' + gtFmt(g.fim).slice(0,5) : ''}</div>`;
+      corpo += `<div class="gt-left${zc}" style="grid-column:1;grid-row:${linha}" onclick="prjAbrirFicha('${p.id}')" onmousemove="prjGanttTip(event,'${p.id}')" onmouseleave="prjGanttTip(null)">${celEsq(x)}</div>
+        <div class="gt-row${zc}" style="grid-column:2;grid-row:${linha};width:${W}px" onclick="prjAbrirFicha('${p.id}')" onmousemove="prjGanttTip(event,'${p.id}')" onmouseleave="prjGanttTip(null)">${html}</div>`;
+      linha++;
+    });
   });
-  const n = lista.length;
-  let corpo = `<div class="gt-left-h">Projeto · etapa atual · cliente</div>
+  const nLin = linha - 2;
+  grid.innerHTML = `<div class="gt-grid" style="grid-template-columns:320px ${W}px">
+    <div class="gt-left-h">Projeto · etapa atual · cliente</div>
     <div class="gt-head" style="width:${W}px"><div class="gt-head-r1">${r1.join('')}</div><div class="gt-head-r2">${r2.join('')}</div></div>
-    <div style="grid-column:2;grid-row:2 / span ${n};position:relative;pointer-events:none">${bg.join('')}</div>`;
-  lista.forEach((_, i) => { corpo += esq[i].replace('class="gt-left"', `class="gt-left" style="grid-column:1;grid-row:${i + 2}"`) + dir[i].replace('class="gt-row" style="', `class="gt-row" style="grid-column:2;grid-row:${i + 2};`); });
-  grid.innerHTML = `<div class="gt-grid" style="grid-template-columns:320px ${W}px">${corpo}</div>`;
-  const etLeg = prjEtapas().filter(e => !e.final).map(e => `<span><span class="sw" style="background:${prjEsc(e.cor)}"></span>${prjEsc(e.nome)}</span>`).join('');
-  document.getElementById('gt-legenda').innerHTML = etLeg +
-    `<span style="margin-left:auto"><span class="sw" style="background:#94a3b8"></span>Realizado</span>
-     <span><span class="sw" style="background:#94a3b8;opacity:.35;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.6) 0 3px,transparent 3px 6px)"></span>Previsto</span>
+    <div style="grid-column:2;grid-row:2 / span ${nLin};position:relative;pointer-events:none;z-index:2">${bg.join('')}</div>
+    ${corpo}</div>`;
+  document.getElementById('gt-legenda').innerHTML =
+    `<span><span class="sw" style="background:#78716c"></span>Realizado</span>
+     <span><span class="sw" style="background:#78716c;opacity:.45;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.6) 0 3px,transparent 3px 6px)"></span>Previsto</span>
+     <span><span class="sw" style="background:#fff;outline:2px solid #1f2937;width:14px"></span>Etapa em andamento</span>
+     <span><span class="sw" style="height:2px;background:#e7e5e4"></span>Etapas ocultas</span>
      <span><span class="sw" style="width:10px;height:10px;transform:rotate(45deg);background:#1f2937"></span>Entrega prometida</span>
-     <span><span class="sw" style="background:repeating-linear-gradient(45deg,rgba(220,38,38,.35) 0 3px,rgba(220,38,38,.1) 3px 6px);border:1px dashed #dc2626"></span>Atraso previsto</span>
-     <span><span class="sw" style="width:2px;background:#2563eb"></span>Hoje</span>`;
+     <span><span class="sw" style="height:2px;background:repeating-linear-gradient(90deg,#dc2626 0 4px,transparent 4px 7px)"></span>Atraso previsto</span>
+     <span><span class="sw" style="width:2px;background:#2563eb"></span>Hoje</span>
+     <span style="margin-left:auto;color:#a8a29e">Clique nas etapas acima para mostrar/ocultar · clique no projeto para abrir a ficha</span>`;
 }
 
 function prjGanttTip(ev, id) {
@@ -21271,6 +21396,42 @@ async function prjDefinirEquipe(id, etapaId, sel) {
   prjRedesenhar();
   prjAbrirFicha(id);
 }
+
+
+// ── Gantt: etapas que aparecem no gráfico (padrão: só Produção) ──
+function prjGtEtapasPadrao() { return prjEtapas().filter(e => !e.final && prjUsaEquipe(e)).map(e => e.id); }
+function prjGtEtapasVis() {
+  let v = null;
+  try { v = JSON.parse(localStorage.getItem('gt_etapas_vis')); } catch(e) {}
+  if (v === 'todas') return null;
+  const ids = new Set(prjEtapas().map(e => e.id));
+  let lista = Array.isArray(v) ? v.filter(i => ids.has(i)) : prjGtEtapasPadrao();
+  if (!lista.length) lista = prjGtEtapasPadrao();
+  return lista.length ? new Set(lista) : null;
+}
+function prjGtSalvarVis(v) { try { localStorage.setItem('gt_etapas_vis', JSON.stringify(v)); } catch(e) {} prjRenderGantt(); prjGtMenu(null, true); }
+function prjGtMenu(ev, manter) {
+  if (ev) ev.stopPropagation();
+  const m = document.getElementById('gt-etvis-menu'); if (!m) return;
+  if (!manter && m.style.display === 'block') { m.style.display = 'none'; return; }
+  if (manter && m.style.display !== 'block') return;
+  const vis = prjGtEtapasVis();
+  m.innerHTML = '<div style="font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#a8a29e;margin-bottom:6px">Mostrar no gráfico</div>' +
+    prjEtapas().filter(e => !e.final).map(e => `<label><input type="checkbox" ${!vis || vis.has(e.id) ? 'checked' : ''} onchange="prjGtToggle('${e.id}',this.checked)"><span class="prj-dot" style="background:${prjEsc(e.cor)}"></span> ${prjEsc(e.nome)}</label>`).join('') +
+    `<div style="border-top:1px solid #f1efed;margin-top:6px;padding-top:6px;display:flex;gap:12px;font-size:12px">
+      <a href="#" onclick="event.preventDefault();prjGtSalvarVis('todas')">Todas</a>
+      <a href="#" onclick="event.preventDefault();prjGtSalvarVis(prjGtEtapasPadrao())">Só produção (padrão)</a></div>`;
+  m.style.display = 'block';
+}
+function prjGtToggle(id, on) {
+  const vis = prjGtEtapasVis();
+  let atual = vis ? [...vis] : prjEtapas().filter(e => !e.final).map(e => e.id);
+  atual = on ? [...new Set([...atual, id])] : atual.filter(x => x !== id);
+  if (!atual.length) { alert('Deixe pelo menos uma etapa visível.'); prjGtMenu(null, true); return; }
+  const todas = prjEtapas().filter(e => !e.final).every(e => atual.includes(e.id));
+  prjGtSalvarVis(todas ? 'todas' : atual);
+}
+document.addEventListener('click', e => { const m = document.getElementById('gt-etvis-menu'); if (m && m.style.display === 'block' && !m.contains(e.target)) m.style.display = 'none'; });
 
 // ══════════════════════════════════════════════════════════════════
 // PLANO DE AÇÃO 5W2H
