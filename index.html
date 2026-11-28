@@ -2,7 +2,12 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ea580c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="C@P Gestão">
 <title>C@P Consultoria — Sistema de Gestão Financeira</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2753,6 +2758,148 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 @media (max-width:1000px) { .cob-hero { grid-template-columns:1fr; } .cob-hero-k { grid-template-columns:1fr 1fr; } .cob-cli-p { grid-template-columns:1fr 1fr; } }
 .cob-tab td:first-child { min-width:150px; } .cob-tab th, .cob-tab td { padding-left:10px !important; padding-right:10px !important; } .cob-cont { min-width:110px; }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   ██  VERSÃO MOBILE / CELULAR  ██
+   Tudo abaixo só vale em telas estreitas (celular e tablet em pé).
+   No computador nada muda.
+   ═══════════════════════════════════════════════════════════════ */
+.mob-topbar, .mob-fundo { display:none; }
+@media (hover:none) {
+  .ac-add, .rf-pz-acts { opacity:1 !important; }
+}
+
+@media (max-width:900px) {
+  html, body { overflow-x:hidden; }
+  body { -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:rgba(234,88,12,.12); }
+
+  /* ── Barra superior fixa com botão ☰ ── */
+  .mob-topbar {
+    display:flex; align-items:center; gap:10px;
+    position:fixed; top:0; left:0; right:0; z-index:150;
+    height:calc(56px + env(safe-area-inset-top)); padding:env(safe-area-inset-top) 12px 0;
+    background:#fff; border-bottom:1px solid #ece9e6; box-shadow:0 2px 10px rgba(0,0,0,.04);
+  }
+  .mob-burger {
+    width:40px; height:40px; flex:0 0 40px; border:none; border-radius:10px;
+    background:#fff1e6; color:#ea580c; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .mob-burger svg { width:22px; height:22px; }
+  .mob-titulo { font-size:15px; font-weight:700; color:#1f2937; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1; min-width:0; }
+  .mob-logo { height:26px; width:auto; flex:0 0 auto; }
+
+  /* ── Menu lateral vira "gaveta" que desliza por cima ── */
+  .menu-hotzone, .menu-abrir, .menu-toggle { display:none !important; }
+  .sidebar, body.menu-oculto .sidebar {
+    width:min(84vw, 300px) !important; transform:translateX(-105%) !important;
+    z-index:400; box-shadow:none; transition:transform .22s ease;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  body.mob-menu-aberto .sidebar { transform:translateX(0) !important; box-shadow:8px 0 30px rgba(0,0,0,.22); }
+  .mob-fundo { display:block; position:fixed; inset:0; z-index:390; background:rgba(15,23,42,.45);
+    opacity:0; pointer-events:none; transition:opacity .2s; }
+  body.mob-menu-aberto .mob-fundo { opacity:1; pointer-events:auto; }
+  body.mob-menu-aberto { overflow:hidden; }
+  .nav-item, .nav-sub-item { padding-top:11px !important; padding-bottom:11px !important; font-size:14px !important; }
+
+  /* ── Área de conteúdo ocupa a tela toda ── */
+  .main, body.menu-oculto .main {
+    margin-left:0 !important; padding:calc(68px + env(safe-area-inset-top)) 12px calc(90px + env(safe-area-inset-bottom)) !important;
+  }
+  .page-title { font-size:18px; }
+  .page-sub { margin-bottom:16px; }
+  .page-header { align-items:flex-start; gap:8px; }
+  .page-header > div:first-child { flex:1 1 100%; min-width:0; }
+  .page-header .btn, .page-header .btn-novo, .page-header button { flex:0 1 auto; }
+  .card { padding:16px 14px; border-radius:12px; margin-bottom:14px; }
+
+  /* ── Grades viram 1 ou 2 colunas ── */
+  .grid2, .grid3, .kpi-grid-2col, .cpr-wrap, .pd-hero, .pn-hero, .pn-grid2, .pn-grid3, .prj-grid2,
+  .ccg-layout, .ccx-hero, .ccx-cols, .fcd-cols, .ac-body, .reu-wrap, .reu-form-body, .rf-body,
+  .chq-hero, .cob-hero, .cxb-hero-grid, .mr-resumo, .reu-det-grid, .rh-ori, .cob-r-grid
+    { grid-template-columns:minmax(0,1fr) !important; }
+  .grid4, .kpi-cards-grid, .ccg-kpis, .ccx-kpis, .fcd-kpis, .est-kpis, .pd-kpis, .pn-mini, .dfc-kpis,
+  .pl-kpis, .cxb-kpis, .cob-hero-k, .cob-r-nums, .mg-grid, .prj-ficha-info, .ccx-hero-g, .cpr-tiles
+    { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .cob-aging { gap:3px; }
+  .cob-ag span { font-size:9px; }
+  .cob-ag b { font-size:10px; }
+  .ccg-col, .ac-side, .reu-side { position:static !important; }
+  [style*="grid-template-columns:1fr 1fr;"], [style*="grid-template-columns:minmax(0,1fr) minmax(0,1fr)"],
+  [style*="grid-template-columns:repeat(4,minmax(0,1fr))"]
+    { grid-template-columns:minmax(0,1fr) !important; }
+  .grid2 .span2, .grid3 .span2, .el-grid .span2 { grid-column:auto !important; }
+  .prj-bar-row, .prj-funil-row, .pn-pipe-row { grid-template-columns:90px 1fr 80px !important; }
+  .prj-eq-row { grid-template-columns:12px 1fr 120px !important; }
+  .reu-f-row { grid-template-columns:1fr 1fr !important; }
+
+  /* Quadros largos (kanban, agenda semanal) rolam para o lado */
+  .acao-kanban, .reu-grade, .ac-sem, .gt-wrap, .prj-kanban, .kanban { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+  /* ── Filtros: campos lado a lado, 2 por linha ── */
+  .filter-row { gap:10px; }
+  .filter-row .form-group { flex:1 1 calc(50% - 10px); min-width:0 !important; max-width:none !important; }
+  .filter-row .form-group[style*="width"] { width:auto !important; }
+  .filter-row > .btn, .filter-row > button { flex:1 1 auto; }
+  .btn-row { flex-wrap:wrap; }
+
+  /* ── Campos: fonte 16px evita o zoom automático do iPhone ── */
+  input:not([type=checkbox]):not([type=radio]), select, textarea { font-size:16px !important; min-height:42px; }
+  input[type=checkbox], input[type=radio] { width:auto; flex:0 0 auto; }
+  #app div[style*="margin-left:auto"][style*="display:flex"] { min-width:0; flex:1 1 auto; justify-content:flex-end; }
+  #app div[style*="display:flex"] > input[style*="width:"]:not([type=checkbox]):not([type=radio]) { flex:1 1 120px; width:auto !important; }
+  .btn { min-height:38px; }
+  .btn-sm { min-height:32px; }
+
+  /* ── Tabelas: rolagem horizontal dentro do cartão ── */
+  .mob-tscroll { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .mob-tscroll > table { min-width:100%; width:max-content; }
+  .mob-tscroll th, .mob-tscroll td { white-space:nowrap; }
+  .table-scroll { overflow-x:auto; max-height:65vh; }
+  th, td { padding:9px 10px; }
+
+  /* ── Janelas (modais) ocupam a tela, abrindo de baixo ── */
+  .modal-overlay.open { align-items:flex-end; }
+  .modal, .modal.lanc-modal, .el-modal {
+    width:100% !important; max-width:100% !important; min-width:0 !important;
+    max-height:calc(100dvh - 24px) !important; max-height:calc(100vh - 24px);
+    border-radius:18px 18px 0 0 !important; padding:20px 16px calc(16px + env(safe-area-inset-bottom)) !important;
+    margin:0 !important;
+  }
+  .modal.lanc-modal, .el-modal { padding:0 !important; }
+  .modal-title { margin-bottom:16px; padding-right:36px; }
+  .modal-footer { flex-wrap:wrap; position:sticky; bottom:0; background:#fff; z-index:2; padding-bottom:4px; }
+  .modal-footer .btn { flex:1 1 auto; }
+  .el-grid { grid-template-columns:minmax(0,1fr) !important; }
+  .el-head, .el-body, .el-foot { padding-left:16px !important; padding-right:16px !important; }
+  .lanc-modal .grid3.form-compacto, .lanc-modal .grid2.form-compacto { grid-template-columns:minmax(0,1fr) !important; }
+
+  /* Menu de filtro de coluna estilo Excel cabe na tela */
+  .ef-dropdown { max-width:calc(100vw - 16px); }
+
+  /* Botão flutuante (+) acima da barra de gestos do celular */
+  .fab-lanc { right:16px !important; bottom:calc(16px + env(safe-area-inset-bottom)) !important; }
+  body.mob-menu-aberto .fab-lanc, body.mob-menu-aberto .fab-fundo,
+  body:has(.modal-overlay.open) .fab-lanc { display:none !important; }
+}
+
+@media (max-width:600px) {
+  .page-header .btn, .page-header .btn-novo { padding:9px 14px; }
+  .filter-row .form-group { flex:1 1 100%; }
+  .filter-row .form-group:has(input[type=date]), .filter-row .form-group:has(select) { flex:1 1 calc(50% - 10px); }
+  .kpi-val, [class*="kpi"] .val { word-break:break-word; }
+  .card-title { margin-bottom:12px; }
+  .tf-contas { grid-template-columns:1fr !important; }
+  .cal-grid, .cal-header, .ac-mes-grid, .ac-mes-head, .reu-mes-g, .reu-mes-h, .chq-agenda { font-size:11px; }
+}
+
+/* ── Login no celular ── */
+@media (max-width:480px) {
+  #login-screen { padding:16px; align-items:center; }
+  .login-box { width:100%; padding:36px 22px; border-radius:16px; }
+  .login-box input:not([type=checkbox]) { font-size:16px; }
+}
+@media print { .mob-topbar, .mob-fundo { display:none !important; } }
 </style>
 </head>
 <body>
@@ -2786,6 +2933,15 @@ body.menu-oculto .sidebar { transform:translateX(-248px); }
 
 <!-- ═══ APP ═══ -->
 <div id="app">
+
+  <!-- ══ BARRA SUPERIOR (só aparece no celular) ══ -->
+  <div class="mob-topbar">
+    <button class="mob-burger" onclick="alternarMenuMobile()" aria-label="Abrir menu" title="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <div class="mob-titulo">C@P Consultoria</div>
+  </div>
+  <div class="mob-fundo" onclick="fecharMenuMobile()"></div>
 
   <!-- ══ ATALHOS FLUTUANTES DE LANÇAMENTO (menu radial estilo app) ══ -->
   <div class="fab-lanc" id="fab-lanc">
@@ -28660,5 +28816,112 @@ function arLancarVarias() {
 })();
 
 </script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// VERSÃO MOBILE / CELULAR
+// Em telas até 900px: menu vira gaveta (☰ na barra superior), a gaveta
+// fecha sozinha ao escolher uma tela, e as tabelas ganham rolagem lateral.
+// No computador nada disso é ativado.
+// ═══════════════════════════════════════════════════════════════
+(function () {
+  const MQ = window.matchMedia('(max-width:900px)');
+  const ehMobile = () => MQ.matches;
+
+  function abrirMenuMobile()  { document.body.classList.add('mob-menu-aberto'); }
+  function fecharMenuMobile() { document.body.classList.remove('mob-menu-aberto'); }
+  window.alternarMenuMobile = function () {
+    document.body.classList.contains('mob-menu-aberto') ? fecharMenuMobile() : abrirMenuMobile();
+  };
+  window.fecharMenuMobile = fecharMenuMobile;
+
+  // Título da barra superior = título da tela aberta
+  function atualizarTituloMobile() {
+    const el = document.querySelector('.mob-titulo');
+    if (!el) return;
+    const pg = document.querySelector('.page.active');
+    const t = pg && pg.querySelector('.page-title');
+    el.textContent = (t && t.textContent.trim()) || 'C@P Consultoria';
+  }
+
+  // Envolve showPage: ao trocar de tela no celular, fecha a gaveta e volta ao topo
+  if (typeof window.showPage === 'function') {
+    const _showPageOrig = window.showPage;
+    window.showPage = function () {
+      const r = _showPageOrig.apply(this, arguments);
+      if (ehMobile()) { fecharMenuMobile(); window.scrollTo(0, 0); }
+      setTimeout(atualizarTituloMobile, 0);
+      return r;
+    };
+  }
+
+  // Abrir uma janela (modal) fecha a gaveta do menu
+  if (typeof window.openModal === 'function') {
+    const _openModalOrig = window.openModal;
+    window.openModal = function () { fecharMenuMobile(); return _openModalOrig.apply(this, arguments); };
+  }
+
+  // Tabelas: rolagem horizontal dentro do cartão
+  function rolagemPropria(el) {
+    for (let p = el.parentElement, i = 0; p && i < 3; p = p.parentElement, i++) {
+      if (p.classList.contains('mob-tscroll') || p.classList.contains('table-scroll')) return true;
+      const ox = getComputedStyle(p).overflowX;
+      if (ox === 'auto' || ox === 'scroll') return true;
+    }
+    return false;
+  }
+  function contarColunas(tb) {
+    const linha = tb.rows && tb.rows[0];
+    if (!linha) return 0;
+    let n = 0;
+    for (const c of linha.cells) n += c.colSpan || 1;
+    return n;
+  }
+  function ajustarTabelas() {
+    if (!ehMobile()) return;
+    document.querySelectorAll('#app table').forEach(tb => {
+      if (tb.closest('.modal-overlay:not(.open)')) return;
+      const cols = contarColunas(tb);
+      if (cols >= 4) tb.style.minWidth = Math.min(cols * 105, 1400) + 'px';
+      if (tb.dataset.mobOk) return;
+      tb.dataset.mobOk = '1';
+      if (rolagemPropria(tb)) return;
+      const w = document.createElement('div');
+      w.className = 'mob-tscroll';
+      tb.parentNode.insertBefore(w, tb);
+      w.appendChild(tb);
+    });
+  }
+  let _agendado = false;
+  function agendarAjuste() {
+    if (_agendado || !ehMobile()) return;
+    _agendado = true;
+    requestAnimationFrame(() => { _agendado = false; ajustarTabelas(); atualizarTituloMobile(); });
+  }
+
+  function iniciar() {
+    const app = document.getElementById('app');
+    if (!app) return;
+    new MutationObserver(agendarAjuste).observe(app, { childList: true, subtree: true });
+    MQ.addEventListener ? MQ.addEventListener('change', () => { fecharMenuMobile(); agendarAjuste(); })
+                        : MQ.addListener(() => { fecharMenuMobile(); agendarAjuste(); });
+    // Esc fecha a gaveta
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharMenuMobile(); });
+    // Arrastar para a esquerda fecha a gaveta
+    const sb = document.querySelector('.sidebar');
+    let x0 = null;
+    if (sb) {
+      sb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+      sb.addEventListener('touchend', e => {
+        if (x0 !== null && e.changedTouches[0].clientX - x0 < -60) fecharMenuMobile();
+        x0 = null;
+      }, { passive: true });
+    }
+    agendarAjuste();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar);
+  else iniciar();
+})();
+</script>
+
 </body>
 </html>
